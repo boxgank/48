@@ -5,7 +5,7 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Background bergerak */
+/* ===== BACKGROUND ===== */
 body {
   min-height: 100vh;
   background: linear-gradient(270deg, #ff0066, #ffcc00, #ff0066);
@@ -16,14 +16,22 @@ body {
   justify-content: center;
 }
 
-
 @keyframes bgMove {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* Card utama */
+/* ===== LAYOUT ===== */
+.layout {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* ===== CARD UTAMA ===== */
 .card {
   background: rgba(255,255,255,0.96);
   width: 380px;
@@ -41,7 +49,7 @@ body {
   50% { transform: translateY(-10px); }
 }
 
-/* Judul BESAR + TIMBUL */
+/* ===== JUDUL ===== */
 .title {
   font-size: 36px;
   font-weight: 900;
@@ -55,12 +63,6 @@ body {
 }
 
 @keyframes titleGlow {
-  0%, 100% {
-    text-shadow:
-      0 3px 0 #c4004e,
-      0 6px 10px rgba(0,0,0,0.35),
-      0 0 18px rgba(255,0,102,0.8);
-  }
   50% {
     text-shadow:
       0 3px 0 #c4004e,
@@ -75,7 +77,7 @@ body {
   margin-bottom: 30px;
 }
 
-/* Tombol */
+/* ===== TOMBOL ===== */
 .buttons a {
   display: block;
   margin: 14px 0;
@@ -84,13 +86,11 @@ body {
   color: white;
   text-decoration: none;
   font-weight: 700;
-  letter-spacing: 0.5px;
   position: relative;
   overflow: hidden;
   transition: 0.3s;
 }
 
-/* Efek cahaya jalan */
 .buttons a::before {
   content: '';
   position: absolute;
@@ -115,26 +115,17 @@ body {
   box-shadow: 0 0 25px rgba(0,0,0,0.45);
 }
 
-/* Warna tombol */
+/* WARNA TOMBOL */
 .yt { background: #ff0000; }
 .ig { background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af); }
 .tt { background: #000; }
 .dc { background: #5865F2; }
-.buttons a.sw {
+.sw {
   background: linear-gradient(135deg, #ff9a00, #ff6a00);
-  color: white;
   box-shadow: 0 0 20px rgba(255,140,0,0.8);
 }
 
-/* ===== LAYOUT KIRI - TENGAH - KANAN ===== */
-.layout {
-  display: flex;
-  gap: 28px;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Card samping kiri & kanan */
+/* ===== SIDE CARD ===== */
 .side {
   width: 240px;
   padding: 26px;
@@ -145,36 +136,33 @@ body {
   animation: sideFloat 5s ease-in-out infinite;
 }
 
-/* Animasi beda timing */
 .left { animation-delay: 0s; }
 .right { animation-delay: 2s; }
 
 @keyframes sideFloat {
-  0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-14px); }
 }
 
-/* Judul side card */
 .side h3 {
   font-size: 18px;
   color: #ff0066;
   margin-bottom: 10px;
 }
 
-/* Isi side card */
 .side p {
   font-size: 14px;
   color: #555;
-  line-height: 1.5;
 }
 
-/* ===== RESPONSIVE HP ===== */
-@media (max-width: 900px) {
-  body {
-    height: auto;
-    padding: 40px 0;
-  }
+/* ===== NOTE ===== */
+.note {
+  margin-top: 30px;
+  font-size: 11px;
+  color: #777;
+}
 
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
   .layout {
     flex-direction: column;
   }
@@ -182,13 +170,4 @@ body {
   .side {
     width: 90%;
   }
-}
-
-
-
-/* Catatan */
-.note {
-  margin-top: 30px;
-  font-size: 11px;
-  color: #777;
 }
