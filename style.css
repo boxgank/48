@@ -119,6 +119,8 @@ body {
 .ig { background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af); }
 .tt { background: #000; }
 .dc { background: #5865F2; }
+.sw { background: #ff8a00; }
+
 
 /* Catatan */
 .note {
