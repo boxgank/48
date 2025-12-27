@@ -51,9 +51,17 @@
   </div>
 
   <div class="card">
-    <h2>Daftar Member JKT48</h2>
+  <h2>Daftar Member JKT48</h2>
+
+  <button class="toggle-btn" onclick="toggleMember()">
+    Tampilkan Daftar Member
+  </button>
+
+  <div id="memberSection" style="display:none;">
     <div id="memberList" class="member-grid"></div>
   </div>
+</div>
+
 
   <div class="card">
     <h2>Jadwal Show</h2>
@@ -112,7 +120,24 @@ schedules.forEach(s=>{
     </div>
   `;
 });
+
+...
+<script>
+function toggleMember(){
+  const section=document.getElementById("memberSection");
+  const btn=document.querySelector(".toggle-btn");
+
+  if(section.style.display==="none"){
+    section.style.display="block";
+    btn.textContent="Sembunyikan Daftar Member";
+  }else{
+    section.style.display="none";
+    btn.textContent="Tampilkan Daftar Member";
+  }
+}
 </script>
+</body>
+</html>
 
 </body>
 </html>
