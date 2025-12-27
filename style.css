@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>48 Replay</title>
-
-<style>
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
   font-family:'Segoe UI',sans-serif;
 }
+
 body{
   background:#f5f6fa;
   overflow-x:hidden;
@@ -74,7 +68,9 @@ nav a{
   gap:30px;
 }
 @media(max-width:900px){
-  .container{grid-template-columns:1fr;}
+  .container{
+    grid-template-columns:1fr;
+  }
 }
 
 /* ===== CARD ===== */
@@ -142,6 +138,53 @@ nav a{
 .dc{background:#5865F2}
 .sw{background:#ff9800}
 
+/* ===== MEMBER ===== */
+.member-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:15px;
+  margin-top:15px;
+}
+.member{
+  background:#fff;
+  padding:15px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+  transition:.3s;
+}
+.member:hover{
+  transform:translateY(-5px);
+}
+.member img{
+  width:100%;
+  border-radius:12px;
+}
+.member h4{
+  margin-top:8px;
+  font-size:14px;
+  color:#333;
+}
+
+/* ===== SCHEDULE ===== */
+.schedule{
+  margin-top:15px;
+  padding:15px;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+  transition:.3s;
+}
+.schedule:hover{
+  transform:translateY(-5px);
+}
+.schedule h3{
+  color:#ff004c;
+}
+.schedule p{
+  color:#555;
+}
+
 /* ===== FOOTER ===== */
 footer{
   text-align:center;
@@ -161,71 +204,7 @@ footer{
   z-index:0;
 }
 @keyframes fall{
-  to{transform:translateY(110vh);}
+  to{
+    transform:translateY(110vh);
+  }
 }
-</style>
-</head>
-
-<body>
-
-<nav>
-  <b>48 Replay</b>
-  <div>
-    <a href="#">Home</a>
-    <a href="#">Event</a>
-    <a href="#">Sosial</a>
-  </div>
-</nav>
-
-<section class="hero">
-  <h1>48 Replay</h1>
-  <p>Replay Live Theater • Event • Fan Project</p>
-</section>
-
-<div class="container">
-
-  <div class="card">
-    <h2>Welcome!</h2>
-    <p>Website fan-made untuk berbagi replay, event, dan info JKT48.</p>
-
-    <div class="event">
-      <img src="https://via.placeholder.com/100">
-      <div>
-        <h3>KIRA KIRA GIRLS</h3>
-        <p>📅 Minggu, 28 Desember 2025</p>
-        <p>⏰ 11:45 WIB</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Sosial Media</h2>
-
-    <div class="buttons">
-      <a class="yt" href="https://www.youtube.com/@48replay" target="_blank">🎥 YouTube</a>
-      <a class="ig" href="https://www.instagram.com/48replay" target="_blank">📸 Instagram</a>
-      <a class="tt" href="https://www.tiktok.com/@48replay" target="_blank">🎵 TikTok</a>
-      <a class="dc" href="https://discord.gg/xxxxxx" target="_blank">💬 Discord</a>
-      <a class="sw" href="https://saweria.co/masterkardus" target="_blank">☕ Saweria</a>
-    </div>
-  </div>
-
-</div>
-
-<footer>
-Fan-made Website • Not affiliated with JKT48
-</footer>
-
-<!-- PARTIKEL -->
-<script>
-for(let i=0;i<40;i++){
-  let s=document.createElement("span");
-  s.className="idol";
-  s.style.left=Math.random()*100+"vw";
-  s.style.animationDuration=3+Math.random()*5+"s";
-  document.body.appendChild(s);
-}
-</script>
-
-</body>
-</html>
