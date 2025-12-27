@@ -7,14 +7,15 @@
 
 /* Background bergerak */
 body {
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(270deg, #ff0066, #ffcc00, #ff0066);
   background-size: 600% 600%;
   animation: bgMove 10s ease infinite;
+
   display: flex;
   justify-content: center;
-  align-items: center;
 }
+
 
 @keyframes bgMove {
   0% { background-position: 0% 50%; }
