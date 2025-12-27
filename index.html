@@ -53,15 +53,15 @@
   <div class="card">
   <h2>Daftar Member JKT48</h2>
 
-  <button class="toggle-btn" onclick="toggleMember()">
-    Tampilkan Daftar Member
-  </button>
+  <button id="toggleBtn" class="toggle-btn">
+Tampilkan Daftar Member
+</button>
 
-  <div id="memberSection" style="display:none;">
-    <div id="memberList" class="member-grid"></div>
-  </div>
+<div id="memberSection" class="member-grid hidden">
+  <div class="card">Member 1</div>
+  <div class="card">Member 2</div>
+  <div class="card">Member 3</div>
 </div>
-
 
   <div class="card">
     <h2>Jadwal Show</h2>
@@ -147,9 +147,35 @@ for(let i=0;i<40;i++){
   document.body.appendChild(s);
 }
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
-</body>
-</html>
+  // ===== TOGGLE MEMBER =====
+  const btn = document.getElementById("toggleBtn");
+  const member = document.getElementById("memberSection");
+
+  if (btn && member) {
+    btn.addEventListener("click", () => {
+      member.classList.toggle("hidden");
+
+      btn.textContent = member.classList.contains("hidden")
+        ? "Tampilkan Daftar Member"
+        : "Sembunyikan Daftar Member";
+    });
+  }
+
+  // ===== PARTIKEL SALJU =====
+  for (let i = 0; i < 40; i++) {
+    let s = document.createElement("span");
+    s.className = "idol";
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.animationDuration = 3 + Math.random() * 5 + "s";
+    s.style.opacity = Math.random();
+    document.body.appendChild(s);
+  }
+
+});
+</script>
 
 </body>
 </html>
