@@ -4,201 +4,7 @@
 <meta charset="UTF-8">
 <title>48 Replay</title>
 
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Segoe UI',sans-serif;
-}
-body{
-  background:#f5f6fa;
-  overflow-x:hidden;
-}
-
-/* ===== NAVBAR ===== */
-nav{
-  background:#fff;
-  padding:15px 40px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 4px 20px rgba(0,0,0,.1);
-  position:sticky;
-  top:0;
-  z-index:100;
-}
-nav b{
-  font-size:22px;
-  color:#ff004c;
-}
-nav a{
-  margin-left:25px;
-  font-weight:600;
-  text-decoration:none;
-  color:#333;
-}
-
-/* ===== HERO ===== */
-.hero{
-  padding:90px 20px;
-  text-align:center;
-  background:linear-gradient(135deg,#ff004c,#ff8fb1);
-  color:white;
-  position:relative;
-  overflow:hidden;
-}
-.hero h1{
-  font-size:64px;
-  font-weight:900;
-  text-shadow:0 0 30px rgba(255,255,255,.6);
-  animation:pop 1s ease;
-}
-.hero p{
-  margin-top:10px;
-  font-size:18px;
-  opacity:.9;
-}
-@keyframes pop{
-  from{transform:scale(.8);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
-
-/* ===== CONTAINER ===== */
-.container{
-  max-width:1100px;
-  margin:50px auto;
-  padding:20px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:30px;
-}
-@media(max-width:900px){
-  .container{grid-template-columns:1fr;}
-}
-
-/* ===== CARD ===== */
-.card{
-  background:#fff;
-  border-radius:20px;
-  padding:25px;
-  box-shadow:0 15px 40px rgba(0,0,0,.12);
-  animation:fadeUp 1s ease;
-}
-@keyframes fadeUp{
-  from{transform:translateY(40px);opacity:0}
-  to{transform:translateY(0);opacity:1}
-}
-.card h2{
-  margin-bottom:10px;
-}
-.card p{
-  color:#555;
-}
-
-/* ===== EVENT ===== */
-.event{
-  display:flex;
-  gap:15px;
-  margin-top:20px;
-  padding:15px;
-  border-radius:16px;
-  background:#fff;
-  box-shadow:0 8px 25px rgba(0,0,0,.1);
-  transition:.3s;
-}
-.event:hover{
-  transform:translateY(-6px);
-}
-.event img{
-  width:100px;
-  border-radius:12px;
-}
-.event h3{
-  color:#ff004c;
-}
-
-/* ===== BUTTONS ===== */
-.buttons{
-  margin-top:20px;
-}
-.buttons a{
-  display:block;
-  margin-bottom:12px;
-  padding:14px;
-  border-radius:14px;
-  font-weight:bold;
-  color:white;
-  text-align:center;
-  text-decoration:none;
-  transition:.3s;
-}
-.buttons a:hover{
-  transform:scale(1.05);
-}
-.yt{background:#ff0000}
-.ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743)}
-.tt{background:#000}
-.dc{background:#5865F2}
-.sw{background:#ff9800}
-
-/* ===== MEMBER ===== */
-.member-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-  gap:15px;
-  margin-top:15px;
-}
-.member{
-  background:#fff;
-  padding:15px;
-  border-radius:16px;
-  text-align:center;
-  box-shadow:0 8px 20px rgba(0,0,0,.1);
-}
-.member img{
-  width:100%;
-  border-radius:12px;
-}
-.member h4{
-  margin-top:8px;
-  font-size:14px;
-}
-
-/* ===== SCHEDULE ===== */
-.schedule{
-  margin-top:15px;
-  padding:15px;
-  border-radius:14px;
-  background:#fff;
-  box-shadow:0 8px 20px rgba(0,0,0,.1);
-}
-.schedule h3{
-  color:#ff004c;
-}
-
-/* ===== FOOTER ===== */
-footer{
-  text-align:center;
-  padding:40px;
-  color:#777;
-}
-
-/* ===== PARTIKEL ===== */
-.idol{
-  position:fixed;
-  top:-10px;
-  width:10px;
-  height:10px;
-  background:rgba(255,255,255,.8);
-  border-radius:50%;
-  animation:fall linear infinite;
-  z-index:0;
-}
-@keyframes fall{
-  to{transform:translateY(110vh);}
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -219,7 +25,6 @@ footer{
 
 <div class="container">
 
-  <!-- WELCOME -->
   <div class="card">
     <h2>Welcome!</h2>
     <p>Website fan-made untuk berbagi replay, event, dan info JKT48.</p>
@@ -234,7 +39,6 @@ footer{
     </div>
   </div>
 
-  <!-- SOSIAL -->
   <div class="card">
     <h2>Sosial Media</h2>
     <div class="buttons">
@@ -246,13 +50,11 @@ footer{
     </div>
   </div>
 
-  <!-- MEMBER -->
   <div class="card">
     <h2>Daftar Member JKT48</h2>
     <div id="memberList" class="member-grid"></div>
   </div>
 
-  <!-- JADWAL -->
   <div class="card">
     <h2>Jadwal Show</h2>
     <div id="scheduleList"></div>
@@ -264,8 +66,8 @@ footer{
 Fan-made Website • Not affiliated with JKT48
 </footer>
 
-<!-- PARTIKEL -->
 <script>
+// PARTIKEL
 for(let i=0;i<40;i++){
   let s=document.createElement("span");
   s.className="idol";
@@ -274,18 +76,18 @@ for(let i=0;i<40;i++){
   document.body.appendChild(s);
 }
 
-// ===== DATA MEMBER =====
-const members = [
-  {name:"Zee", img:"https://via.placeholder.com/150"},
-  {name:"Freya", img:"https://via.placeholder.com/150"},
-  {name:"Christy", img:"https://via.placeholder.com/150"},
-  {name:"Gracie", img:"https://via.placeholder.com/150"}
+// DATA MEMBER
+const members=[
+  {name:"Hillary Abigail",img:"https://via.placeholder.com/150"},
+  {name:"Victoria Kimberly",img:"https://via.placeholder.com/150"},
+  {name:"Michelle Alexandra",img:"https://via.placeholder.com/150"},
+  {name:"Ribka Budiman",img:"https://via.placeholder.com/150"}
 ];
 
-// ===== DATA JADWAL =====
-const schedules = [
-  {title:"Kira Kira Girls", date:"28 Desember 2025", time:"11:45 WIB"},
-  {title:"Aturan Anti Cinta", date:"30 Desember 2025", time:"19:00 WIB"}
+// DATA JADWAL
+const schedules=[
+  {title:"Kira Kira Girls",date:"28 Desember 2025",time:"11:45 WIB"},
+  {title:"Aturan Anti Cinta",date:"30 Desember 2025",time:"19:00 WIB"}
 ];
 
 // RENDER MEMBER
