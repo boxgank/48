@@ -142,6 +142,41 @@ nav a{
 .dc{background:#5865F2}
 .sw{background:#ff9800}
 
+/* ===== MEMBER ===== */
+.member-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:15px;
+  margin-top:15px;
+}
+.member{
+  background:#fff;
+  padding:15px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+.member img{
+  width:100%;
+  border-radius:12px;
+}
+.member h4{
+  margin-top:8px;
+  font-size:14px;
+}
+
+/* ===== SCHEDULE ===== */
+.schedule{
+  margin-top:15px;
+  padding:15px;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+.schedule h3{
+  color:#ff004c;
+}
+
 /* ===== FOOTER ===== */
 footer{
   text-align:center;
@@ -184,6 +219,7 @@ footer{
 
 <div class="container">
 
+  <!-- WELCOME -->
   <div class="card">
     <h2>Welcome!</h2>
     <p>Website fan-made untuk berbagi replay, event, dan info JKT48.</p>
@@ -198,9 +234,9 @@ footer{
     </div>
   </div>
 
+  <!-- SOSIAL -->
   <div class="card">
     <h2>Sosial Media</h2>
-
     <div class="buttons">
       <a class="yt" href="https://www.youtube.com/@48replay" target="_blank">🎥 YouTube</a>
       <a class="ig" href="https://www.instagram.com/48replay" target="_blank">📸 Instagram</a>
@@ -208,6 +244,18 @@ footer{
       <a class="dc" href="https://discord.gg/xxxxxx" target="_blank">💬 Discord</a>
       <a class="sw" href="https://saweria.co/masterkardus" target="_blank">☕ Saweria</a>
     </div>
+  </div>
+
+  <!-- MEMBER -->
+  <div class="card">
+    <h2>Daftar Member JKT48</h2>
+    <div id="memberList" class="member-grid"></div>
+  </div>
+
+  <!-- JADWAL -->
+  <div class="card">
+    <h2>Jadwal Show</h2>
+    <div id="scheduleList"></div>
   </div>
 
 </div>
@@ -225,6 +273,43 @@ for(let i=0;i<40;i++){
   s.style.animationDuration=3+Math.random()*5+"s";
   document.body.appendChild(s);
 }
+
+// ===== DATA MEMBER =====
+const members = [
+  {name:"Zee", img:"https://via.placeholder.com/150"},
+  {name:"Freya", img:"https://via.placeholder.com/150"},
+  {name:"Christy", img:"https://via.placeholder.com/150"},
+  {name:"Gracie", img:"https://via.placeholder.com/150"}
+];
+
+// ===== DATA JADWAL =====
+const schedules = [
+  {title:"Kira Kira Girls", date:"28 Desember 2025", time:"11:45 WIB"},
+  {title:"Aturan Anti Cinta", date:"30 Desember 2025", time:"19:00 WIB"}
+];
+
+// RENDER MEMBER
+const memberList=document.getElementById("memberList");
+members.forEach(m=>{
+  memberList.innerHTML+=`
+    <div class="member">
+      <img src="${m.img}">
+      <h4>${m.name}</h4>
+    </div>
+  `;
+});
+
+// RENDER JADWAL
+const scheduleList=document.getElementById("scheduleList");
+schedules.forEach(s=>{
+  scheduleList.innerHTML+=`
+    <div class="schedule">
+      <h3>${s.title}</h3>
+      <p>📅 ${s.date}</p>
+      <p>⏰ ${s.time}</p>
+    </div>
+  `;
+});
 </script>
 
 </body>
