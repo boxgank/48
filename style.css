@@ -1,173 +1,231 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>48 Replay</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+body{
+  background:#f5f6fa;
+  overflow-x:hidden;
 }
 
-/* ===== BACKGROUND ===== */
-body {
-  min-height: 100vh;
-  background: linear-gradient(270deg, #ff0066, #ffcc00, #ff0066);
-  background-size: 600% 600%;
-  animation: bgMove 10s ease infinite;
-
-  display: flex;
-  justify-content: center;
+/* ===== NAVBAR ===== */
+nav{
+  background:#fff;
+  padding:15px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.1);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+nav b{
+  font-size:22px;
+  color:#ff004c;
+}
+nav a{
+  margin-left:25px;
+  font-weight:600;
+  text-decoration:none;
+  color:#333;
 }
 
-@keyframes bgMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* ===== HERO ===== */
+.hero{
+  padding:90px 20px;
+  text-align:center;
+  background:linear-gradient(135deg,#ff004c,#ff8fb1);
+  color:white;
+  position:relative;
+  overflow:hidden;
+}
+.hero h1{
+  font-size:64px;
+  font-weight:900;
+  text-shadow:0 0 30px rgba(255,255,255,.6);
+  animation:pop 1s ease;
+}
+.hero p{
+  margin-top:10px;
+  font-size:18px;
+  opacity:.9;
+}
+@keyframes pop{
+  from{transform:scale(.8);opacity:0}
+  to{transform:scale(1);opacity:1}
 }
 
-/* ===== LAYOUT ===== */
-.layout {
-  display: flex;
-  gap: 28px;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
+/* ===== CONTAINER ===== */
+.container{
+  max-width:1100px;
+  margin:50px auto;
+  padding:20px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:30px;
+}
+@media(max-width:900px){
+  .container{grid-template-columns:1fr;}
 }
 
-/* ===== CARD UTAMA ===== */
-.card {
-  background: rgba(255,255,255,0.96);
-  width: 380px;
-  padding: 40px 30px;
-  border-radius: 30px;
-  text-align: center;
-  box-shadow:
-    0 20px 40px rgba(0,0,0,0.3),
-    0 0 30px rgba(255,0,102,0.6);
-  animation: cardFloat 4s ease-in-out infinite;
+/* ===== CARD ===== */
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 15px 40px rgba(0,0,0,.12);
+  animation:fadeUp 1s ease;
+}
+@keyframes fadeUp{
+  from{transform:translateY(40px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+.card h2{
+  margin-bottom:10px;
+}
+.card p{
+  color:#555;
 }
 
-@keyframes cardFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+/* ===== EVENT ===== */
+.event{
+  display:flex;
+  gap:15px;
+  margin-top:20px;
+  padding:15px;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 8px 25px rgba(0,0,0,.1);
+  transition:.3s;
+}
+.event:hover{
+  transform:translateY(-6px);
+}
+.event img{
+  width:100px;
+  border-radius:12px;
+}
+.event h3{
+  color:#ff004c;
 }
 
-/* ===== JUDUL ===== */
-.title {
-  font-size: 36px;
-  font-weight: 900;
-  color: #ff0066;
-  margin-bottom: 8px;
-  text-shadow:
-    0 3px 0 #c4004e,
-    0 6px 10px rgba(0,0,0,0.35),
-    0 0 18px rgba(255,0,102,0.8);
-  animation: titleGlow 2s ease-in-out infinite;
+/* ===== BUTTONS ===== */
+.buttons{
+  margin-top:20px;
+}
+.buttons a{
+  display:block;
+  margin-bottom:12px;
+  padding:14px;
+  border-radius:14px;
+  font-weight:bold;
+  color:white;
+  text-align:center;
+  text-decoration:none;
+  transition:.3s;
+}
+.buttons a:hover{
+  transform:scale(1.05);
+}
+.yt{background:#ff0000}
+.ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743)}
+.tt{background:#000}
+.dc{background:#5865F2}
+.sw{background:#ff9800}
+
+/* ===== FOOTER ===== */
+footer{
+  text-align:center;
+  padding:40px;
+  color:#777;
 }
 
-@keyframes titleGlow {
-  50% {
-    text-shadow:
-      0 3px 0 #c4004e,
-      0 8px 16px rgba(0,0,0,0.45),
-      0 0 30px rgba(255,0,102,1);
-  }
+/* ===== PARTIKEL ===== */
+.idol{
+  position:fixed;
+  top:-10px;
+  width:10px;
+  height:10px;
+  background:rgba(255,255,255,.8);
+  border-radius:50%;
+  animation:fall linear infinite;
+  z-index:0;
 }
-
-.subtitle {
-  font-size: 15px;
-  color: #666;
-  margin-bottom: 30px;
+@keyframes fall{
+  to{transform:translateY(110vh);}
 }
+</style>
+</head>
 
-/* ===== TOMBOL ===== */
-.buttons a {
-  display: block;
-  margin: 14px 0;
-  padding: 16px;
-  border-radius: 18px;
-  color: white;
-  text-decoration: none;
-  font-weight: 700;
-  position: relative;
-  overflow: hidden;
-  transition: 0.3s;
+<body>
+
+<nav>
+  <b>48 Replay</b>
+  <div>
+    <a href="#">Home</a>
+    <a href="#">Event</a>
+    <a href="#">Sosial</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>48 Replay</h1>
+  <p>Replay Live Theater • Event • Fan Project</p>
+</section>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Welcome!</h2>
+    <p>Website fan-made untuk berbagi replay, event, dan info JKT48.</p>
+
+    <div class="event">
+      <img src="https://via.placeholder.com/100">
+      <div>
+        <h3>KIRA KIRA GIRLS</h3>
+        <p>📅 Minggu, 28 Desember 2025</p>
+        <p>⏰ 11:45 WIB</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Sosial Media</h2>
+
+    <div class="buttons">
+      <a class="yt" href="https://www.youtube.com/@48replay" target="_blank">🎥 YouTube</a>
+      <a class="ig" href="https://www.instagram.com/48replay" target="_blank">📸 Instagram</a>
+      <a class="tt" href="https://www.tiktok.com/@48replay" target="_blank">🎵 TikTok</a>
+      <a class="dc" href="https://discord.gg/xxxxxx" target="_blank">💬 Discord</a>
+      <a class="sw" href="https://saweria.co/masterkardus" target="_blank">☕ Saweria</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+Fan-made Website • Not affiliated with JKT48
+</footer>
+
+<!-- PARTIKEL -->
+<script>
+for(let i=0;i<40;i++){
+  let s=document.createElement("span");
+  s.className="idol";
+  s.style.left=Math.random()*100+"vw";
+  s.style.animationDuration=3+Math.random()*5+"s";
+  document.body.appendChild(s);
 }
+</script>
 
-.buttons a::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 120%;
-  height: 100%;
-  background: rgba(255,255,255,0.35);
-  transform: skewX(-20deg);
-}
-
-.buttons a:hover::before {
-  animation: shine 0.7s forwards;
-}
-
-@keyframes shine {
-  to { left: 120%; }
-}
-
-.buttons a:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 25px rgba(0,0,0,0.45);
-}
-
-/* WARNA TOMBOL */
-.yt { background: #ff0000; }
-.ig { background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af); }
-.tt { background: #000; }
-.dc { background: #5865F2; }
-.sw {
-  background: linear-gradient(135deg, #ff9a00, #ff6a00);
-  box-shadow: 0 0 20px rgba(255,140,0,0.8);
-}
-
-/* ===== SIDE CARD ===== */
-.side {
-  width: 240px;
-  padding: 26px;
-  background: rgba(255,255,255,0.95);
-  border-radius: 24px;
-  text-align: center;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  animation: sideFloat 5s ease-in-out infinite;
-}
-
-.left { animation-delay: 0s; }
-.right { animation-delay: 2s; }
-
-@keyframes sideFloat {
-  50% { transform: translateY(-14px); }
-}
-
-.side h3 {
-  font-size: 18px;
-  color: #ff0066;
-  margin-bottom: 10px;
-}
-
-.side p {
-  font-size: 14px;
-  color: #555;
-}
-
-/* ===== NOTE ===== */
-.note {
-  margin-top: 30px;
-  font-size: 11px;
-  color: #777;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-  .layout {
-    flex-direction: column;
-  }
-
-  .side {
-    width: 90%;
-  }
-}
+</body>
+</html>
