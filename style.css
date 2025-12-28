@@ -353,3 +353,8 @@ footer{
   padding: 20px;
   box-shadow: 0 10px 25px rgba(0,0,0,.08);
 }
+
+/* ===== CARD MEMBER FULL WIDTH ===== */
+.card-member {
+  grid-column: 1 / -1; /* span dari kolom pertama sampai terakhir */
+}
