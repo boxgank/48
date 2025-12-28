@@ -251,3 +251,36 @@ footer{
 .big-buttons span{
   font-weight:700;
 }
+
+.social-buttons a{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:18px;
+  font-size:19px;
+  border-radius:16px;
+}
+
+.social-buttons i{
+  font-size:28px;
+}
+
+.social-buttons span{
+  font-weight:700;
+}
+
+/* ===== SAWERIA ===== */
+.donate-buttons a{
+  display:block;
+  padding:20px;
+  font-size:20px;
+  border-radius:18px;
+  text-align:center;
+  font-weight:800;
+  background:linear-gradient(135deg,#ff9800,#ffc107);
+  color:#fff;
+}
+
+.donate-buttons a:hover{
+  transform:scale(1.06);
+}
