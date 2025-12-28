@@ -253,31 +253,6 @@ body{
 
 <body>
 
-<!-- ================= MEMBER ================= -->
-<h2 class="section-title">Daftar Member</h2>
-
-<button id="toggleMemberBtn" class="toggle-btn">
-  Tampilkan Daftar Member
-</button>
-
-<div id="memberSection" class="hidden">
-
-  <div class="member-grid">
-    <div class="member-card">
-      <img src="https://via.placeholder.com/300x300?text=Member+1">
-      <p>Rani Putri</p>
-    </div>
-    <div class="member-card">
-      <img src="https://via.placeholder.com/300x300?text=Member+2">
-      <p>Amanda Zahra</p>
-    </div>
-    <div class="member-card">
-      <img src="https://via.placeholder.com/300x300?text=Member+3">
-      <p>Citra Lestari</p>
-    </div>
-  </div>
-
-</div>
 
 <!-- ================= JADWAL SHOW ================= -->
 <h2 class="section-title">Jadwal Show</h2>
@@ -299,31 +274,6 @@ body{
 <script>
   // Fungsi saat halaman sudah siap
   document.addEventListener("DOMContentLoaded", () => {
-
-    // === TOGGLE MEMBER ===
-    const memberBtn = document.getElementById("toggleMemberBtn");
-    const memberSection = document.getElementById("memberSection");
-
-    memberBtn.addEventListener("click", () => {
-      memberSection.classList.toggle("hidden");
-      memberBtn.textContent = memberSection.classList.contains("hidden")
-        ? "Tampilkan Daftar Member"
-        : "Sembunyikan Daftar Member";
-    });
-
-    // === TOGGLE JADWAL ===
-    const scheduleBtn = document.getElementById("toggleScheduleBtn");
-    const scheduleSection = document.getElementById("scheduleSection");
-
-    scheduleBtn.addEventListener("click", () => {
-      scheduleSection.classList.toggle("hidden");
-      scheduleBtn.textContent = scheduleSection.classList.contains("hidden")
-        ? "Tampilkan Jadwal Show"
-        : "Sembunyikan Jadwal Show";
-    });
-
-  });
-</script>
 
   // Partikel salju
   for(let i=0;i<30;i++){
