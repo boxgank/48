@@ -256,37 +256,52 @@ body{
 
 <!-- ================= JADWAL SHOW ================= -->
 <h2 class="section-title">Jadwal Show</h2>
-
-<button id="toggleScheduleBtn" class="toggle-btn">
-  Tampilkan Jadwal Show
-</button>
+<button id="btnSchedule" class="toggle-btn">Tampilkan Jadwal Show</button>
 
 <div id="scheduleSection" class="hidden">
-
   <div class="schedule">
     <h3>Regular Show</h3>
-    <p>📅 Coming Soon</p>
-    <p>⏰ Coming Soon</p>
+    <p>📅 28 Desember 2025</p>
+    <p>⏰ 19.00 WIB</p>
   </div>
+
+  <div class="schedule">
+    <h3>Special Event</h3>
+    <p>📅 5 Januari 2026</p>
+    <p>⏰ 18.30 WIB</p>
+  </div>
+</div>
 
 </div>
 
-<script>
-  // Fungsi saat halaman sudah siap
-  document.addEventListener("DOMContentLoaded", () => {
+<footer>
+  © 2025 48 Replay — Fan Made Project
+</footer>
 
-  // Partikel salju
-  for(let i=0;i<30;i++){
-    let s=document.createElement("span");
-    s.className="idol";
-    s.style.left=Math.random()*100+"vw";
-    s.style.animationDuration=3+Math.random()*5+"s";
-    s.style.opacity=Math.random();
-    document.body.appendChild(s);
-  }
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const btnMember = document.getElementById("btnMember");
+  const memberBox = document.getElementById("memberSection");
+
+  const btnSchedule = document.getElementById("btnSchedule");
+  const scheduleBox = document.getElementById("scheduleSection");
+
+  btnMember.onclick = () => {
+    memberBox.classList.toggle("hidden");
+    btnMember.textContent = memberBox.classList.contains("hidden")
+      ? "Tampilkan Daftar Member"
+      : "Sembunyikan Daftar Member";
+  };
+
+  btnSchedule.onclick = () => {
+    scheduleBox.classList.toggle("hidden");
+    btnSchedule.textContent = scheduleBox.classList.contains("hidden")
+      ? "Tampilkan Jadwal Show"
+      : "Sembunyikan Jadwal Show";
+  };
 });
 </script>
 
 </body>
 </html>
-
