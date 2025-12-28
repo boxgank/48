@@ -152,13 +152,14 @@
 </div>
 
 <!-- ===== JADWAL SHOW ===== -->
- <h2 class="section-title">Jadwal Show</h2>
+<h2 class="section-title">Jadwal Show</h2>
 
-  <button id="btnSchedule" class="toggle-btn">
-    Tampilkan Jadwal Show
-  </button>
+<button id="btnSchedule" class="toggle-btn">
+  Tampilkan Jadwal Show
+</button>
 
-  <div id="scheduleSection" class="hidden">
+<div id="scheduleSection" class="hidden">
+
   <h3 class="group-title">🎭 Regular Show</h3>
   <div class="schedule-grid">
 
@@ -186,36 +187,16 @@
       <p class="show-title">New Year Live</p>
       <p>📅 5 Januari 2026</p>
       <p>⏰ 18.30 WIB</p>
+    </div>
+
   </div>
 
-</div>
+</div> <!-- END scheduleSection -->
+</div> <!-- END card -->
 
 <footer>
   © 2025 48 Replay — Fan Made Project
 </footer>
-
-<script>
-document.addEventListener("DOMContentLoaded",()=>{
-
-  const btnMember=document.getElementById("btnMember");
-  const memberBox=document.getElementById("memberSection");
-
-  const btnSchedule=document.getElementById("btnSchedule");
-  const scheduleBox=document.getElementById("scheduleSection");
-
-  btnMember.onclick=()=>{
-    memberBox.classList.toggle("hidden");
-    btnMember.textContent = memberBox.classList.contains("hidden")
-      ? "Tampilkan Daftar Member"
-      : "Sembunyikan Daftar Member";
-  };
-
-  btnSchedule.onclick=()=>{
-    scheduleBox.classList.toggle("hidden");
-    btnSchedule.textContent = scheduleBox.classList.contains("hidden")
-      ? "Tampilkan Jadwal Show"
-      : "Sembunyikan Jadwal Show";
-  };
 
   // PARTIKEL
   for(let i=0;i<40;i++){
