@@ -172,31 +172,6 @@
 
 </div>
 
-
-// RENDER MEMBER
-const memberList=document.getElementById("memberList");
-members.forEach(m=>{
-  memberList.innerHTML+=`
-    <div class="member">
-      <img src="${m.img}">
-      <h4>${m.name}</h4>
-    </div>
-  `;
-});
-
-// RENDER JADWAL
-const scheduleList=document.getElementById("scheduleList");
-schedules.forEach(s=>{
-  scheduleList.innerHTML+=`
-    <div class="schedule">
-      <h3>${s.title}</h3>
-      <p>📅 ${s.date}</p>
-      <p>⏰ ${s.time}</p>
-    </div>
-  `;
-});
-
-...
 <script>
 // ===== TOGGLE MEMBER =====
 function toggleMember(){
@@ -221,6 +196,7 @@ for(let i=0;i<40;i++){
   s.style.opacity=Math.random();
   document.body.appendChild(s);
 }
+   
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -253,16 +229,16 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <footer>
-Fan-made Website • Not affiliated with JKT48
+Fan-made Website by 48 replay • Not affiliated with JKT48
 </footer>
 
- <script>
-document.addEventListener("DOMContentLoaded",()=>{
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
   const memberBtn = document.getElementById("toggleMemberBtn");
   const memberSec = document.getElementById("memberSection");
 
-  memberBtn.addEventListener("click",()=>{
+  memberBtn.addEventListener("click", () => {
     memberSec.classList.toggle("hidden");
     memberBtn.textContent = memberSec.classList.contains("hidden")
       ? "Tampilkan Daftar Member"
@@ -272,7 +248,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   const scheduleBtn = document.getElementById("toggleScheduleBtn");
   const scheduleSec = document.getElementById("scheduleSection");
 
-  scheduleBtn.addEventListener("click",()=>{
+  scheduleBtn.addEventListener("click", () => {
     scheduleSec.classList.toggle("hidden");
     scheduleBtn.textContent = scheduleSec.classList.contains("hidden")
       ? "Tampilkan Jadwal Show"
