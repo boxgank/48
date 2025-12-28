@@ -284,3 +284,50 @@ footer{
 .donate-buttons a:hover{
   transform:scale(1.06);
 }
+
+.member-wrapper{
+  margin-top:20px;
+}
+
+.group-title{
+  margin:25px 0 10px;
+  font-size:22px;
+  font-weight:800;
+  color:#ff004c;
+}
+
+.member-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:16px;
+}
+
+.member-card{
+  background:#fff;
+  border-radius:18px;
+  padding:12px;
+  text-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
+  transition:.3s;
+}
+
+.member-card:hover{
+  transform:translateY(-6px);
+}
+
+.member-card img{
+  width:100%;
+  border-radius:14px;
+  aspect-ratio:1/1;
+  object-fit:cover;
+}
+
+.member-card p{
+  margin-top:8px;
+  font-weight:700;
+  font-size:14px;
+}
+
+.hidden{
+  display:none;
+}
