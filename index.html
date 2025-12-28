@@ -120,7 +120,7 @@
 
 </div>
 
-<h3 class="group-title">🔥 Team Mboh Manuk</h3>
+<h3 class="group-title">🔥 Team Passion</h3>
 <div class="member-grid">
 
   <div class="member-card"><img src="https://via.placeholder.com/300x300?text=X+1"><p>Kayla Putri</p></div>
@@ -153,124 +153,24 @@
 </div>
 
    <!-- ===== JADWAL SHOW ===== -->
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>48 Replay</title>
+    <h2 class="section-title">Jadwal Show</h2>
+    <button id="btnSchedule" class="toggle-btn">Tampilkan Jadwal Show</button>
 
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial, sans-serif;
-}
+    <div id="scheduleSection" class="hidden">
+      <div class="schedule">
+        <h3>Regular Show</h3>
+        <p>📅 28 Desember 2025</p>
+        <p>⏰ 19.00 WIB</p>
+      </div>
 
-body{
-  background:#f5f6fa;
-  padding:20px;
-}
+      <div class="schedule">
+        <h3>Special Event</h3>
+        <p>📅 5 Januari 2026</p>
+        <p>⏰ 18.30 WIB</p>
+      </div>
+    </div>
 
-/* ===== BUTTON ===== */
-.toggle-btn{
-  width:100%;
-  padding:14px;
-  margin:15px 0;
-  border:none;
-  border-radius:12px;
-  background:#ff004c;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-  transition:.3s;
-}
-.toggle-btn:hover{
-  transform:scale(1.05);
-}
-
-/* ===== SECTION ===== */
-.section-title{
-  font-size:22px;
-  font-weight:800;
-  margin-top:40px;
-}
-
-.hidden{
-  display:none;
-}
-
-/* ===== MEMBER ===== */
-.member-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-  gap:15px;
-  margin-top:15px;
-}
-
-.member-card{
-  background:#fff;
-  padding:12px;
-  border-radius:14px;
-  text-align:center;
-  box-shadow:0 6px 18px rgba(0,0,0,.1);
-}
-
-.member-card img{
-  width:100%;
-  border-radius:10px;
-}
-
-/* ===== JADWAL ===== */
-.schedule{
-  background:#fff;
-  padding:15px;
-  border-radius:14px;
-  margin-top:15px;
-  box-shadow:0 6px 18px rgba(0,0,0,.1);
-}
-
-.schedule h3{
-  color:#ff004c;
-}
-
-/* ===== PARTIKEL ===== */
-.idol{
-  position:fixed;
-  top:-10px;
-  width:10px;
-  height:10px;
-  background:rgba(255,255,255,.8);
-  border-radius:50%;
-  animation:fall linear infinite;
-}
-
-@keyframes fall{
-  to{transform:translateY(110vh);}
-}
-</style>
-</head>
-
-<body>
-
-
-<!-- ================= JADWAL SHOW ================= -->
-<h2 class="section-title">Jadwal Show</h2>
-<button id="btnSchedule" class="toggle-btn">Tampilkan Jadwal Show</button>
-
-<div id="scheduleSection" class="hidden">
-  <div class="schedule">
-    <h3>Regular Show</h3>
-    <p>📅 28 Desember 2025</p>
-    <p>⏰ 19.00 WIB</p>
   </div>
-
-  <div class="schedule">
-    <h3>Special Event</h3>
-    <p>📅 5 Januari 2026</p>
-    <p>⏰ 18.30 WIB</p>
-  </div>
-</div>
 
 </div>
 
@@ -279,27 +179,38 @@ body{
 </footer>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded",()=>{
 
-  const btnMember = document.getElementById("btnMember");
-  const memberBox = document.getElementById("memberSection");
+  const btnMember=document.getElementById("btnMember");
+  const memberBox=document.getElementById("memberSection");
 
-  const btnSchedule = document.getElementById("btnSchedule");
-  const scheduleBox = document.getElementById("scheduleSection");
+  const btnSchedule=document.getElementById("btnSchedule");
+  const scheduleBox=document.getElementById("scheduleSection");
 
-  btnMember.onclick = () => {
+  btnMember.onclick=()=>{
     memberBox.classList.toggle("hidden");
     btnMember.textContent = memberBox.classList.contains("hidden")
       ? "Tampilkan Daftar Member"
       : "Sembunyikan Daftar Member";
   };
 
-  btnSchedule.onclick = () => {
+  btnSchedule.onclick=()=>{
     scheduleBox.classList.toggle("hidden");
     btnSchedule.textContent = scheduleBox.classList.contains("hidden")
       ? "Tampilkan Jadwal Show"
       : "Sembunyikan Jadwal Show";
   };
+
+  // PARTIKEL
+  for(let i=0;i<40;i++){
+    let s=document.createElement("span");
+    s.className="idol";
+    s.style.left=Math.random()*100+"vw";
+    s.style.animationDuration=3+Math.random()*5+"s";
+    s.style.opacity=Math.random();
+    document.body.appendChild(s);
+  }
+
 });
 </script>
 
