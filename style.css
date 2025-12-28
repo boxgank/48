@@ -358,3 +358,43 @@ footer{
 .card-member {
   grid-column: 1 / -1; /* span dari kolom pertama sampai terakhir */
 }
+
+.hidden{
+  display:none;
+}
+
+.section-title{
+  margin-bottom:10px;
+}
+
+.toggle-btn{
+  width:100%;
+  padding:14px;
+  margin-bottom:20px;
+  border:none;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
+  background:#ff004c;
+  color:white;
+}
+
+.member-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+  gap:15px;
+  margin-bottom:30px;
+}
+
+.member-card{
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+  padding:10px;
+  text-align:center;
+}
+
+.member-card img{
+  width:100%;
+  border-radius:10px;
+}
