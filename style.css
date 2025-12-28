@@ -331,3 +331,25 @@ footer{
 .hidden{
   display:none;
 }
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 24px;
+}
+
+.card.member {
+  grid-column: 1 / -1; /* span dari kolom 1 sampai terakhir */
+}
+
+.card.member {
+  grid-column: span 2;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
