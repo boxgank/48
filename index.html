@@ -256,5 +256,31 @@ document.addEventListener("DOMContentLoaded", () => {
 Fan-made Website • Not affiliated with JKT48
 </footer>
 
+ <script>
+document.addEventListener("DOMContentLoaded",()=>{
+
+  const memberBtn = document.getElementById("toggleMemberBtn");
+  const memberSec = document.getElementById("memberSection");
+
+  memberBtn.addEventListener("click",()=>{
+    memberSec.classList.toggle("hidden");
+    memberBtn.textContent = memberSec.classList.contains("hidden")
+      ? "Tampilkan Daftar Member"
+      : "Sembunyikan Daftar Member";
+  });
+
+  const scheduleBtn = document.getElementById("toggleScheduleBtn");
+  const scheduleSec = document.getElementById("scheduleSection");
+
+  scheduleBtn.addEventListener("click",()=>{
+    scheduleSec.classList.toggle("hidden");
+    scheduleBtn.textContent = scheduleSec.classList.contains("hidden")
+      ? "Tampilkan Jadwal Show"
+      : "Sembunyikan Jadwal Show";
+  });
+
+});
+</script>
+    
 </body>
 </html>
