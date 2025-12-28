@@ -234,3 +234,20 @@ footer{
 .hidden{
   display:none;
 }
+
+.big-buttons a{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:20px;
+  font-size:20px;
+  border-radius:18px;
+}
+
+.big-buttons i{
+  font-size:32px;
+}
+
+.big-buttons span{
+  font-weight:700;
+}
