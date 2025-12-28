@@ -297,27 +297,33 @@ body{
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+  // Fungsi saat halaman sudah siap
+  document.addEventListener("DOMContentLoaded", () => {
 
-  const memberBtn = document.getElementById("toggleMemberBtn");
-  const memberSec = document.getElementById("memberSection");
+    // === TOGGLE MEMBER ===
+    const memberBtn = document.getElementById("toggleMemberBtn");
+    const memberSection = document.getElementById("memberSection");
 
-  memberBtn.addEventListener("click", () => {
-    memberSec.classList.toggle("hidden");
-    memberBtn.textContent = memberSec.classList.contains("hidden")
-      ? "Tampilkan Daftar Member"
-      : "Sembunyikan Daftar Member";
+    memberBtn.addEventListener("click", () => {
+      memberSection.classList.toggle("hidden");
+      memberBtn.textContent = memberSection.classList.contains("hidden")
+        ? "Tampilkan Daftar Member"
+        : "Sembunyikan Daftar Member";
+    });
+
+    // === TOGGLE JADWAL ===
+    const scheduleBtn = document.getElementById("toggleScheduleBtn");
+    const scheduleSection = document.getElementById("scheduleSection");
+
+    scheduleBtn.addEventListener("click", () => {
+      scheduleSection.classList.toggle("hidden");
+      scheduleBtn.textContent = scheduleSection.classList.contains("hidden")
+        ? "Tampilkan Jadwal Show"
+        : "Sembunyikan Jadwal Show";
+    });
+
   });
-
-  const scheduleBtn = document.getElementById("toggleScheduleBtn");
-  const scheduleSec = document.getElementById("scheduleSection");
-
-  scheduleBtn.addEventListener("click", () => {
-    scheduleSec.classList.toggle("hidden");
-    scheduleBtn.textContent = scheduleSec.classList.contains("hidden")
-      ? "Tampilkan Jadwal Show"
-      : "Sembunyikan Jadwal Show";
-  });
+</script>
 
   // Partikel salju
   for(let i=0;i<30;i++){
