@@ -188,14 +188,11 @@ nav a{
 /* ===== FOOTER ===== */
 footer{
   grid-column: 1 / -1;           /* span full width seperti card-member */
-  background:#fff;
   margin:40px auto 0;
   padding:30px 20px;
   text-align:center;
   font-size:14px;
   color:#777;
-  border-radius:20px;
-  box-shadow:0 15px 40px rgba(0,0,0,.12);
   max-width:1100px;
 }
 
