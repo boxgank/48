@@ -307,6 +307,33 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+   <script>
+document.querySelectorAll('.member-card').forEach(card=>{
+  const socials = [
+    ['ig','instagram'],
+    ['x','x'],
+    ['tt','tiktok'],
+    ['idn','idn'],
+    ['sr','showroom']
+  ];
+  const box=document.createElement('div');
+  box.className='member-social';
+
+  socials.forEach(([k,icon])=>{
+    const url=card.dataset[k];
+    if(url){
+      const a=document.createElement('a');
+      a.href=url; a.target='_blank';
+      a.innerHTML=`<i class="si si-${icon}"></i>`;
+      box.appendChild(a);
+    }
+  });
+
+  card.appendChild(box);
+});
+</script>
+
+
 <footer>
   <center>
     © 2026 by 48 Replay • No copyright infringement intended
