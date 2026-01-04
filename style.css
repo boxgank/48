@@ -516,36 +516,47 @@ footer{
   background:#1877F2; /* warna resmi Facebook */
 }
 
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 20px;
+  background:#fff;
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
 .mode-btn{
   display:flex;
   align-items:center;
   gap:8px;
-  background:none;
-  border:2px solid currentColor;
+  padding:6px 14px;
   border-radius:20px;
-  padding:6px 12px;
+  border:2px solid #333;
+  background:none;
   cursor:pointer;
   font-weight:600;
-  transition:.3s;
 }
 
-.mode-btn i{
-  font-size:16px;
-}
-
-.mode-btn:hover{
-  background:rgba(0,0,0,.05);
-}
-
-/* DARK MODE */
+/* MODE MALAM */
 body.dark{
   background:#111;
   color:#eee;
 }
 
-body.dark nav{
+body.dark .navbar{
   background:#000;
 }
+
+body.dark .mode-btn{
+  border-color:#eee;
+  color:#eee;
+}
+
 
 body.dark .mode-btn:hover{
   background:rgba(255,255,255,.1);
