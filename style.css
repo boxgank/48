@@ -36,50 +36,56 @@ nav a{
 /* ===== HERO ===== */
 .hero{
   position:relative;
+  height:420px;
   background:#e60012;
   overflow:hidden;
-  height:420px;          /* tinggi area merah */
 }
 
-/* BACKGROUND TEXT */
+/* BACKGROUND TEXT AREA */
 .hero-bg{
   position:absolute;
   inset:0;
-  display:grid;
-  grid-auto-rows:32px;   /* tinggi tiap baris */
-  align-content:stretch;
-  opacity:.22;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-evenly;
+  opacity:.25;
   font-family:monospace;
   font-weight:900;
   pointer-events:none;
 }
 
-/* DUPLIKASI BARIS KE BAWAH */
-.hero-bg::before{
-  content:"";
-  grid-row:1/-1;
-}
-
-.marquee-track{
-  display:flex;
+/* SETIAP BARIS */
+.line{
   white-space:nowrap;
-  animation:scrollLeft 18s linear infinite;
 }
 
-.hero-bg .marquee-track:nth-child(even){
-  animation-direction:reverse;
-}
-
-.marquee-track span{
-  padding-right:50px;
+.line span{
+  display:inline-block;
+  padding-right:60px;
   font-size:14px;
 }
 
-/* FULL DARI KANAN KE KIRI */
-@keyframes scrollLeft{
+/* ANIMASI DASAR */
+@keyframes left{
   from{transform:translateX(100%)}
   to{transform:translateX(-100%)}
 }
+@keyframes right{
+  from{transform:translateX(-100%)}
+  to{transform:translateX(100%)}
+}
+
+/* VARIASI ARAH + SPEED (TIDAK BERURUTAN) */
+.l1 span{animation:left 18s linear infinite;}
+.l2 span{animation:right 26s linear infinite;}
+.l3 span{animation:left 22s linear infinite;}
+.l4 span{animation:right 30s linear infinite;}
+.l5 span{animation:left 20s linear infinite;}
+.l6 span{animation:right 28s linear infinite;}
+.l7 span{animation:left 24s linear infinite;}
+.l8 span{animation:right 32s linear infinite;}
+.l9 span{animation:left 19s linear infinite;}
+.l10 span{animation:right 35s linear infinite;}
 
 /* GAMBAR TENGAH */
 .hero-content{
@@ -94,10 +100,11 @@ nav a{
 .hero-content img{
   max-width:520px;
   width:100%;
+  background:transparent;
   border:6px solid #fff;
   padding:12px;
-  background:transparent; /* ⬅️ TRANSPARAN */
 }
+
 
 
 /* ===== CONTAINER ===== */
