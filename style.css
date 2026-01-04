@@ -412,6 +412,42 @@ footer{
   border-radius:10px;
 }
 
+/* ===== MEMBER NAME BACKGROUND ===== */
+.member-card p{
+  background:#ffe6f0;
+  color:#d81b60;
+  padding:8px 6px;
+  border-radius:12px;
+  font-weight:700;
+  font-size:14px;
+  margin:8px;
+}
+
+/* AREA SOSMED (TEMPAT ICON) */
+.member-card::after{
+  content:"";
+  display:block;
+  margin:6px auto 10px;
+  width:100%;
+}
+
+.member-social{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  padding-bottom:10px;
+}
+
+.member-social a{
+  font-size:15px;
+  color:#ff004c;
+  transition:.2s;
+}
+.member-social a:hover{
+  transform:scale(1.2);
+}
+
+
 /* ===== FACEBOOK ===== */
 .fb{
   background:#1877F2; /* warna resmi Facebook */
