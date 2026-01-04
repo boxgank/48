@@ -14,41 +14,53 @@
 </head>
 
 <script>
-const toggle = document.getElementById('darkToggle');
-const icon = toggle.querySelector('i');
-const text = toggle.querySelector('span');
-const body = document.body;
+document.addEventListener("DOMContentLoaded", () => {
 
-// LOAD THEME
-if(localStorage.getItem('theme') === 'dark'){
-  body.classList.add('dark');
-  icon.className = 'fa-solid fa-sun';
-  text.textContent = 'Mode Siang';
-}
+  const btn = document.getElementById("modeToggle");
+  const icon = btn.querySelector("i");
+  const text = btn.querySelector("span");
 
-// TOGGLE
-toggle.onclick = () => {
-  body.classList.toggle('dark');
-  const dark = body.classList.contains('dark');
+  // LOAD STATUS
+  if(localStorage.getItem("theme") === "dark"){
+    document.body.classList.add("dark");
+    icon.className = "fa-solid fa-sun";
+    text.textContent = "Mode Siang";
+  }
 
-  icon.className = dark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-  text.textContent = dark ? 'Mode Siang' : 'Mode Malam';
+  // KLIK TOMBOL
+  btn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
 
-  localStorage.setItem('theme', dark ? 'dark' : 'light');
-};
+    const isDark = document.body.classList.contains("dark");
+
+    icon.className = isDark
+      ? "fa-solid fa-sun"
+      : "fa-solid fa-moon";
+
+    text.textContent = isDark
+      ? "Mode Siang"
+      : "Mode Malam";
+
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  });
+
+});
 </script>
+
 
 
 <body>
 
-<nav>
+<nav class="navbar">
   <b>48 Replay</b>
-  <div>
+
+  <div class="nav-right">
     <a href="#">Home</a>
     <a href="#">Event</a>
     <a href="#">Sosial</a>
-      <!-- TOGGLE DARK MODE -->
-    <button id="darkToggle" class="mode-btn">
+
+    <!-- TOMBOL MODE -->
+    <button class="mode-btn" id="modeToggle">
       <i class="fa-solid fa-moon"></i>
       <span>Mode Malam</span>
     </button>
