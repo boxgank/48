@@ -65,14 +65,14 @@ nav a{
   white-space:nowrap;
 }
 
-/* TEXT */
 .track span{
   flex:0 0 50%;
-  font-size:20px;     /* ⬅️ mirip poster */
+  font-size:20px;
+  font-weight:900;
   letter-spacing:1px;
 }
 
-/* ANIMASI ANTI GAP */
+/* ANIMASI */
 @keyframes moveLeft{
   from{transform:translateX(0)}
   to{transform:translateX(-50%)}
@@ -83,7 +83,7 @@ nav a{
   to{transform:translateX(0)}
 }
 
-/* VARIASI SPEED + ARAH */
+/* VARIASI */
 .l1 .track{animation:moveLeft 18s linear infinite;}
 .l2 .track{animation:moveRight 26s linear infinite;}
 .l3 .track{animation:moveLeft 22s linear infinite;}
