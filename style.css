@@ -38,64 +38,65 @@ nav a{
   position:relative;
   background:#e60012;
   overflow:hidden;
-  padding:90px 20px;
+  height:420px;          /* tinggi area merah */
 }
 
-/* AREA TEXT BERJALAN */
+/* BACKGROUND TEXT */
 .hero-bg{
   position:absolute;
   inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:18px;
-  opacity:.25;
+  display:grid;
+  grid-auto-rows:32px;   /* tinggi tiap baris */
+  align-content:stretch;
+  opacity:.22;
   font-family:monospace;
   font-weight:900;
-  z-index:1;
   pointer-events:none;
 }
 
-.marquee{
+/* DUPLIKASI BARIS KE BAWAH */
+.hero-bg::before{
+  content:"";
+  grid-row:1/-1;
+}
+
+.marquee-track{
   display:flex;
   white-space:nowrap;
-  animation:runLeft 20s linear infinite;
+  animation:scrollLeft 18s linear infinite;
 }
 
-.marquee:nth-child(even){
-  animation:runRight 25s linear infinite;
+.hero-bg .marquee-track:nth-child(even){
+  animation-direction:reverse;
 }
 
-.marquee span{
-  font-size:15px;
-  padding-right:40px;
+.marquee-track span{
+  padding-right:50px;
+  font-size:14px;
 }
 
-@keyframes runLeft{
-  from{transform:translateX(0)}
-  to{transform:translateX(-50%)}
+/* FULL DARI KANAN KE KIRI */
+@keyframes scrollLeft{
+  from{transform:translateX(100%)}
+  to{transform:translateX(-100%)}
 }
 
-@keyframes runRight{
-  from{transform:translateX(-50%)}
-  to{transform:translateX(0)}
-}
-
-/* GAMBAR DI TENGAH */
+/* GAMBAR TENGAH */
 .hero-content{
-  position:relative;
-  z-index:2;
+  position:absolute;
+  inset:0;
   display:flex;
   justify-content:center;
   align-items:center;
+  z-index:2;
 }
 
 .hero-content img{
   max-width:520px;
   width:100%;
-  background:#000;
   border:6px solid #fff;
   padding:12px;
+  background:transparent; /* ⬅️ TRANSPARAN */
 }
 
 
