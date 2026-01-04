@@ -447,6 +447,15 @@ footer{
   transform:scale(1.2);
 }
 
+.member-social a.idn-text{
+  font-size:12px;
+  font-weight:800;
+  padding:2px 6px;
+  border-radius:6px;
+  background:#ff004c;
+  color:#fff;
+  text-decoration:none;
+}
 
 /* ===== FACEBOOK ===== */
 .fb{
