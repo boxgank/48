@@ -561,3 +561,36 @@ body.dark .mode-btn{
 body.dark .mode-btn:hover{
   background:rgba(255,255,255,.1);
 }
+
+/* CARD / KOTAK DI MODE MALAM */
+body.dark .card,
+body.dark .member,
+body.dark .member-card{
+  background:#222;              /* abu gelap */
+  color:#eee;
+  box-shadow:0 12px 30px rgba(0,0,0,.6);
+}
+
+/* JUDUL DI DALAM KOTAK */
+body.dark .card h2,
+body.dark .section-title{
+  color:#fff;                   /* putih bersih */
+}
+
+body.dark .section-title{
+  border-left:4px solid #e60012; /* aksen merah */
+  padding-left:10px;
+}
+
+/* NAVBAR MODE MALAM */
+body.dark .navbar{
+  background:rgba(0,0,0,.35);   /* transparan */
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+
+body.dark .card p,
+body.dark .member-card p{
+  color:#ddd;
+}
+
