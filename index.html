@@ -13,6 +13,32 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
+<script>
+const toggle = document.getElementById('darkToggle');
+const icon = toggle.querySelector('i');
+const text = toggle.querySelector('span');
+const body = document.body;
+
+// LOAD THEME
+if(localStorage.getItem('theme') === 'dark'){
+  body.classList.add('dark');
+  icon.className = 'fa-solid fa-sun';
+  text.textContent = 'Mode Siang';
+}
+
+// TOGGLE
+toggle.onclick = () => {
+  body.classList.toggle('dark');
+  const dark = body.classList.contains('dark');
+
+  icon.className = dark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+  text.textContent = dark ? 'Mode Siang' : 'Mode Malam';
+
+  localStorage.setItem('theme', dark ? 'dark' : 'light');
+};
+</script>
+
+
 <body>
 
 <nav>
@@ -21,6 +47,11 @@
     <a href="#">Home</a>
     <a href="#">Event</a>
     <a href="#">Sosial</a>
+      <!-- TOGGLE DARK MODE -->
+    <button id="darkToggle" class="mode-btn">
+      <i class="fa-solid fa-moon"></i>
+      <span>Mode Malam</span>
+    </button>
   </div>
 </nav>
 
