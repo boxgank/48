@@ -56,7 +56,7 @@
     <div class="buttons big-buttons">
       <div>
         <a class="fb" href="https://facebook.com/gsixx3" target="_blank">
-           <i class="si si-facebook"></i>
+           <i class="fa-brands fa-facebook-f"></i>
            <span>Facebook Live</span>
         </a>    
         <p>Wajib sudah ADD Pertemanan Facebook untuk nonton Live</p>
@@ -69,7 +69,7 @@
 
   <div class="buttons big-buttons">
     <a class="yt" href="https://www.youtube.com/@48replay" target="_blank">
-      <i class="si si-youtube"></i>
+      <i class="fa-brands fa-youtube"></i>
       <span>YouTube</span>
     </a>
 
@@ -79,19 +79,19 @@
     </a>
 
     <a class="tt" href="https://www.tiktok.com/@48replay" target="_blank">
-      <i class="si si-tiktok"></i>
+      <i class="fa-brands fa-tiktok"></i>
       <span>TikTok</span>
     </a>
 
     <a class="dc" href="https://discord.gg/xxxxxx" target="_blank">
-      <i class="si si-discord"></i>
+      <i class="fa-brands fa-discord"></i>
       <span>Discord</span>
     </a>
 
    <h2>Dukung kami</h2>
      
     <a class="sw" href="https://saweria.co/masterkardus" target="_blank">
-      <i class="si si-buymeacoffee"></i>
+      <i class="fa-solid fa-mug-hot"></i>
       <span>Saweria</span>
     </a>
   </div>
@@ -310,24 +310,26 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-   <script>
+  <script>
 document.querySelectorAll('.member-card').forEach(card=>{
   const socials = [
-    ['ig','instagram'],
-    ['x','x'],
-    ['tt','tiktok'],
-    ['idn','idn'],
-    ['sr','showroom']
+    ['ig','fa-brands fa-instagram'],
+    ['x','fa-brands fa-x-twitter'],
+    ['tt','fa-brands fa-tiktok'],
+    ['idn','fa-solid fa-tv'],
+    ['sr','fa-solid fa-video']
   ];
-  const box=document.createElement('div');
-  box.className='member-social';
 
-  socials.forEach(([k,icon])=>{
-    const url=card.dataset[k];
+  const box = document.createElement('div');
+  box.className = 'member-social';
+
+  socials.forEach(([key,iconClass])=>{
+    const url = card.dataset[key];
     if(url){
-      const a=document.createElement('a');
-      a.href=url; a.target='_blank';
-      a.innerHTML=`<i class="si si-${icon}"></i>`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.innerHTML = `<i class="${iconClass}"></i>`;
       box.appendChild(a);
     }
   });
