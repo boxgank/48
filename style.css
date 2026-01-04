@@ -41,7 +41,7 @@ nav a{
   overflow:hidden;
 }
 
-/* BACKGROUND TEXT AREA */
+/* BACKGROUND RUNNING TEXT */
 .hero-bg{
   position:absolute;
   inset:0;
@@ -54,38 +54,36 @@ nav a{
   pointer-events:none;
 }
 
-/* SETIAP BARIS */
 .line{
+  display:flex;
   white-space:nowrap;
+  width:200%;
 }
 
 .line span{
-  display:inline-block;
+  display:block;
+  font-size:20px;          /* ⬅️ FONT LEBIH BESAR */
   padding-right:60px;
-  font-size:14px;
 }
 
-/* ANIMASI DASAR */
-@keyframes left{
-  from{transform:translateX(100%)}
-  to{transform:translateX(-100%)}
-}
-@keyframes right{
-  from{transform:translateX(-100%)}
-  to{transform:translateX(100%)}
+/* ANIMASI */
+@keyframes scrollLeft{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
 }
 
-/* VARIASI ARAH + SPEED (TIDAK BERURUTAN) */
-.l1 span{animation:left 18s linear infinite;}
-.l2 span{animation:right 26s linear infinite;}
-.l3 span{animation:left 22s linear infinite;}
-.l4 span{animation:right 30s linear infinite;}
-.l5 span{animation:left 20s linear infinite;}
-.l6 span{animation:right 28s linear infinite;}
-.l7 span{animation:left 24s linear infinite;}
-.l8 span{animation:right 32s linear infinite;}
-.l9 span{animation:left 19s linear infinite;}
-.l10 span{animation:right 35s linear infinite;}
+@keyframes scrollRight{
+  from{transform:translateX(-50%)}
+  to{transform:translateX(0)}
+}
+
+/* VARIASI ARAH & SPEED */
+.l1{animation:scrollLeft 22s linear infinite;}
+.l2{animation:scrollRight 30s linear infinite;}
+.l3{animation:scrollLeft 26s linear infinite;}
+.l4{animation:scrollRight 34s linear infinite;}
+.l5{animation:scrollLeft 28s linear infinite;}
+
 
 /* GAMBAR TENGAH */
 .hero-content{
