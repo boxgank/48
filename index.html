@@ -310,33 +310,41 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-  <script>
+<script>
 document.querySelectorAll('.member-card').forEach(card=>{
   const socials = [
-    ['ig','fa-brands fa-instagram'],
-    ['x','fa-brands fa-x-twitter'],
-    ['tt','fa-brands fa-tiktok'],
-    ['idn','fa-solid fa-tv'],
-    ['sr','fa-solid fa-video']
+    ['ig','icon','fa-brands fa-instagram'],
+    ['x','icon','fa-brands fa-x-twitter'],
+    ['tt','icon','fa-brands fa-tiktok'],
+    ['idn','text','IDN'],
+    ['sr','icon','fa-solid fa-video']
   ];
 
   const box = document.createElement('div');
   box.className = 'member-social';
 
-  socials.forEach(([key,iconClass])=>{
+  socials.forEach(([key,type,value])=>{
     const url = card.dataset[key];
-    if(url){
-      const a = document.createElement('a');
-      a.href = url;
-      a.target = '_blank';
-      a.innerHTML = `<i class="${iconClass}"></i>`;
-      box.appendChild(a);
+    if(!url) return;
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+
+    if(type === 'icon'){
+      a.innerHTML = `<i class="${value}"></i>`;
+    }else{
+      a.textContent = value;
+      a.classList.add('idn-text');
     }
+
+    box.appendChild(a);
   });
 
   card.appendChild(box);
 });
 </script>
+
 
 
 <footer>
