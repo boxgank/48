@@ -449,13 +449,15 @@ footer{
 
 .member-social a.idn-text{
   font-size:12px;
-  font-weight:800;
+  font-weight:900;      /* ⬅️ LEBIH TEBAL */
+  letter-spacing:0.5px; /* ⬅️ biar tegas */
   padding:2px 6px;
   border-radius:6px;
   background:#ff004c;
   color:#fff;
   text-decoration:none;
 }
+
 
 /* ===== FACEBOOK ===== */
 .fb{
