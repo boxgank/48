@@ -6,84 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="sorter.css">
 </head>
-
-  <meta charset="UTF-8">
-  <title>JKT48 Active Member Sorter</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #111;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    #progress {
-      margin-bottom: 20px;
-      opacity: 0.8;
-    }
-
-    .container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-
-    .card {
-      width: 220px;
-      background: #1e1e1e;
-      border-radius: 14px;
-      padding: 10px;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-
-    .card img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-    }
-
-    .card p {
-      margin: 10px 0 0;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .tie-btn {
-      margin-top: 25px;
-      padding: 12px 40px;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-      background: #333;
-      color: #fff;
-      transition: background 0.2s ease;
-    }
-
-    .tie-btn:hover {
-      background: #555;
-    }
-  </style>
-</head>
 <body>
 
   <h1>JKT48 Active Member Sorter</h1>
@@ -92,18 +14,18 @@
 
   <div class="container">
     <div class="card" onclick="choose('left')">
-      <img id="leftImg" src="">
+      <img id="leftImg">
       <p id="leftName"></p>
     </div>
 
     <div class="card" onclick="choose('right')">
-      <img id="rightImg" src="">
+      <img id="rightImg">
       <p id="rightName"></p>
     </div>
   </div>
 
   <button class="tie-btn" onclick="choose('tie')">TIE</button>
 
-  <script src="index.js"></script>
+  <script src="sorter.js"></script>
 </body>
 </html>
