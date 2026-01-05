@@ -1,6 +1,3 @@
-/* =========================
-   DATA MEMBER (4 AKTIF)
-========================= */
 const members = [
   { name: "bubub", img: "https://jkt48.com/profile/Nur_Intan.jpg" },
   { name: "cece", img: "https://jkt48.com/profile/abigail_rachel.jpg" },
@@ -8,9 +5,6 @@ const members = [
   { name: "tobrut", img: "https://jkt48.com/profile/aurhel_alana.jpg" }
 ];
 
-/* =========================
-   VARIABEL GLOBAL
-========================= */
 let lists = [];
 let left = [];
 let right = [];
@@ -22,22 +16,14 @@ let ri = 0;
 let total = 0;
 let current = 0;
 
-/* =========================
-   START SORTER
-========================= */
 function startSorter() {
   lists = members.map(m => [m]);
   shuffle(lists);
-
   total = Math.ceil(members.length * Math.log2(members.length));
   current = 0;
-
   nextMerge();
 }
 
-/* =========================
-   SHUFFLE
-========================= */
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -45,9 +31,6 @@ function shuffle(arr) {
   }
 }
 
-/* =========================
-   PROSES MERGE
-========================= */
 function nextMerge() {
   if (lists.length <= 1) {
     showResult(lists[0]);
@@ -57,16 +40,11 @@ function nextMerge() {
   left = lists.shift();
   right = lists.shift();
   merged = [];
-
   li = 0;
   ri = 0;
-
   showBattle();
 }
 
-/* =========================
-   TAMPILKAN BATTLE
-========================= */
 function showBattle() {
   if (li >= left.length && ri >= right.length) {
     lists.push(merged);
@@ -99,19 +77,14 @@ function showBattle() {
     `Progress ${current + 1} / ${total}`;
 }
 
-/* =========================
-   PILIHAN USER
-========================= */
 function choose(choice) {
   current++;
 
   if (choice === "left") {
     merged.push(left[li++]);
-  } 
-  else if (choice === "right") {
+  } else if (choice === "right") {
     merged.push(right[ri++]);
-  } 
-  else {
+  } else {
     merged.push(left[li++]);
     merged.push(right[ri++]);
   }
@@ -119,9 +92,6 @@ function choose(choice) {
   showBattle();
 }
 
-/* =========================
-   HASIL AKHIR
-========================= */
 function showResult(finalList) {
   document.body.innerHTML = "<h1>Hasil Ranking</h1>";
 
@@ -130,7 +100,4 @@ function showResult(finalList) {
   });
 }
 
-/* =========================
-   JALANKAN
-========================= */
 startSorter();
