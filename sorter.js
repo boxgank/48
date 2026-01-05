@@ -1,55 +1,136 @@
+/* =========================
+   DATA MEMBER (4 AKTIF)
+========================= */
 const members = [
-  { name: "Alya Amanda", img: "https://via.placeholder.com/150", score: 0 },
-  { name: "Anindya Ramadhani", img: "https://via.placeholder.com/150", score: 0 },
-  { name: "Aurellia", img: "https://via.placeholder.com/150", score: 0 },
-  { name: "Archel Alana", img: "https://via.placeholder.com/150", score: 0 }
+  { name: "bubub", img: "https://jkt48.com/profile/Nur_Intan.jpg" },
+  { name: "cece", img: "https://jkt48.com/profile/abigail_rachel.jpg" },
+  { name: "kimi", img: "https://jkt48.com/profile/victoria_kimberly.jpg" },
+  { name: "tobrut", img: "https://jkt48.com/profile/aurhel_alana.jpg" }
 ];
 
-let queue = [];
-let current = [];
+/* =========================
+   VARIABEL GLOBAL
+========================= */
+let lists = [];
+let left = [];
+let right = [];
+let merged = [];
 
-function shuffle(array) {
-  return array.sort(() => Math.random() - 0.5);
+let li = 0;
+let ri = 0;
+
+let total = 0;
+let current = 0;
+
+/* =========================
+   START SORTER
+========================= */
+function startSorter() {
+  lists = members.map(m => [m]);
+  shuffle(lists);
+
+  total = Math.ceil(members.length * Math.log2(members.length));
+  current = 0;
+
+  nextMerge();
 }
 
-function start() {
-  queue = shuffle([...members]);
-  nextBattle();
+/* =========================
+   SHUFFLE
+========================= */
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
 }
 
-function nextBattle() {
-  if (queue.length < 2) {
-    showResult();
+/* =========================
+   PROSES MERGE
+========================= */
+function nextMerge() {
+  if (lists.length <= 1) {
+    showResult(lists[0]);
     return;
   }
 
-  current = [queue.shift(), queue.shift()];
+  left = lists.shift();
+  right = lists.shift();
+  merged = [];
 
-  document.getElementById("img0").src = current[0].img;
-  document.getElementById("name0").innerText = current[0].name;
+  li = 0;
+  ri = 0;
 
-  document.getElementById("img1").src = current[1].img;
-  document.getElementById("name1").innerText = current[1].name;
+  showBattle();
 }
 
-function vote(index) {
-  current[index].score++;
-  nextBattle();
+/* =========================
+   TAMPILKAN BATTLE
+========================= */
+function showBattle() {
+  if (li >= left.length && ri >= right.length) {
+    lists.push(merged);
+    nextMerge();
+    return;
+  }
+
+  if (li >= left.length) {
+    merged.push(right[ri++]);
+    showBattle();
+    return;
+  }
+
+  if (ri >= right.length) {
+    merged.push(left[li++]);
+    showBattle();
+    return;
+  }
+
+  const L = left[li];
+  const R = right[ri];
+
+  document.getElementById("leftImg").src = L.img;
+  document.getElementById("leftName").innerText = L.name;
+
+  document.getElementById("rightImg").src = R.img;
+  document.getElementById("rightName").innerText = R.name;
+
+  document.getElementById("progress").innerText =
+    `Progress ${current + 1} / ${total}`;
 }
 
-function showResult() {
-  document.getElementById("battle").classList.add("hidden");
-  document.getElementById("result").classList.remove("hidden");
+/* =========================
+   PILIHAN USER
+========================= */
+function choose(choice) {
+  current++;
 
-  const ranking = document.getElementById("ranking");
-  members
-    .sort((a, b) => b.score - a.score)
-    .forEach(m => {
-      const li = document.createElement("li");
-      li.textContent = `${m.name} (${m.score})`;
-      ranking.appendChild(li);
-    });
+  if (choice === "left") {
+    merged.push(left[li++]);
+  } 
+  else if (choice === "right") {
+    merged.push(right[ri++]);
+  } 
+  else {
+    merged.push(left[li++]);
+    merged.push(right[ri++]);
+  }
+
+  showBattle();
 }
 
-start();
+/* =========================
+   HASIL AKHIR
+========================= */
+function showResult(finalList) {
+  document.body.innerHTML = "<h1>Hasil Ranking</h1>";
 
+  finalList.forEach((m, i) => {
+    document.body.innerHTML += `<p>${i + 1}. ${m.name}</p>`;
+  });
+}
+
+/* =========================
+   JALANKAN
+========================= */
+startSorter();
