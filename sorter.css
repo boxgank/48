@@ -183,3 +183,43 @@ input[type="checkbox"] {
     font-size: 1.8rem;
   }
 }
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.result-card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.result-card img {
+  width: 100%;
+  border-radius: 12px;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+
+.rank {
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: #ff79c6;
+  margin-bottom: 6px;
+}
+
+.name {
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.meta {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
