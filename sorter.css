@@ -1,103 +1,185 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>JKT48 Active Member Sorter</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #111;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
+* {
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
 
-    h1 {
-      margin-bottom: 10px;
-    }
+body {
+  margin: 0;
+  padding: 24px;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+}
 
-    #progress {
-      margin-bottom: 20px;
-      opacity: 0.8;
-    }
+/* ===== TITLE ===== */
+h1 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+}
 
-    .container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
+h4 {
+  margin: 24px 0 8px;
+  font-size: 1.1rem;
+  color: #ffd6ff;
+}
 
-    .card {
-      width: 220px;
-      background: #1e1e1e;
-      border-radius: 14px;
-      padding: 10px;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
+/* ===== SELECT SCREEN ===== */
+#selectScreen {
+  max-width: 900px;
+  margin: auto;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
 
-    .card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
+/* ===== MODE RADIO ===== */
+#selectScreen label {
+  margin-right: 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
 
-    .card img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-    }
+input[type="radio"] {
+  accent-color: #ff79c6;
+}
 
-    .card p {
-      margin: 10px 0 0;
-      font-size: 18px;
-      font-weight: bold;
-    }
+/* ===== TEAM / GEN BOX ===== */
+#genSelect,
+#teamSelect {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.25);
+}
 
-    .tie-btn {
-      margin-top: 25px;
-      padding: 12px 40px;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-      background: #333;
-      color: #fff;
-      transition: background 0.2s ease;
-    }
+/* ===== ALL BUTTON ===== */
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: linear-gradient(135deg, #ff79c6, #8be9fd);
+  color: #111;
+  margin: 6px 0 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
 
-    .tie-btn:hover {
-      background: #555;
-    }
-  </style>
-</head>
-<body>
+button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(255,121,198,0.4);
+}
 
-  <h1>JKT48 Active Member Sorter</h1>
+button:active {
+  transform: scale(0.95);
+}
 
-  <p id="progress">Progress 0 / 0</p>
+/* ===== CHECKBOX MEMBER ===== */
+label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+  background: rgba(255,255,255,0.05);
+  transition: background 0.15s ease;
+}
 
-  <div class="container">
-    <div class="card" onclick="choose('left')">
-      <img id="leftImg" src="">
-      <p id="leftName"></p>
-    </div>
+label:hover {
+  background: rgba(255,255,255,0.12);
+}
 
-    <div class="card" onclick="choose('right')">
-      <img id="rightImg" src="">
-      <p id="rightName"></p>
-    </div>
-  </div>
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #8be9fd;
+  cursor: pointer;
+}
 
-  <button class="tie-btn" onclick="choose('tie')">TIE</button>
+/* ===== START BUTTON ===== */
+#selectScreen > button {
+  display: block;
+  margin: 30px auto 0;
+  padding: 14px 36px;
+  font-size: 1rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #50fa7b, #8be9fd);
+  box-shadow: 0 12px 30px rgba(80,250,123,0.4);
+}
 
-  <script src="index.js"></script>
-</body>
-</html>
+#selectScreen > button:hover {
+  box-shadow: 0 16px 40px rgba(80,250,123,0.6);
+}
+
+/* ===== SORTER SCREEN ===== */
+#sorterScreen {
+  max-width: 900px;
+  margin: auto;
+  margin-top: 30px;
+  text-align: center;
+}
+
+/* ===== PROGRESS ===== */
+#progress {
+  margin-bottom: 14px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+/* ===== BATTLE CARD ===== */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 18px 40px rgba(255,121,198,0.45);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 16px;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+
+.card p {
+  margin-top: 12px;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+/* ===== TIE BUTTON ===== */
+#sorterScreen button {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #ffb86c, #ff79c6);
+  box-shadow: 0 10px 30px rgba(255,184,108,0.4);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+}
