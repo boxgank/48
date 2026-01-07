@@ -134,7 +134,7 @@ function updateProgress() {
   bar.style.width = percent + "%";
   bar.classList.remove("progress-pulse");
 
-  void bar.offsetWidth; // trigger reflow
+  void bar.offsetWidth;
   bar.classList.add("progress-pulse");
 
   document.getElementById("progressText").innerText =
