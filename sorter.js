@@ -233,5 +233,3 @@ function showResult(finalList) {
     document.body.innerHTML += `<p>${i + 1}. ${m.name}</p>`;
   });
 }
-
-startSorter();
