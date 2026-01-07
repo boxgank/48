@@ -134,18 +134,18 @@ input[type="checkbox"] {
 
 /* ===== BATTLE CARD ===== */
 .container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
+
 .card {
-  background: rgba(255,255,255,0.08);
-  border-radius: 20px;
-  padding: 16px;
+  width: min(45vw, 180px);
+  text-align: center;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
 .card:hover {
@@ -155,15 +155,16 @@ input[type="checkbox"] {
 
 .card img {
   width: 100%;
-  border-radius: 16px;
-  aspect-ratio: 3/4;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
+  border-radius: 14px;
 }
 
+
 .card p {
-  margin-top: 12px;
-  font-weight: 700;
-  font-size: 1.05rem;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* ===== TIE BUTTON ===== */
