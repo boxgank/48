@@ -186,3 +186,58 @@ function showResult(list) {
     document.body.innerHTML += `<p>${i + 1}. ${m.name}</p>`;
   });
 }
+
+function renderFilters() {
+  genBox.innerHTML = "";
+  teamBox.innerHTML = "";
+
+  const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
+  const teams = [...new Set(members.map(m => m.team))];
+
+  gens.forEach(g => {
+    genBox.innerHTML += `<h4>Generasi ${g}</h4>`;
+    genBox.innerHTML += `
+      <button type="button" onclick="toggleGroup('gen', ${g})">
+        All Gen ${g}
+      </button>
+    `;
+    members.filter(m => m.gen === g).forEach(m => {
+      genBox.innerHTML += `
+        <label>
+          <input type="checkbox" value="${m.id}" data-gen="${m.gen}">
+          ${m.name}
+        </label><br>
+      `;
+    });
+  });
+
+  teams.forEach(t => {
+    teamBox.innerHTML += `<h4>Team ${t}</h4>`;
+    teamBox.innerHTML += `
+      <button type="button" onclick="toggleGroup('team', '${t}')">
+        All ${t}
+      </button>
+    `;
+    members.filter(m => m.team === t).forEach(m => {
+      teamBox.innerHTML += `
+        <label>
+          <input type="checkbox" value="${m.id}" data-team="${m.team}">
+          ${m.name}
+        </label><br>
+      `;
+    });
+  });
+}
+
+function toggleGroup(type, value) {
+  const selector =
+    type === "gen"
+      ? `#genSelect input[data-gen="${value}"]`
+      : `#teamSelect input[data-team="${value}"]`;
+
+  const boxes = document.querySelectorAll(selector);
+  if (!boxes.length) return;
+
+  const allChecked = [...boxes].every(b => b.checked);
+  boxes.forEach(b => b.checked = !allChecked);
+}
