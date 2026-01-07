@@ -51,34 +51,32 @@ const members = [
 const genBox = document.getElementById("genSelect");
 const teamBox = document.getElementById("teamSelect");
 
-function renderFilters() {
-  const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
-  const teams = [...new Set(members.map(m => m.team))];
+let lists = [];
+let left = [];
+let right = [];
+let merged = [];
+let li = 0;
+let ri = 0;
+let total = 0;
+let current = 0;
 
+/* ================= FILTER ================= */
+
+function renderFilters() {
   genBox.innerHTML = "";
   teamBox.innerHTML = "";
 
-  gens.forEach(g => {
-    genBox.innerHTML += `<h4>Generasi ${g}</h4>`;
+  [...new Set(members.map(m => m.gen))].sort().forEach(g => {
+    genBox.innerHTML += `<h4>Gen ${g}</h4>`;
     members.filter(m => m.gen === g).forEach(m => {
-      genBox.innerHTML += `
-        <label>
-          <input type="checkbox" value="${m.id}">
-          ${m.name}
-        </label><br>
-      `;
+      genBox.innerHTML += `<label><input type="checkbox" value="${m.id}"> ${m.name}</label><br>`;
     });
   });
 
-  teams.forEach(t => {
+  [...new Set(members.map(m => m.team))].forEach(t => {
     teamBox.innerHTML += `<h4>Team ${t}</h4>`;
     members.filter(m => m.team === t).forEach(m => {
-      teamBox.innerHTML += `
-        <label>
-          <input type="checkbox" value="${m.id}">
-          ${m.name}
-        </label><br>
-      `;
+      teamBox.innerHTML += `<label><input type="checkbox" value="${m.id}"> ${m.name}</label><br>`;
     });
   });
 }
@@ -92,6 +90,8 @@ document.querySelectorAll('input[name="mode"]').forEach(radio => {
   });
 });
 
+/* ================= START ================= */
+
 function startFromSelection() {
   const mode = document.querySelector('input[name="mode"]:checked').value;
   let selected = [];
@@ -99,14 +99,8 @@ function startFromSelection() {
   if (mode === "all") {
     selected = members;
   } else {
-    const checked = document.querySelectorAll(
-      '#selectScreen input[type="checkbox"]:checked'
-    );
-
-    const ids = new Set();
-    checked.forEach(c => ids.add(c.value));
-
-    selected = members.filter(m => ids.has(m.id));
+    const checked = document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
+    selected = members.filter(m => [...checked].some(c => c.value === m.id));
   }
 
   if (selected.length < 2) {
@@ -120,43 +114,15 @@ function startFromSelection() {
   initSorter(selected);
 }
 
-function initSorter(selectedMembers) {
-  lists = selectedMembers.map(m => [m]);
+/* ================= SORTER ================= */
+
+function initSorter(data) {
+  lists = data.map(m => [m]);
   shuffle(lists);
-  total = Math.ceil(selectedMembers.length * Math.log2(selectedMembers.length));
+  total = Math.ceil(data.length * Math.log2(data.length));
   current = 0;
   nextMerge();
 }
-
-
-let lists = [];
-let left = [];
-let right = [];
-let merged = [];
-
-let li = 0;
-let ri = 0;
-
-let total = 0;
-let current = 0;
-
-  if (mode === "all") {
-    selected = members;
-  } else {
-    const checked = document.querySelectorAll(
-      '#selectScreen input[type="checkbox"]:checked'
-    );
-
-    const ids = new Set();
-    checked.forEach(c => ids.add(c.value));
-
-    selected = members.filter(m => ids.has(m.id));
-  }
-
-  if (selected.length < 2) {
-    alert("Pilih minimal 2 member");
-    return;
-  }
 
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -174,8 +140,7 @@ function nextMerge() {
   left = lists.shift();
   right = lists.shift();
   merged = [];
-  li = 0;
-  ri = 0;
+  li = ri = 0;
   showBattle();
 }
 
@@ -186,52 +151,28 @@ function showBattle() {
     return;
   }
 
-  if (li >= left.length) {
-    merged.push(right[ri++]);
-    showBattle();
-    return;
-  }
+  if (li >= left.length) return merged.push(right[ri++]), showBattle();
+  if (ri >= right.length) return merged.push(left[li++]), showBattle();
 
-  if (ri >= right.length) {
-    merged.push(left[li++]);
-    showBattle();
-    return;
-  }
+  document.getElementById("leftImg").src = left[li].img;
+  document.getElementById("leftName").innerText = left[li].name;
+  document.getElementById("rightImg").src = right[ri].img;
+  document.getElementById("rightName").innerText = right[ri].name;
 
-  const L = left[li];
-  const R = right[ri];
-
-  document.getElementById("leftImg").src = L.img;
-  document.getElementById("leftName").innerText = L.name;
-
-  document.getElementById("rightImg").src = R.img;
-  document.getElementById("rightName").innerText = R.name;
-
-  document.getElementById("progress").innerText =
-    `Progress ${current + 1} / ${total}`;
+  document.getElementById("progress").innerText = `Progress ${current + 1} / ${total}`;
 }
 
-function choose(choice) {
+function choose(side) {
   current++;
-
-  if (choice === "left") {
-    merged.push(left[li++]);
-  } else if (choice === "right") {
-    merged.push(right[ri++]);
-  } else {
-    merged.push(left[li++]);
-    merged.push(right[ri++]);
-  }
-
+  if (side === "left") merged.push(left[li++]);
+  else if (side === "right") merged.push(right[ri++]);
+  else merged.push(left[li++], right[ri++]);
   showBattle();
 }
 
-function showResult(finalList) {
+function showResult(list) {
   document.body.innerHTML = "<h1>Hasil Ranking</h1>";
-
-  finalList.forEach((m, i) => {
+  list.forEach((m, i) => {
     document.body.innerHTML += `<p>${i + 1}. ${m.name}</p>`;
   });
 }
-
-startFromSelection()
