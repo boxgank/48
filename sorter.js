@@ -180,12 +180,29 @@ function choose(side) {
   showBattle();
 }
 
-function showResult(list) {
-  document.body.innerHTML = "<h1>Hasil Ranking</h1>";
-  list.forEach((m, i) => {
-    document.body.innerHTML += `<p>${i + 1}. ${m.name}</p>`;
+function showResult(finalList) {
+  document.body.innerHTML = `
+    <h1>Hasil Ranking</h1>
+    <div class="result-grid"></div>
+    <button onclick="location.reload()">Ulangi Sorter</button>
+  `;
+
+  const grid = document.querySelector(".result-grid");
+
+  finalList.forEach((m, i) => {
+    grid.innerHTML += `
+      <div class="result-card">
+        <div class="rank">#${i + 1}</div>
+        <img src="${m.img}">
+        <div class="info">
+          <p class="name">${m.name}</p>
+          <p class="meta">Gen ${m.gen} · Team ${m.team}</p>
+        </div>
+      </div>
+    `;
   });
 }
+
 
 function renderFilters() {
   genBox.innerHTML = "";
