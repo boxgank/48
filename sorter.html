@@ -2,19 +2,17 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>JKT48 Active Member Sorter</title>
+  <title>JKT48 Member Sorter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="sorter.css">
 </head>
 <body>
 
-  <h1>JKT48 Active Member Sorter</h1>
+<h1>JKT48 Member Sorter</h1>
 
-  <p id="progress">Progress 0 / 0</p>
+<div id="selectScreen">
+  <h3>Pilih Mode</h3>
 
-  <div id="selectScreen">
-
-  <h2>Pilih Mode</h2>
   <label><input type="radio" name="mode" value="all" checked> Semua Member</label>
   <label><input type="radio" name="mode" value="gen"> Berdasarkan Generasi</label>
   <label><input type="radio" name="mode" value="team"> Berdasarkan Team</label>
@@ -23,11 +21,10 @@
   <div id="teamSelect" style="display:none"></div>
 
   <button onclick="startFromSelection()">Start Sorting</button>
-
 </div>
 
 <div id="sorterScreen" style="display:none">
-  <p id="progress">Progress 0 / 0</p>
+  <p id="progress"></p>
 
   <div class="container">
     <div class="card" onclick="choose('left')">
@@ -41,11 +38,9 @@
     </div>
   </div>
 
-  <button class="tie-btn" onclick="choose('tie')">TIE</button>
+  <button onclick="choose('tie')">TIE</button>
 </div>
 
-
-  
-  <script src="sorter.js"></script>
+<script src="sorter.js"></script>
 </body>
 </html>
