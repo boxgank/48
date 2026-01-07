@@ -1,9 +1,24 @@
 const members = [
-  { name: "bubub", img: "https://jkt48.com/profile/Nur_Intan.jpg" },
-  { name: "cece", img: "https://jkt48.com/profile/abigail_rachel.jpg" },
-  { name: "kimi", img: "https://jkt48.com/profile/victoria_kimberly.jpg" },
-  { name: "tobrut", img: "https://jkt48.com/profile/aurhel_alana.jpg" }
+  {
+    id: "nur_intan",
+    name: "Nur Intan",
+    gen: 10,
+    team: "J"
+  },
+  {
+    id: "abigail",
+    name: "Abigail Rachel",
+    gen: 10,
+    team: "KIII"
+  },
+  {
+    id: "kimberly",
+    name: "Victoria Kimberly",
+    gen: 9,
+    team: "J"
+  }
 ];
+
 
 let lists = [];
 let left = [];
