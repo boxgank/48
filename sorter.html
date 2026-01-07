@@ -22,11 +22,30 @@
   <div id="genSelect" style="display:none"></div>
   <div id="teamSelect" style="display:none"></div>
 
-  <button onclick="confirmSelection()">Start Sorting</button>
+  <button onclick="startFromSelection()">Start Sorting</button>
 
 </div>
 
+<div id="sorterScreen" style="display:none">
+  <p id="progress">Progress 0 / 0</p>
 
+  <div class="container">
+    <div class="card" onclick="choose('left')">
+      <img id="leftImg">
+      <p id="leftName"></p>
+    </div>
+
+    <div class="card" onclick="choose('right')">
+      <img id="rightImg">
+      <p id="rightName"></p>
+    </div>
+  </div>
+
+  <button class="tie-btn" onclick="choose('tie')">TIE</button>
+</div>
+
+
+  
   <script src="sorter.js"></script>
 </body>
 </html>
