@@ -275,3 +275,18 @@ function toggleGroup(type, value) {
   const allChecked = [...boxes].every(b => b.checked);
   boxes.forEach(b => b.checked = !allChecked);
 }
+
+function undo() {
+  if (!history.length) return;
+
+  const prev = history.pop();
+  lists = prev.lists;
+  left = prev.left;
+  right = prev.right;
+  merged = prev.merged;
+  li = prev.li;
+  ri = prev.ri;
+  current = prev.current;
+
+  showBattle();
+}
