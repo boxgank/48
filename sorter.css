@@ -223,3 +223,21 @@ input[type="checkbox"] {
   opacity: 0.75;
 }
 
+#genSelect label,
+#teamSelect label {
+  font-size: 0.85rem;
+  padding: 6px 8px;
+  border-radius: 10px;
+}
+
+#genSelect input[type="checkbox"],
+#teamSelect input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+}
+
+#genSelect h4,
+#teamSelect h4 {
+  font-size: 0.95rem;
+  margin-top: 18px;
+}
