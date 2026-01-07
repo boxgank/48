@@ -127,6 +127,21 @@ function startFromSelection() {
 
 /* ================= SORTER ================= */
 
+function updateProgress() {
+  const percent = Math.min((current / total) * 100, 100);
+  const bar = document.getElementById("progressFill");
+
+  bar.style.width = percent + "%";
+  bar.classList.remove("progress-pulse");
+
+  void bar.offsetWidth; // trigger reflow
+  bar.classList.add("progress-pulse");
+
+  document.getElementById("progressText").innerText =
+    `${current} / ${total}`;
+}
+
+
 function initSorter(data) {
   lists = data.map(m => [m]);
   shuffle(lists);
