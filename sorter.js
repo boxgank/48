@@ -69,6 +69,7 @@ let li = 0;
 let ri = 0;
 let total = 0;
 let current = 0;
+let history = [];
 
 /* ================= FILTER ================= */
 
@@ -172,11 +173,27 @@ function showBattle() {
   document.getElementById("progress").innerText = `Progress ${current + 1} / ${total}`;
 }
 
-function choose(side) {
+function choose(choice) {
+  history.push({
+    lists: JSON.parse(JSON.stringify(lists)),
+    left: [...left],
+    right: [...right],
+    merged: [...merged],
+    li,
+    ri,
+    current
+  });
+
   current++;
-  if (side === "left") merged.push(left[li++]);
-  else if (side === "right") merged.push(right[ri++]);
-  else merged.push(left[li++], right[ri++]);
+
+  if (choice === "left") {
+    merged.push(left[li++]);
+  } else if (choice === "right") {
+    merged.push(right[ri++]);
+  } else {
+    merged.push(left[li++], right[ri++]);
+  }
+
   showBattle();
 }
 
