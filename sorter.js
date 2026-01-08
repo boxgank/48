@@ -64,6 +64,8 @@ const leftName = document.getElementById("leftName");
 const rightImg = document.getElementById("rightImg");
 const rightName = document.getElementById("rightName");
 
+const estimateBox = document.getElementById("battleEstimate");
+
 /* ==================================================
    MODE SWITCH
 ================================================== */
@@ -77,14 +79,14 @@ document.querySelectorAll('input[name="mode"]').forEach(radio => {
 });
 
 /* ==================================================
-   FILTER RENDER (GEN + TEAM + ALL BUTTON)
+   FILTER RENDER
 ================================================== */
 
 function renderFilters() {
   genBox.innerHTML = "";
   teamBox.innerHTML = "";
 
-  const gens = [...new Set(members.map(m => m.gen))].sort((a, b) => a - b);
+  const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
   const teams = [...new Set(members.map(m => m.team))];
 
   gens.forEach(g => {
@@ -92,7 +94,6 @@ function renderFilters() {
       <h4>Generasi ${g}</h4>
       <button onclick="toggleGroup('gen', ${g})">All Gen ${g}</button>
     `;
-
     members.filter(m => m.gen === g).forEach(m => {
       genBox.innerHTML += `
         <label>
@@ -108,7 +109,6 @@ function renderFilters() {
       <h4>Team ${t}</h4>
       <button onclick="toggleGroup('team', '${t}')">All ${t}</button>
     `;
-
     members.filter(m => m.team === t).forEach(m => {
       teamBox.innerHTML += `
         <label>
@@ -123,18 +123,17 @@ function renderFilters() {
 renderFilters();
 
 function toggleGroup(type, value) {
-  const selector =
-    type === "gen"
-      ? `#genSelect input[data-gen="${value}"]`
-      : `#teamSelect input[data-team="${value}"]`;
+  const selector = type === "gen"
+    ? `#genSelect input[data-gen="${value}"]`
+    : `#teamSelect input[data-team="${value}"]`;
 
   const boxes = document.querySelectorAll(selector);
   const allChecked = [...boxes].every(b => b.checked);
-  boxes.forEach(b => (b.checked = !allChecked));
+  boxes.forEach(b => b.checked = !allChecked);
 }
 
 /* ==================================================
-   START FROM SELECTION
+   START SORTER
 ================================================== */
 
 window.startFromSelection = function () {
@@ -147,7 +146,6 @@ window.startFromSelection = function () {
     const checked = document.querySelectorAll(
       '#selectScreen input[type="checkbox"]:checked'
     );
-
     selected = members.filter(m =>
       [...checked].some(c => c.value === m.id)
     );
@@ -158,6 +156,9 @@ window.startFromSelection = function () {
     return;
   }
 
+  // INIT SCORE
+  selected.forEach(m => m.score = 0);
+
   document.getElementById("selectScreen").style.display = "none";
   document.getElementById("sorterScreen").style.display = "block";
 
@@ -165,7 +166,7 @@ window.startFromSelection = function () {
 };
 
 /* ==================================================
-   SORTER STATE (LOGIC LAMA STABIL)
+   SORTER STATE (PURE MANUAL)
 ================================================== */
 
 let lists = [];
@@ -186,7 +187,7 @@ function initSorter(data) {
   lists = data.map(m => [m]);
   shuffle(lists);
 
-  total = Math.ceil(data.length * Math.log2(data.length));
+  total = calculateTotalBattles(data.length);
   current = 0;
 
   updateProgress();
@@ -201,18 +202,28 @@ function shuffle(arr) {
 }
 
 /* ==================================================
-   MERGE FLOW (NO AUTO SKIP)
+   TOTAL BATTLE COUNT
+================================================== */
+
+function calculateTotalBattles(n) {
+  let total = 0;
+  let size = n;
+  while (size > 1) {
+    total += size - 1;
+    size = Math.floor(size / 2);
+  }
+  return total;
+}
+
+/* ==================================================
+   MERGE FLOW (NO AUTO RUN)
 ================================================== */
 
 function nextMerge() {
   if (lists.length <= 1) {
     current = total;
     updateProgress();
-
-    setTimeout(() => {
-      showResult(lists[0]);
-    }, 400);
-
+    setTimeout(() => showResult(lists[0]), 400);
     return;
   }
 
@@ -226,43 +237,69 @@ function nextMerge() {
 }
 
 function showBattle() {
+  if (li >= left.length || ri >= right.length) return;
+
+  leftImg.src = left[li].img;
+  leftName.innerText = left[li].name;
+
+  rightImg.src = right[ri].img;
+  rightName.innerText = right[ri].name;
+}
+
+/* ==================================================
+   USER CHOICE + SCORE
+================================================== */
+
+function choose(choice) {
+  current++;
+
+  if (choice === "left") {
+    left[li].score++;
+    merged.push(left[li++]);
+  } else if (choice === "right") {
+    right[ri].score++;
+    merged.push(right[ri++]);
+  } else {
+    left[li].score++;
+    merged.push(left[li++]); // tie stabil
+  }
+
+  updateProgress();
+
   if (li >= left.length || ri >= right.length) {
-    merged = merged
-      .concat(left.slice(li))
-      .concat(right.slice(ri));
+    while (li < left.length) merged.push(left[li++]);
+    while (ri < right.length) merged.push(right[ri++]);
 
     lists.push(merged);
     nextMerge();
     return;
   }
 
-  const L = left[li];
-  const R = right[ri];
-
-  leftImg.src = L.img;
-  leftName.innerText = L.name;
-
-  rightImg.src = R.img;
-  rightName.innerText = R.name;
-}
-
-/* ==================================================
-   USER CHOICE
-================================================== */
-
-function choose(choice) {
-  current++;
-
-  if (choice === "left") merged.push(left[li++]);
-  else if (choice === "right") merged.push(right[ri++]);
-  else merged.push(left[li++]); // tie stabil
-
-  updateProgress();
   showBattle();
 }
 
 /* ==================================================
-   PROGRESS BAR
+   REMAINING BATTLE ESTIMATE
+================================================== */
+
+function estimateRemainingBattles() {
+  let remaining = 0;
+
+  if (left.length && right.length) {
+    remaining += (left.length - li) + (right.length - ri) - 1;
+  }
+
+  for (let i = 0; i < lists.length; i += 2) {
+    if (lists[i + 1]) {
+      remaining += lists[i].length + lists[i + 1].length - 1;
+    }
+  }
+
+  return Math.max(remaining, 0);
+}
+
+/* ==================================================
+   PROGRESS BAR + ESTIMATE
 ================================================== */
 
 function updateProgress() {
@@ -270,10 +307,17 @@ function updateProgress() {
   document.getElementById("progressFill").style.width = percent + "%";
   document.getElementById("progressText").innerText =
     `${current} / ${total}`;
+
+  if (estimateBox) {
+    estimateBox.innerText =
+      estimateRemainingBattles() > 0
+        ? `Sisa battle: ${estimateRemainingBattles()}`
+        : "Tahap akhir...";
+  }
 }
 
 /* ==================================================
-   RESULT
+   RESULT (RANKING + SCORE)
 ================================================== */
 
 function showResult(finalList) {
@@ -285,6 +329,7 @@ function showResult(finalList) {
           <div class="rank">#${i + 1}</div>
           <img src="${m.img}">
           <div class="name">${m.name}</div>
+          <div class="score">Score: ${m.score}</div>
           <div class="meta">Gen ${m.gen} • Team ${m.team}</div>
         </div>
       `).join("")}
