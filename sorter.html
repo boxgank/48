@@ -25,7 +25,12 @@
 
 <div id="sorterScreen" style="display:none">
   <p id="progress"></p>
-
+<div class="progress-wrapper">
+  <div class="progress-bar">
+    <div id="progressFill"></div>
+  </div>
+  <div id="progressText"></div>
+</div>
 <div class="battle">
 
   <div class="cards">
@@ -44,16 +49,6 @@
     <button class="undo-btn" onclick="undo()">UNDO</button>
     <button class="tie-btn" onclick="choose('tie')">TIE</button>
   </div>
-
-  <p id="progress"></p>
-</div>
-
-  <div class="progress-wrapper">
-  <div class="progress-bar">
-    <div id="progressFill"></div>
-  </div>
-  <div id="progressText"></div>
-</div>
 
 <script src="sorter.js"></script>
 </body>
