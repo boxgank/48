@@ -1,3 +1,7 @@
+/* ==================================================
+   DATA MEMBER
+================================================== */
+
 const members = [
   { id: "alya_amanda", name: "Alya Amanda", gen: 11, team: "Love", img: "https://jkt48.com/profile/alya_amanda.jpg" },
   { id: "anindya_ramadhani", name: "Anindya Ramadhani", gen: 11, team: "Love", img: "https://jkt48.com/profile/anindya_ramadhani.jpg" },
@@ -23,7 +27,7 @@ const members = [
   { id: "gabriela_abigail", name: "Gabriela Abigail", gen: 10, team: "Dream", img: "https://jkt48.com/profile/gabriela_abigail.jpg" },
   { id: "gendis_mayrannisa", name: "Gendis Mayrannisa", gen: 11, team: "Dream", img: "https://jkt48.com/profile/gendis_mayrannisa.jpg" },
   { id: "gita_sekar_andarini", name: "Gita Sekar Andarini", gen: 6, team: "Dream", img: "https://jkt48.com/profile/gita_sekar_andarini.jpg" },
-  { id: "greesella_adhalia", name: "Greesela Adhalia", gen: 10, team: "Dream", img: "https://jkt48.com/profile/greesella_adhalia.jpg" },
+  { id: "greesela_adhalia", name: "Greesela Adhalia", gen: 10, team: "Dream", img: "https://jkt48.com/profile/greesella_adhalia.jpg" },
   { id: "helisma_putri", name: "Helisma Putri", gen: 7, team: "Dream", img: "https://jkt48.com/profile/helisma_putri.jpg" },
   { id: "jesslyn_elly", name: "Jesslyn Elly", gen: 10, team: "Dream", img: "https://jkt48.com/profile/jesslyn_elly.jpg" },
   { id: "marsha_lenathea", name: "Marsha Lenathea", gen: 9, team: "Dream", img: "https://jkt48.com/profile/marsha_lenathea.jpg" },
@@ -45,17 +49,7 @@ const members = [
   { id: "mutiara_azzahra", name: "Mutiara Azzahra", gen: 7, team: "Passion", img: "https://jkt48.com/profile/mutiara_azzahra.jpg" },
   { id: "raisha_syifa", name: "Raisha Syifa", gen: 10, team: "Passion", img: "https://jkt48.com/profile/raisha_syifa.jpg" },
   { id: "ribka_budiman", name: "Ribka Budiman", gen: 12, team: "Passion", img: "https://jkt48.com/profile/ribka_budiman.jpg" },
-  { id: "victoria_kimberly", name: "Victoria Kimberly", gen: 12, team: "Passion", img: "https://jkt48.com/profile/victoria_kimberly.jpg" },
-
-  { id: "astrella_virgiananda", name: "Astrella Virgiananda", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Astrella_Virgiananda.jpg" },
-  { id: "aulia_riza", name: "Aulia Riza", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Aulia_Riza.jpg" },
-  { id: "bong_aprilli", name: "Bong Aprilli", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Bong_Aprilli.jpg" },
-  { id: "hagia_sopia", name: "Hagia Sopia", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Hagia_Sopia.jpg" },
-  { id: "humaira_ramadhani", name: "Humaira Ramadhani", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Humaira_Ramadhani.jpg" },
-  { id: "jacqueline_immanuela", name: "Jacqueline Immanuela", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Jacqueline_Immanuela.jpg" },
-  { id: "jemima_evodie", name: "Jemima Evodie", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Jemima_Evodie.jpg" },
-  { id: "mikaela_kusjanto", name: "Mikaela Kusjanto", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Mikaela_Kusjanto.jpg" },
-  { id: "nur_intan", name: "Nur Intan", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Nur_Intan.jpg" }
+  { id: "victoria_kimberly", name: "Victoria Kimberly", gen: 12, team: "Passion", img: "https://jkt48.com/profile/victoria_kimberly.jpg" }
 ];
 
 /* ==================================================
@@ -69,20 +63,6 @@ const leftImg = document.getElementById("leftImg");
 const leftName = document.getElementById("leftName");
 const rightImg = document.getElementById("rightImg");
 const rightName = document.getElementById("rightName");
-
-/* ==================================================
-   SORTER STATE
-================================================== */
-
-let lists = [];
-let left = [];
-let right = [];
-let merged = [];
-let li = 0;
-let ri = 0;
-let total = 0;
-let current = 0;
-let history = [];
 
 /* ==================================================
    MODE SWITCH
@@ -108,13 +88,11 @@ function renderFilters() {
   const teams = [...new Set(members.map(m => m.team))];
 
   gens.forEach(g => {
-    genBox.innerHTML += `<h4>Generasi ${g}</h4>
-      <button onclick="toggleGroup('gen', ${g})">All Gen ${g}</button>`;
-
+    genBox.innerHTML += `<h4>Generasi ${g}</h4>`;
     members.filter(m => m.gen === g).forEach(m => {
       genBox.innerHTML += `
         <label>
-          <input type="checkbox" data-gen="${g}" value="${m.id}">
+          <input type="checkbox" value="${m.id}">
           ${m.name}
         </label><br>
       `;
@@ -122,13 +100,11 @@ function renderFilters() {
   });
 
   teams.forEach(t => {
-    teamBox.innerHTML += `<h4>Team ${t}</h4>
-      <button onclick="toggleGroup('team', '${t}')">All ${t}</button>`;
-
+    teamBox.innerHTML += `<h4>Team ${t}</h4>`;
     members.filter(m => m.team === t).forEach(m => {
       teamBox.innerHTML += `
         <label>
-          <input type="checkbox" data-team="${t}" value="${m.id}">
+          <input type="checkbox" value="${m.id}">
           ${m.name}
         </label><br>
       `;
@@ -139,7 +115,7 @@ function renderFilters() {
 renderFilters();
 
 /* ==================================================
-   START
+   START SORTING
 ================================================== */
 
 window.startFromSelection = function () {
@@ -169,14 +145,26 @@ window.startFromSelection = function () {
 };
 
 /* ==================================================
-   SORTER LOGIC (MERGE SORT)
+   SORTER LOGIC (LOGIC LAMA STABIL)
 ================================================== */
+
+let lists = [];
+let left = [];
+let right = [];
+let merged = [];
+let li = 0;
+let ri = 0;
+
+let total = 0;
+let current = 0;
 
 function initSorter(data) {
   lists = data.map(m => [m]);
   shuffle(lists);
+
   total = Math.ceil(data.length * Math.log2(data.length));
   current = 0;
+
   updateProgress();
   nextMerge();
 }
@@ -190,84 +178,79 @@ function shuffle(arr) {
 
 function nextMerge() {
   if (lists.length <= 1) {
-    alert("Sorting selesai!");
+    showResult(lists[0]);
     return;
   }
+
   left = lists.shift();
   right = lists.shift();
   merged = [];
-  li = ri = 0;
+  li = 0;
+  ri = 0;
+
   showBattle();
 }
 
 function showBattle() {
-  if (li >= left.length && ri >= right.length) {
+  if (li >= left.length || ri >= right.length) {
+    merged = merged
+      .concat(left.slice(li))
+      .concat(right.slice(ri));
+
     lists.push(merged);
     nextMerge();
     return;
   }
 
-  if (li >= left.length) {
-    merged.push(right[ri++]);
-    showBattle();
-    return;
-  }
+  const L = left[li];
+  const R = right[ri];
 
-  if (ri >= right.length) {
-    merged.push(left[li++]);
-    showBattle();
-    return;
-  }
+  leftImg.src = L.img;
+  leftName.innerText = L.name;
 
-  leftImg.src = left[li].img;
-  leftName.innerText = left[li].name;
-  rightImg.src = right[ri].img;
-  rightName.innerText = right[ri].name;
-
-  updateProgress();
+  rightImg.src = R.img;
+  rightName.innerText = R.name;
 }
 
 function choose(choice) {
-  history.push({
-    lists: structuredClone(lists),
-    left, right, merged, li, ri, current
-  });
-
   current++;
 
   if (choice === "left") merged.push(left[li++]);
   else if (choice === "right") merged.push(right[ri++]);
-  else {
-    merged.push(left[li++]);
-    merged.push(right[ri++]);
-  }
+  else merged.push(left[li++]); // tie = stabil
 
-  showBattle();
-}
-
-function undo() {
-  if (!history.length) return;
-  const h = history.pop();
-  ({ lists, left, right, merged, li, ri, current } = h);
+  updateProgress();
   showBattle();
 }
 
 /* ==================================================
-   UI
+   PROGRESS BAR (VERSI BARU)
 ================================================== */
 
 function updateProgress() {
   const percent = Math.min((current / total) * 100, 100);
+
   document.getElementById("progressFill").style.width = percent + "%";
-  document.getElementById("progressText").innerText = `${current} / ${total}`;
+  document.getElementById("progressText").innerText =
+    `${current} / ${total}`;
 }
 
-function toggleGroup(type, value) {
-  const selector = type === "gen"
-    ? `#genSelect input[data-gen="${value}"]`
-    : `#teamSelect input[data-team="${value}"]`;
+/* ==================================================
+   RESULT
+================================================== */
 
-  const boxes = document.querySelectorAll(selector);
-  const allChecked = [...boxes].every(b => b.checked);
-  boxes.forEach(b => b.checked = !allChecked);
+function showResult(finalList) {
+  document.getElementById("sorterScreen").innerHTML = `
+    <h2>Hasil Ranking</h2>
+    <div class="result-grid">
+      ${finalList.map((m, i) => `
+        <div class="result-card">
+          <div class="rank">#${i + 1}</div>
+          <img src="${m.img}">
+          <div class="name">${m.name}</div>
+          <div class="meta">Gen ${m.gen} • Team ${m.team}</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
 }
