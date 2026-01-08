@@ -77,29 +77,25 @@ function renderFilters() {
   genBox.innerHTML = "";
   teamBox.innerHTML = "";
 
-  [...new Set(members.map(m => m.gen))].sort().forEach(g => {
-    genBox.innerHTML += `<h4>Gen ${g}</h4>`;
+  const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
+  const teams = [...new Set(members.map(m => m.team))];
+
+  gens.forEach(g => {
+    genBox.innerHTML += `<h4>Generasi ${g}</h4>`;
+    genBox.innerHTML += `
+      <button type="button" onclick="toggleGroup('gen', ${g})">
+        All Gen ${g}
+      </button>
+    `;
     members.filter(m => m.gen === g).forEach(m => {
-      genBox.innerHTML += `<label><input type="checkbox" value="${m.id}"> ${m.name}</label><br>`;
+      genBox.innerHTML += `
+        <label>
+          <input type="checkbox" value="${m.id}" data-gen="${m.gen}">
+          ${m.name}
+        </label><br>
+      `;
     });
   });
-
-  [...new Set(members.map(m => m.team))].forEach(t => {
-    teamBox.innerHTML += `<h4>Team ${t}</h4>`;
-    members.filter(m => m.team === t).forEach(m => {
-      teamBox.innerHTML += `<label><input type="checkbox" value="${m.id}"> ${m.name}</label><br>`;
-    });
-  });
-}
-
-renderFilters();
-
-document.querySelectorAll('input[name="mode"]').forEach(radio => {
-  radio.addEventListener("change", e => {
-    genBox.style.display = e.target.value === "gen" ? "block" : "none";
-    teamBox.style.display = e.target.value === "team" ? "block" : "none";
-  });
-});
 
 /* ================= START ================= */
 
@@ -147,8 +143,10 @@ function initSorter(data) {
   shuffle(lists);
   total = Math.ceil(data.length * Math.log2(data.length));
   current = 0;
+  updateProgress(); // ⬅️ WAJIB
   nextMerge();
 }
+
 
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -185,7 +183,7 @@ function showBattle() {
   document.getElementById("rightImg").src = right[ri].img;
   document.getElementById("rightName").innerText = right[ri].name;
 
-  document.getElementById("progress").innerText = `Progress ${current + 1} / ${total}`;
+  updateProgress(); // ⬅️ INI KUNCI
 }
 
 function choose(choice) {
@@ -201,16 +199,14 @@ function choose(choice) {
 
   current++;
 
-  if (choice === "left") {
-    merged.push(left[li++]);
-  } else if (choice === "right") {
-    merged.push(right[ri++]);
-  } else {
-    merged.push(left[li++], right[ri++]);
-  }
+  if (choice === "left") merged.push(left[li++]);
+  else if (choice === "right") merged.push(right[ri++]);
+  else merged.push(left[li++], right[ri++]);
 
+  updateProgress(); // ⬅️ BIAR LANGSUNG GERAK
   showBattle();
 }
+
 
 function undo() {
   if (!history.length) return;
@@ -250,31 +246,6 @@ function showResult(finalList) {
     `;
   });
 }
-
-
-function renderFilters() {
-  genBox.innerHTML = "";
-  teamBox.innerHTML = "";
-
-  const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
-  const teams = [...new Set(members.map(m => m.team))];
-
-  gens.forEach(g => {
-    genBox.innerHTML += `<h4>Generasi ${g}</h4>`;
-    genBox.innerHTML += `
-      <button type="button" onclick="toggleGroup('gen', ${g})">
-        All Gen ${g}
-      </button>
-    `;
-    members.filter(m => m.gen === g).forEach(m => {
-      genBox.innerHTML += `
-        <label>
-          <input type="checkbox" value="${m.id}" data-gen="${m.gen}">
-          ${m.name}
-        </label><br>
-      `;
-    });
-  });
 
   teams.forEach(t => {
     teamBox.innerHTML += `<h4>Team ${t}</h4>`;
