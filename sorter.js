@@ -27,7 +27,7 @@ const members = [
   { id: "gabriela_abigail", name: "Gabriela Abigail", gen: 10, team: "Dream", img: "https://jkt48.com/profile/gabriela_abigail.jpg" },
   { id: "gendis_mayrannisa", name: "Gendis Mayrannisa", gen: 11, team: "Dream", img: "https://jkt48.com/profile/gendis_mayrannisa.jpg" },
   { id: "gita_sekar_andarini", name: "Gita Sekar Andarini", gen: 6, team: "Dream", img: "https://jkt48.com/profile/gita_sekar_andarini.jpg" },
-  { id: "greesela_adhalia", name: "Greesela Adhalia", gen: 10, team: "Dream", img: "https://jkt48.com/profile/greesella_adhalia.jpg" },
+  { id: "greesela_adhalia", name: "Greesela Adhalia", gen: 11, team: "Dream", img: "https://jkt48.com/profile/greesella_adhalia.jpg" },
   { id: "helisma_putri", name: "Helisma Putri", gen: 7, team: "Dream", img: "https://jkt48.com/profile/helisma_putri.jpg" },
   { id: "jesslyn_elly", name: "Jesslyn Elly", gen: 10, team: "Dream", img: "https://jkt48.com/profile/jesslyn_elly.jpg" },
   { id: "marsha_lenathea", name: "Marsha Lenathea", gen: 9, team: "Dream", img: "https://jkt48.com/profile/marsha_lenathea.jpg" },
@@ -39,8 +39,8 @@ const members = [
   { id: "angelina_christy", name: "Angelina Christy", gen: 7, team: "Passion", img: "https://jkt48.com/profile/angelina_christy.jpg" },
   { id: "catherina_vallencia", name: "Catherina Vallencia", gen: 12, team: "Passion", img: "https://jkt48.com/profile/catherina_vallencia.jpg" },
   { id: "cornelia_vanisa", name: "Cornelia Vanisa", gen: 8, team: "Passion", img: "https://jkt48.com/profile/cornelia_vanisa.jpg" },
-  { id: "dena_natalia", name: "Dena Natalia", gen: 10, team: "Passion", img: "https://jkt48.com/profile/dena_natalia.jpg" },
-  { id: "desy_natalia", name: "Desy Natalia", gen: 10, team: "Passion", img: "https://jkt48.com/profile/desy_natalia.jpg" },
+  { id: "dena_natalia", name: "Dena Natalia", gen: 11, team: "Passion", img: "https://jkt48.com/profile/dena_natalia.jpg" },
+  { id: "desy_natalia", name: "Desy Natalia", gen: 11, team: "Passion", img: "https://jkt48.com/profile/desy_natalia.jpg" },
   { id: "feni_fitriyanti", name: "Feni Fitriyanti", gen: 3, team: "Passion", img: "https://jkt48.com/profile/feni_fitriyanti.jpg" },
   { id: "jessica_chandra", name: "Jessica Chandra", gen: 7, team: "Passion", img: "https://jkt48.com/profile/jessica_chandra.jpg" },
   { id: "kathrina_irene", name: "Kathrina Irene", gen: 9, team: "Passion", img: "https://jkt48.com/profile/kathrina_irene.jpg" },
@@ -49,7 +49,17 @@ const members = [
   { id: "mutiara_azzahra", name: "Mutiara Azzahra", gen: 7, team: "Passion", img: "https://jkt48.com/profile/mutiara_azzahra.jpg" },
   { id: "raisha_syifa", name: "Raisha Syifa", gen: 10, team: "Passion", img: "https://jkt48.com/profile/raisha_syifa.jpg" },
   { id: "ribka_budiman", name: "Ribka Budiman", gen: 12, team: "Passion", img: "https://jkt48.com/profile/ribka_budiman.jpg" },
-  { id: "victoria_kimberly", name: "Victoria Kimberly", gen: 12, team: "Passion", img: "https://jkt48.com/profile/victoria_kimberly.jpg" }
+  { id: "victoria_kimberly", name: "Victoria Kimberly", gen: 12, team: "Passion", img: "https://jkt48.com/profile/victoria_kimberly.jpg" },
+
+  { id: "astrella_virgiananda", name: "Astrella Virgiananda", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Astrella_Virgiananda.jpg" },
+  { id: "aulia_riza", name: "Aulia Riza", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Aulia_Riza.jpg" },
+  { id: "bong_aprilli", name: "Bong Aprilli", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Bong_Aprilli.jpg" },
+  { id: "hagia_sopia", name: "Hagia Sopia", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Hagia_Sopia.jpg" },
+  { id: "humaira_ramadhani", name: "Humaira Ramadhani", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Humaira_Ramadhani.jpg" },
+  { id: "jacqueline_immanuela", name: "Jacqueline Immanuela", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Jacqueline_Immanuela.jpg" },
+  { id: "jemima_evodie", name: "Jemima Evodie", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Jemima_Evodie.jpg" },
+  { id: "mikaela_kusjanto", name: "Mikaela Kusjanto", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Mikaela_Kusjanto.jpg" },
+  { id: "nur_intan", name: "Nur Intan", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Nur_Intan.jpg" }
 ];
 
 /* ==================================================
@@ -65,6 +75,8 @@ const rightImg = document.getElementById("rightImg");
 const rightName = document.getElementById("rightName");
 
 const estimateBox = document.getElementById("battleEstimate");
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
 
 /* ==================================================
    MODE SWITCH
@@ -79,7 +91,7 @@ document.querySelectorAll('input[name="mode"]').forEach(radio => {
 });
 
 /* ==================================================
-   FILTER RENDER
+   FILTER RENDER (TRAINEE SAFE)
 ================================================== */
 
 function renderFilters() {
@@ -87,7 +99,7 @@ function renderFilters() {
   teamBox.innerHTML = "";
 
   const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
-  const teams = [...new Set(members.map(m => m.team))];
+  const teams = [...new Set(members.map(m => m.team || "Trainee"))];
 
   gens.forEach(g => {
     genBox.innerHTML += `
@@ -109,14 +121,16 @@ function renderFilters() {
       <h4>Team ${t}</h4>
       <button onclick="toggleGroup('team', '${t}')">All ${t}</button>
     `;
-    members.filter(m => m.team === t).forEach(m => {
-      teamBox.innerHTML += `
-        <label>
-          <input type="checkbox" data-team="${t}" value="${m.id}">
-          ${m.name}
-        </label><br>
-      `;
-    });
+    members
+      .filter(m => (m.team || "Trainee") === t)
+      .forEach(m => {
+        teamBox.innerHTML += `
+          <label>
+            <input type="checkbox" data-team="${t}" value="${m.id}">
+            ${m.name}
+          </label><br>
+        `;
+      });
   });
 }
 
@@ -156,7 +170,6 @@ window.startFromSelection = function () {
     return;
   }
 
-  // INIT SCORE
   selected.forEach(m => m.score = 0);
 
   document.getElementById("selectScreen").style.display = "none";
@@ -166,7 +179,7 @@ window.startFromSelection = function () {
 };
 
 /* ==================================================
-   SORTER STATE (PURE MANUAL)
+   SORTER STATE
 ================================================== */
 
 let lists = [];
@@ -176,8 +189,10 @@ let merged = [];
 let li = 0;
 let ri = 0;
 
-let total = 0;
-let current = 0;
+let totalBattles = 0;
+
+/* ---------- UNDO STACK ---------- */
+let historyStack = [];
 
 /* ==================================================
    INIT SORTER
@@ -187,8 +202,8 @@ function initSorter(data) {
   lists = data.map(m => [m]);
   shuffle(lists);
 
-  total = calculateTotalBattles(data.length);
-  current = 0;
+  totalBattles = calculateTotalBattles(data.length);
+  historyStack = [];
 
   updateProgress();
   nextMerge();
@@ -216,13 +231,12 @@ function calculateTotalBattles(n) {
 }
 
 /* ==================================================
-   MERGE FLOW (NO AUTO RUN)
+   MERGE FLOW (MANUAL)
 ================================================== */
 
 function nextMerge() {
   if (lists.length <= 1) {
-    current = total;
-    updateProgress();
+    updateProgress(true);
     setTimeout(() => showResult(lists[0]), 400);
     return;
   }
@@ -247,11 +261,23 @@ function showBattle() {
 }
 
 /* ==================================================
-   USER CHOICE + SCORE
+   USER CHOICE + UNDO SAVE
 ================================================== */
 
+function saveState() {
+  historyStack.push({
+    lists: JSON.parse(JSON.stringify(lists)),
+    left: [...left],
+    right: [...right],
+    merged: [...merged],
+    li,
+    ri,
+    scores: members.map(m => m.score)
+  });
+}
+
 function choose(choice) {
-  current++;
+  saveState();
 
   if (choice === "left") {
     left[li].score++;
@@ -261,7 +287,7 @@ function choose(choice) {
     merged.push(right[ri++]);
   } else {
     left[li].score++;
-    merged.push(left[li++]); // tie stabil
+    merged.push(left[li++]);
   }
 
   updateProgress();
@@ -277,6 +303,30 @@ function choose(choice) {
 
   showBattle();
 }
+
+/* ==================================================
+   UNDO FUNCTION (WORKING)
+================================================== */
+
+function undo() {
+  if (!historyStack.length) return;
+
+  const prev = historyStack.pop();
+
+  lists = prev.lists;
+  left = prev.left;
+  right = prev.right;
+  merged = prev.merged;
+  li = prev.li;
+  ri = prev.ri;
+
+  members.forEach((m, i) => m.score = prev.scores[i]);
+
+  updateProgress();
+  showBattle();
+}
+
+window.undo = undo;
 
 /* ==================================================
    REMAINING BATTLE ESTIMATE
@@ -299,25 +349,32 @@ function estimateRemainingBattles() {
 }
 
 /* ==================================================
-   PROGRESS BAR + ESTIMATE
+   PROGRESS BAR
 ================================================== */
 
-function updateProgress() {
-  const percent = Math.min((current / total) * 100, 100);
-  document.getElementById("progressFill").style.width = percent + "%";
-  document.getElementById("progressText").innerText =
-    `${current} / ${total}`;
+function updateProgress(forceDone = false) {
+  const remaining = estimateRemainingBattles();
+  const percent = forceDone
+    ? 100
+    : Math.min(
+        100 - (remaining / totalBattles) * 100,
+        100
+      );
+
+  progressFill.style.width = percent + "%";
+  progressText.innerText =
+    `${Math.round(percent)}% • Sisa ${remaining} battle`;
 
   if (estimateBox) {
     estimateBox.innerText =
-      estimateRemainingBattles() > 0
-        ? `Sisa battle: ${estimateRemainingBattles()}`
+      remaining > 0
+        ? `Sisa battle: ${remaining}`
         : "Tahap akhir...";
   }
 }
 
 /* ==================================================
-   RESULT (RANKING + SCORE)
+   RESULT
 ================================================== */
 
 function showResult(finalList) {
@@ -330,7 +387,7 @@ function showResult(finalList) {
           <img src="${m.img}">
           <div class="name">${m.name}</div>
           <div class="score">Score: ${m.score}</div>
-          <div class="meta">Gen ${m.gen} • Team ${m.team}</div>
+          <div class="meta">Gen ${m.gen} • Team ${m.team || "Trainee"}</div>
         </div>
       `).join("")}
     </div>
