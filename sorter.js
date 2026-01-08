@@ -62,54 +62,42 @@ const members = [
   { id: "nur_intan", name: "Nur Intan", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Nur_Intan.jpg" }
 ];
 
-/* ==================================================
-   DOM ELEMENTS
-================================================== */
+/* ================= ELEMENT ================= */
 
 const genBox = document.getElementById("genSelect");
 const teamBox = document.getElementById("teamSelect");
-
-const leftImg = document.getElementById("leftImg");
-const leftName = document.getElementById("leftName");
-const rightImg = document.getElementById("rightImg");
-const rightName = document.getElementById("rightName");
-
-const estimateBox = document.getElementById("battleEstimate");
 const progressFill = document.getElementById("progressFill");
 const progressText = document.getElementById("progressText");
 
-/* ==================================================
-   MODE SWITCH
-================================================== */
+/* ================= STATE ================= */
 
-document.querySelectorAll('input[name="mode"]').forEach(radio => {
-  radio.addEventListener("change", () => {
-    const mode = document.querySelector('input[name="mode"]:checked').value;
-    genBox.style.display = mode === "gen" ? "block" : "none";
-    teamBox.style.display = mode === "team" ? "block" : "none";
-  });
-});
+let lists = [];
+let left = [];
+let right = [];
+let merged = [];
+let li = 0;
+let ri = 0;
 
-/* ==================================================
-   FILTER RENDER (TRAINEE SAFE)
-================================================== */
+let total = 0;
+let current = 0;
+
+let history = [];
+
+/* ================= FILTER ================= */
 
 function renderFilters() {
   genBox.innerHTML = "";
   teamBox.innerHTML = "";
 
   const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
-  const teams = [...new Set(members.map(m => m.team || "Trainee"))];
+  const teams = [...new Set(members.map(m => m.team))];
 
   gens.forEach(g => {
-    genBox.innerHTML += `
-      <h4>Generasi ${g}</h4>
-      <button onclick="toggleGroup('gen', ${g})">All Gen ${g}</button>
-    `;
+    genBox.innerHTML += `<h4>Gen ${g}</h4>`;
     members.filter(m => m.gen === g).forEach(m => {
       genBox.innerHTML += `
         <label>
-          <input type="checkbox" data-gen="${g}" value="${m.id}">
+          <input type="checkbox" value="${m.id}">
           ${m.name}
         </label><br>
       `;
@@ -117,40 +105,23 @@ function renderFilters() {
   });
 
   teams.forEach(t => {
-    teamBox.innerHTML += `
-      <h4>Team ${t}</h4>
-      <button onclick="toggleGroup('team', '${t}')">All ${t}</button>
-    `;
-    members
-      .filter(m => (m.team || "Trainee") === t)
-      .forEach(m => {
-        teamBox.innerHTML += `
-          <label>
-            <input type="checkbox" data-team="${t}" value="${m.id}">
-            ${m.name}
-          </label><br>
-        `;
-      });
+    teamBox.innerHTML += `<h4>Team ${t}</h4>`;
+    members.filter(m => m.team === t).forEach(m => {
+      teamBox.innerHTML += `
+        <label>
+          <input type="checkbox" value="${m.id}">
+          ${m.name}
+        </label><br>
+      `;
+    });
   });
 }
 
 renderFilters();
 
-function toggleGroup(type, value) {
-  const selector = type === "gen"
-    ? `#genSelect input[data-gen="${value}"]`
-    : `#teamSelect input[data-team="${value}"]`;
+/* ================= START ================= */
 
-  const boxes = document.querySelectorAll(selector);
-  const allChecked = [...boxes].every(b => b.checked);
-  boxes.forEach(b => b.checked = !allChecked);
-}
-
-/* ==================================================
-   START SORTER
-================================================== */
-
-window.startFromSelection = function () {
+function startFromSelection() {
   const mode = document.querySelector('input[name="mode"]:checked').value;
   let selected = [];
 
@@ -170,40 +141,21 @@ window.startFromSelection = function () {
     return;
   }
 
-  selected.forEach(m => m.score = 0);
-
   document.getElementById("selectScreen").style.display = "none";
   document.getElementById("sorterScreen").style.display = "block";
 
   initSorter(selected);
-};
+}
 
-/* ==================================================
-   SORTER STATE
-================================================== */
-
-let lists = [];
-let left = [];
-let right = [];
-let merged = [];
-let li = 0;
-let ri = 0;
-
-let totalBattles = 0;
-
-/* ---------- UNDO STACK ---------- */
-let historyStack = [];
-
-/* ==================================================
-   INIT SORTER
-================================================== */
+/* ================= SORTER CORE ================= */
 
 function initSorter(data) {
   lists = data.map(m => [m]);
   shuffle(lists);
 
-  totalBattles = calculateTotalBattles(data.length);
-  historyStack = [];
+  total = Math.ceil(data.length * Math.log2(data.length));
+  current = 0;
+  history = [];
 
   updateProgress();
   nextMerge();
@@ -216,180 +168,146 @@ function shuffle(arr) {
   }
 }
 
-/* ==================================================
-   TOTAL BATTLE COUNT
-================================================== */
-
-function calculateTotalBattles(n) {
-  let total = 0;
-  let size = n;
-  while (size > 1) {
-    total += size - 1;
-    size = Math.floor(size / 2);
-  }
-  return total;
-}
-
-/* ==================================================
-   MERGE FLOW (MANUAL)
-================================================== */
-
 function nextMerge() {
   if (lists.length <= 1) {
-    updateProgress(true);
-    setTimeout(() => showResult(lists[0]), 400);
+    showResult(lists[0]);
     return;
   }
 
   left = lists.shift();
   right = lists.shift();
   merged = [];
-  li = 0;
-  ri = 0;
+  li = ri = 0;
 
   showBattle();
 }
 
 function showBattle() {
-  if (li >= left.length || ri >= right.length) return;
+  if (li >= left.length && ri >= right.length) {
+    lists.push(merged);
+    nextMerge();
+    return;
+  }
 
-  leftImg.src = left[li].img;
-  leftName.innerText = left[li].name;
+  if (li >= left.length) {
+    merged.push(right[ri++]);
+    showBattle();
+    return;
+  }
 
-  rightImg.src = right[ri].img;
-  rightName.innerText = right[ri].name;
+  if (ri >= right.length) {
+    merged.push(left[li++]);
+    showBattle();
+    return;
+  }
+
+  document.getElementById("leftImg").src = left[li].img;
+  document.getElementById("leftName").innerText = left[li].name;
+  document.getElementById("rightImg").src = right[ri].img;
+  document.getElementById("rightName").innerText = right[ri].name;
 }
 
-/* ==================================================
-   USER CHOICE + UNDO SAVE
-================================================== */
+/* ================= CHOOSE ================= */
 
-function saveState() {
-  historyStack.push({
+function choose(choice) {
+  history.push({
     lists: JSON.parse(JSON.stringify(lists)),
     left: [...left],
     right: [...right],
     merged: [...merged],
     li,
     ri,
-    scores: members.map(m => m.score)
+    current
   });
-}
 
-function choose(choice) {
-  saveState();
+  current++;
 
   if (choice === "left") {
-    left[li].score++;
     merged.push(left[li++]);
   } else if (choice === "right") {
-    right[ri].score++;
     merged.push(right[ri++]);
   } else {
-    left[li].score++;
-    merged.push(left[li++]);
+    merged.push(left[li++], right[ri++]);
   }
 
   updateProgress();
-
-  if (li >= left.length || ri >= right.length) {
-    while (li < left.length) merged.push(left[li++]);
-    while (ri < right.length) merged.push(right[ri++]);
-
-    lists.push(merged);
-    nextMerge();
-    return;
-  }
-
   showBattle();
 }
 
-/* ==================================================
-   UNDO FUNCTION (WORKING)
-================================================== */
+/* ================= UNDO ================= */
 
 function undo() {
-  if (!historyStack.length) return;
+  if (!history.length) return;
 
-  const prev = historyStack.pop();
-
+  const prev = history.pop();
   lists = prev.lists;
   left = prev.left;
   right = prev.right;
   merged = prev.merged;
   li = prev.li;
   ri = prev.ri;
-
-  members.forEach((m, i) => m.score = prev.scores[i]);
+  current = prev.current;
 
   updateProgress();
   showBattle();
 }
 
-window.undo = undo;
-
-/* ==================================================
-   REMAINING BATTLE ESTIMATE
-================================================== */
-
-function estimateRemainingBattles() {
-  let remaining = 0;
-
-  if (left.length && right.length) {
-    remaining += (left.length - li) + (right.length - ri) - 1;
-  }
-
-  for (let i = 0; i < lists.length; i += 2) {
-    if (lists[i + 1]) {
-      remaining += lists[i].length + lists[i + 1].length - 1;
-    }
-  }
-
-  return Math.max(remaining, 0);
-}
-
-/* ==================================================
-   PROGRESS BAR
-================================================== */
+/* ================= PROGRESS BAR ================= */
 
 function updateProgress(forceDone = false) {
-  const remaining = estimateRemainingBattles();
-  const percent = forceDone
+  let percent = forceDone
     ? 100
-    : Math.min(
-        100 - (remaining / totalBattles) * 100,
-        100
-      );
+    : Math.min((current / total) * 100, 100);
 
   progressFill.style.width = percent + "%";
-  progressText.innerText =
-    `${Math.round(percent)}% • Sisa ${remaining} battle`;
 
-  if (estimateBox) {
-    estimateBox.innerText =
-      remaining > 0
-        ? `Sisa battle: ${remaining}`
-        : "Tahap akhir...";
-  }
+  progressFill.style.background = `
+    linear-gradient(
+      90deg,
+      #ff4d6d,
+      #ffb703,
+      #52b788,
+      #4dabf7,
+      #9775fa
+    )
+  `;
+
+  progressText.innerText =
+    `${Math.round(percent)}%`;
+
+  progressText.style.color = "#fff";
+  progressText.style.fontWeight = "700";
 }
 
-/* ==================================================
-   RESULT
-================================================== */
+/* ================= RESULT ================= */
 
 function showResult(finalList) {
-  document.getElementById("sorterScreen").innerHTML = `
-    <h2>Hasil Ranking</h2>
-    <div class="result-grid">
-      ${finalList.map((m, i) => `
-        <div class="result-card">
-          <div class="rank">#${i + 1}</div>
-          <img src="${m.img}">
-          <div class="name">${m.name}</div>
-          <div class="score">Score: ${m.score}</div>
-          <div class="meta">Gen ${m.gen} • Team ${m.team || "Trainee"}</div>
-        </div>
-      `).join("")}
-    </div>
+  updateProgress(true);
+
+  document.body.innerHTML = `
+    <h1>Hasil Ranking</h1>
+
+    <p style="opacity:.8;margin-bottom:12px">
+      Tidak mencapai target biasanya sudah <b>DONE</b>,
+      karena kamu hanya memilih <b>oshi yang tepat</b> 💙
+    </p>
+
+    <div class="result-grid"></div>
+    <button onclick="location.reload()">Ulangi Sorter</button>
   `;
+
+  const grid = document.querySelector(".result-grid");
+
+  finalList.forEach((m, i) => {
+    grid.innerHTML += `
+      <div class="result-card">
+        <div class="rank">#${i + 1}</div>
+        <img src="${m.img}">
+        <div class="info">
+          <p class="name">${m.name}</p>
+          <p class="meta">Gen ${m.gen} · Team ${m.team}</p>
+        </div>
+      </div>
+    `;
+  });
 }
