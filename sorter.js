@@ -72,6 +72,8 @@ const progressText = document.getElementById("progressText");
    GLOBAL STATE
 ===================================================== */
 
+/* ================== STATE ================== */
+
 let lists = [];
 let left = [];
 let right = [];
@@ -79,32 +81,25 @@ let merged = [];
 let li = 0;
 let ri = 0;
 
-let totalSteps = 0;
-let currentStep = 0;
+let total = 0;
+let current = 0;
+let history = [];
 
-let historyStack = [];
+/* ================== START ================== */
 
-/* =====================================================
-   ELEMENTS
-===================================================== */
+function startFromSelection() {
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+  let selected = [];
 
-const leftImg = document.getElementById("leftImg");
-const rightImg = document.getElementById("rightImg");
-const leftName = document.getElementById("leftName");
-const rightName = document.getElementById("rightName");
-
-const progressFill = document.getElementById("progressFill");
-const progressText = document.getElementById("progressText");
-
-/* =====================================================
-   START SORTER
-===================================================== */
-
-window.startFromSelection = function () {
-  let selected = members.slice(); // MODE ALL (AMAN)
+  if (mode === "all") {
+    selected = members;
+  } else {
+    const checked = document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
+    selected = members.filter(m => [...checked].some(c => c.value === m.id));
+  }
 
   if (selected.length < 2) {
-    alert("Minimal 2 member");
+    alert("Pilih minimal 2 member");
     return;
   }
 
@@ -112,21 +107,19 @@ window.startFromSelection = function () {
   document.getElementById("sorterScreen").style.display = "block";
 
   initSorter(selected);
-};
+}
 
-/* =====================================================
-   INIT
-===================================================== */
+/* ================== SORTER ================== */
 
 function initSorter(data) {
   lists = data.map(m => [m]);
   shuffle(lists);
 
-  totalSteps = Math.ceil(data.length * Math.log2(data.length));
-  currentStep = 0;
-  historyStack = [];
+  total = Math.ceil(data.length * Math.log2(data.length));
+  current = 0;
+  history = [];
 
-  updateProgress();
+  updateProgress(); // ⬅️ hanya di init
   nextMerge();
 }
 
@@ -137,21 +130,16 @@ function shuffle(arr) {
   }
 }
 
-/* =====================================================
-   MERGE FLOW
-===================================================== */
-
 function nextMerge() {
   if (lists.length <= 1) {
-    finishSorter(lists[0]);
+    showResult(lists[0]);
     return;
   }
 
   left = lists.shift();
   right = lists.shift();
   merged = [];
-  li = 0;
-  ri = 0;
+  li = ri = 0;
 
   showBattle();
 }
@@ -175,111 +163,74 @@ function showBattle() {
     return;
   }
 
-  leftImg.src = left[li].img;
-  leftName.textContent = left[li].name;
-  rightImg.src = right[ri].img;
-  rightName.textContent = right[ri].name;
+  document.getElementById("leftImg").src = left[li].img;
+  document.getElementById("leftName").innerText = left[li].name;
+  document.getElementById("rightImg").src = right[ri].img;
+  document.getElementById("rightName").innerText = right[ri].name;
 }
 
-/* =====================================================
-   SAVE STATE (UNDO)
-===================================================== */
+/* ================== CHOOSE ================== */
 
-function saveState() {
-  historyStack.push({
+function choose(choice) {
+  history.push({
     lists: JSON.parse(JSON.stringify(lists)),
     left: [...left],
     right: [...right],
     merged: [...merged],
     li,
     ri,
-    currentStep
+    current
   });
+
+  current++;              // ⬅️ PROGRESS NAIK SAAT KLIK
+
+  if (choice === "left") merged.push(left[li++]);
+  else if (choice === "right") merged.push(right[ri++]);
+  else merged.push(left[li++], right[ri++]);
+
+  updateProgress();       // ⬅️ BAR GERAK DI SINI
+  showBattle();
 }
 
-/* =====================================================
-   USER CHOICE
-===================================================== */
+/* ================== UNDO ================== */
 
-window.choose = function (side) {
-  saveState();
-  currentStep++;
+function undo() {
+  if (!history.length) return;
 
-  if (side === "left") {
-    merged.push(left[li++]);
-  } else if (side === "right") {
-    merged.push(right[ri++]);
-  } else {
-    merged.push(left[li++]);
-  }
-
-  updateProgress();
-  showBattle();
-};
-
-/* =====================================================
-   UNDO
-===================================================== */
-
-window.undo = function () {
-  if (!historyStack.length) return;
-
-  const prev = historyStack.pop();
+  const prev = history.pop();
   lists = prev.lists;
   left = prev.left;
   right = prev.right;
   merged = prev.merged;
   li = prev.li;
   ri = prev.ri;
-  currentStep = prev.currentStep;
+  current = prev.current;
 
   updateProgress();
   showBattle();
-};
-
-/* =====================================================
-   PROGRESS BAR (CLICK BASED)
-===================================================== */
-
-function updateProgress(forceDone = false) {
-  let percent = forceDone
-    ? 100
-    : Math.min((currentStep / totalSteps) * 100, 100);
-
-  progressFill.style.width = percent + "%";
-  progressFill.style.background =
-    "linear-gradient(90deg,#ff4d6d,#ffa94d,#51cf66,#4dabf7,#9775fa)";
-
-  progressText.textContent = Math.round(percent) + "%";
-  progressText.style.color = "#fff";
-  progressText.style.fontWeight = "700";
 }
 
-/* =====================================================
-   FINISH
-===================================================== */
+/* ================== PROGRESS ================== */
 
-function finishSorter(result) {
-  updateProgress(true);
+function updateProgress() {
+  const percent = Math.min((current / total) * 100, 100);
+  const bar = document.getElementById("progressFill");
 
-  document.getElementById("sorterScreen").innerHTML = `
-    <h2>Hasil Ranking</h2>
+  bar.style.width = percent + "%";
 
-    <p style="opacity:.8;margin-bottom:12px">
+  document.getElementById("progressText").innerText =
+    `${current} / ${total}`;
+}
+
+/* ================== RESULT ================== */
+
+function showResult(finalList) {
+  document.body.innerHTML = `
+    <h1>Hasil Ranking</h1>
+    <p style="opacity:.8">
       Tidak mencapai target biasanya sudah <b>DONE</b>,
-      karena kamu hanya memilih <b>oshi yang tepat</b> 💙
+      karena kamu memilih <b>oshi yang tepat</b> 💙
     </p>
-
-    <div class="result-grid">
-      ${result.map((m,i)=>`
-        <div class="result-card">
-          <div class="rank">#${i+1}</div>
-          <img src="${m.img}">
-          <div class="name">${m.name}</div>
-        </div>
-      `).join("")}
-    </div>
-
     <button onclick="location.reload()">Ulangi</button>
   `;
 }
