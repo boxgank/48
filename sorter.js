@@ -58,165 +58,145 @@ const members = [
   { id: "nur_intan", name: "Nur Intan", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Nur_Intan.jpg" }
 ];
 
-const genBox = document.getElementById("genSelect");
-const teamBox = document.getElementById("teamSelect");
+/* ================= MAIN ================= */
 
-let lists = [];
-let left = [];
-let right = [];
-let merged = [];
-let li = 0;
-let ri = 0;
-let total = 0;
-let current = 0;
-let history = [];
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("JS HIDUP");
 
-/* ================= FILTER ================= */
+  /* === ELEMENT === */
+  const leftImg = document.getElementById("leftImg");
+  const leftName = document.getElementById("leftName");
+  const rightImg = document.getElementById("rightImg");
+  const rightName = document.getElementById("rightName");
+  const progressFill = document.getElementById("progressFill");
+  const progressText = document.getElementById("progressText");
 
-function renderFilters() {
-  genBox.innerHTML = "";
-  teamBox.innerHTML = "";
+  /* === STATE === */
+  let lists = [];
+  let left = [];
+  let right = [];
+  let merged = [];
+  let li = 0;
+  let ri = 0;
+  let total = 0;
+  let current = 0;
+  let history = [];
 
-  const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
-  const teams = [...new Set(members.map(m => m.team))];
+  /* ================= START ================= */
 
-  gens.forEach(g => {
-    genBox.innerHTML += `<h4>Generasi ${g}</h4>
-      <button onclick="toggleGroup('gen', ${g})">All Gen ${g}</button>`;
+  window.startSorter = function () {
+    if (members.length < 2) {
+      alert("Minimal 2 member");
+      return;
+    }
+    initSorter(members);
+  };
 
-    members.filter(m => m.gen === g).forEach(m => {
-      genBox.innerHTML += `
-        <label>
-          <input type="checkbox" data-gen="${g}" value="${m.id}">
-          ${m.name}
-        </label><br>
-      `;
-    });
-  });
-
-  teams.forEach(t => {
-    teamBox.innerHTML += `<h4>Team ${t}</h4>
-      <button onclick="toggleGroup('team', '${t}')">All ${t}</button>`;
-
-    members.filter(m => m.team === t).forEach(m => {
-      teamBox.innerHTML += `
-        <label>
-          <input type="checkbox" data-team="${t}" value="${m.id}">
-          ${m.name}
-        </label><br>
-      `;
-    });
-  });
-}
-
-renderFilters();
-
-/* ================= START ================= */
-
-function startFromSelection() {
-  const mode = document.querySelector('input[name="mode"]:checked').value;
-  let selected = [];
-
-  if (mode === "all") {
-    selected = members;
-  } else {
-    const checked = document.querySelectorAll(
-      '#selectScreen input[type="checkbox"]:checked'
-    );
-    selected = members.filter(m =>
-      [...checked].some(c => c.value === m.id)
-    );
-  }
-
-  if (selected.length < 2) {
-    alert("Pilih minimal 2 member");
-    return;
-  }
-
-  document.getElementById("selectScreen").style.display = "none";
-  document.getElementById("sorterScreen").style.display = "block";
-
-  initSorter(selected);
-}
-
-/* ================= SORTER ================= */
-
-function initSorter(data) {
-  lists = data.map(m => [m]);
-  shuffle(lists);
-  total = Math.ceil(data.length * Math.log2(data.length));
-  current = 0;
-  updateProgress();
-  nextMerge();
-}
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
-
-function nextMerge() {
-  if (lists.length <= 1) {
-    showResult(lists[0]);
-    return;
-  }
-  left = lists.shift();
-  right = lists.shift();
-  merged = [];
-  li = ri = 0;
-  showBattle();
-}
-
-function showBattle() {
-  if (li >= left.length && ri >= right.length) {
-    lists.push(merged);
+  function initSorter(data) {
+    lists = data.map(m => [m]);
+    shuffle(lists);
+    total = Math.ceil(data.length * Math.log2(data.length));
+    current = 0;
+    updateProgress();
     nextMerge();
-    return;
   }
 
-  if (li >= left.length) return merged.push(right[ri++]), showBattle();
-  if (ri >= right.length) return merged.push(left[li++]), showBattle();
+  /* ================= SORT ================= */
 
-  leftImg.src = left[li].img;
-  leftName.innerText = left[li].name;
-  rightImg.src = right[ri].img;
-  rightName.innerText = right[ri].name;
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
 
-  updateProgress();
-}
+  function nextMerge() {
+    if (lists.length <= 1) {
+      showResult(lists[0]);
+      return;
+    }
+    left = lists.shift();
+    right = lists.shift();
+    merged = [];
+    li = ri = 0;
+    showBattle();
+  }
 
-function choose(choice) {
-  history.push({ lists: structuredClone(lists), left, right, merged, li, ri, current });
-  current++;
+  function showBattle() {
+    if (li >= left.length && ri >= right.length) {
+      lists.push(merged);
+      nextMerge();
+      return;
+    }
 
-  if (choice === "left") merged.push(left[li++]);
-  else if (choice === "right") merged.push(right[ri++]);
-  else merged.push(left[li++], right[ri++]);
+    if (li >= left.length) {
+      merged.push(right[ri++]);
+      showBattle();
+      return;
+    }
 
-  showBattle();
-}
+    if (ri >= right.length) {
+      merged.push(left[li++]);
+      showBattle();
+      return;
+    }
 
-function undo() {
-  if (!history.length) return;
-  const h = history.pop();
-  ({ lists, left, right, merged, li, ri, current } = h);
-  showBattle();
-}
+    leftImg.src = left[li].img;
+    leftName.textContent = left[li].name;
+    rightImg.src = right[ri].img;
+    rightName.textContent = right[ri].name;
 
-function updateProgress() {
-  const percent = Math.min(current / total * 100, 100);
-  document.getElementById("progressFill").style.width = percent + "%";
-  document.getElementById("progressText").innerText = `${current} / ${total}`;
-}
+    updateProgress();
+  }
 
-function toggleGroup(type, value) {
-  const selector = type === "gen"
-    ? `#genSelect input[data-gen="${value}"]`
-    : `#teamSelect input[data-team="${value}"]`;
+  /* ================= ACTION ================= */
 
-  const boxes = document.querySelectorAll(selector);
-  const allChecked = [...boxes].every(b => b.checked);
-  boxes.forEach(b => b.checked = !allChecked);
-}
+  window.choose = function (choice) {
+    history.push({
+      lists: JSON.parse(JSON.stringify(lists)),
+      left: [...left],
+      right: [...right],
+      merged: [...merged],
+      li,
+      ri,
+      current
+    });
+
+    current++;
+
+    if (choice === "left") merged.push(left[li++]);
+    else if (choice === "right") merged.push(right[ri++]);
+    else {
+      merged.push(left[li++]);
+      merged.push(right[ri++]);
+    }
+
+    showBattle();
+  };
+
+  window.undo = function () {
+    if (!history.length) return;
+    const h = history.pop();
+    lists = h.lists;
+    left = h.left;
+    right = h.right;
+    merged = h.merged;
+    li = h.li;
+    ri = h.ri;
+    current = h.current;
+    showBattle();
+  };
+
+  /* ================= UI ================= */
+
+  function updateProgress() {
+    const percent = Math.min((current / total) * 100, 100);
+    progressFill.style.width = percent + "%";
+    progressText.textContent = `${current} / ${total}`;
+  }
+
+  function showResult(result) {
+    console.log("HASIL AKHIR:", result);
+    alert("Sorting selesai!\nCek console untuk hasil.");
+  }
+});
