@@ -10,6 +10,7 @@
 
 <h1>JKT48 Member Sorter</h1>
 
+<!-- ================= SELECT SCREEN ================= -->
 <div id="selectScreen">
   <h3>Pilih Mode</h3>
 
@@ -23,32 +24,35 @@
   <button onclick="startFromSelection()">Start Sorting</button>
 </div>
 
+<!-- ================= SORTER SCREEN ================= -->
 <div id="sorterScreen" style="display:none">
-  <p id="progress"></p>
-<div class="progress-wrapper">
-  <div class="progress-bar">
-    <div id="progressFill"></div>
+
+  <div class="progress-wrapper">
+    <div class="progress-bar">
+      <div id="progressFill"></div>
+    </div>
+    <div id="progressText"></div>
   </div>
-  <div id="progressText"></div>
+
+  <div class="battle">
+    <div class="cards">
+      <div class="card" onclick="choose('left')">
+        <img id="leftImg">
+        <p id="leftName"></p>
+      </div>
+
+      <div class="card" onclick="choose('right')">
+        <img id="rightImg">
+        <p id="rightName"></p>
+      </div>
+    </div>
+
+    <div class="battle-controls">
+      <button class="undo-btn" onclick="undo()">UNDO</button>
+      <button class="tie-btn" onclick="choose('tie')">TIE</button>
+    </div>
+  </div>
 </div>
-<div class="battle">
-
-  <div class="cards">
-    <div class="card" onclick="choose('left')">
-      <img id="leftImg">
-      <p id="leftName"></p>
-    </div>
-
-    <div class="card" onclick="choose('right')">
-      <img id="rightImg">
-      <p id="rightName"></p>
-    </div>
-  </div>
-
-  <div class="battle-controls">
-    <button class="undo-btn" onclick="undo()">UNDO</button>
-    <button class="tie-btn" onclick="choose('tie')">TIE</button>
-  </div>
 
 <script src="sorter.js"></script>
 </body>
