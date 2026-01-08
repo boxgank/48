@@ -68,8 +68,9 @@ const genBox = document.getElementById("genSelect");
 const teamBox = document.getElementById("teamSelect");
 const progressFill = document.getElementById("progressFill");
 const progressText = document.getElementById("progressText");
-
-/* ================= STATE ================= */
+/* =====================================================
+   GLOBAL STATE
+===================================================== */
 
 let lists = [];
 let left = [];
@@ -78,66 +79,32 @@ let merged = [];
 let li = 0;
 let ri = 0;
 
-let total = 0;
-let current = 0;
+let totalSteps = 0;
+let currentStep = 0;
 
-let history = [];
+let historyStack = [];
 
-/* ================= FILTER ================= */
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
-function renderFilters() {
-  genBox.innerHTML = "";
-  teamBox.innerHTML = "";
+const leftImg = document.getElementById("leftImg");
+const rightImg = document.getElementById("rightImg");
+const leftName = document.getElementById("leftName");
+const rightName = document.getElementById("rightName");
 
-  const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
-  const teams = [...new Set(members.map(m => m.team))];
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
 
-  gens.forEach(g => {
-    genBox.innerHTML += `<h4>Gen ${g}</h4>`;
-    members.filter(m => m.gen === g).forEach(m => {
-      genBox.innerHTML += `
-        <label>
-          <input type="checkbox" value="${m.id}">
-          ${m.name}
-        </label><br>
-      `;
-    });
-  });
+/* =====================================================
+   START SORTER
+===================================================== */
 
-  teams.forEach(t => {
-    teamBox.innerHTML += `<h4>Team ${t}</h4>`;
-    members.filter(m => m.team === t).forEach(m => {
-      teamBox.innerHTML += `
-        <label>
-          <input type="checkbox" value="${m.id}">
-          ${m.name}
-        </label><br>
-      `;
-    });
-  });
-}
-
-renderFilters();
-
-/* ================= START ================= */
-
-function startFromSelection() {
-  const mode = document.querySelector('input[name="mode"]:checked').value;
-  let selected = [];
-
-  if (mode === "all") {
-    selected = members;
-  } else {
-    const checked = document.querySelectorAll(
-      '#selectScreen input[type="checkbox"]:checked'
-    );
-    selected = members.filter(m =>
-      [...checked].some(c => c.value === m.id)
-    );
-  }
+window.startFromSelection = function () {
+  let selected = members.slice(); // MODE ALL (AMAN)
 
   if (selected.length < 2) {
-    alert("Pilih minimal 2 member");
+    alert("Minimal 2 member");
     return;
   }
 
@@ -145,17 +112,19 @@ function startFromSelection() {
   document.getElementById("sorterScreen").style.display = "block";
 
   initSorter(selected);
-}
+};
 
-/* ================= SORTER CORE ================= */
+/* =====================================================
+   INIT
+===================================================== */
 
 function initSorter(data) {
   lists = data.map(m => [m]);
   shuffle(lists);
 
-  total = Math.ceil(data.length * Math.log2(data.length));
-  current = 0;
-  history = [];
+  totalSteps = Math.ceil(data.length * Math.log2(data.length));
+  currentStep = 0;
+  historyStack = [];
 
   updateProgress();
   nextMerge();
@@ -168,16 +137,21 @@ function shuffle(arr) {
   }
 }
 
+/* =====================================================
+   MERGE FLOW
+===================================================== */
+
 function nextMerge() {
   if (lists.length <= 1) {
-    showResult(lists[0]);
+    finishSorter(lists[0]);
     return;
   }
 
   left = lists.shift();
   right = lists.shift();
   merged = [];
-  li = ri = 0;
+  li = 0;
+  ri = 0;
 
   showBattle();
 }
@@ -201,113 +175,111 @@ function showBattle() {
     return;
   }
 
-  document.getElementById("leftImg").src = left[li].img;
-  document.getElementById("leftName").innerText = left[li].name;
-  document.getElementById("rightImg").src = right[ri].img;
-  document.getElementById("rightName").innerText = right[ri].name;
+  leftImg.src = left[li].img;
+  leftName.textContent = left[li].name;
+  rightImg.src = right[ri].img;
+  rightName.textContent = right[ri].name;
 }
 
-/* ================= CHOOSE ================= */
+/* =====================================================
+   SAVE STATE (UNDO)
+===================================================== */
 
-function choose(choice) {
-  history.push({
+function saveState() {
+  historyStack.push({
     lists: JSON.parse(JSON.stringify(lists)),
     left: [...left],
     right: [...right],
     merged: [...merged],
     li,
     ri,
-    current
+    currentStep
   });
+}
 
-  current++;
+/* =====================================================
+   USER CHOICE
+===================================================== */
 
-  if (choice === "left") {
+window.choose = function (side) {
+  saveState();
+  currentStep++;
+
+  if (side === "left") {
     merged.push(left[li++]);
-  } else if (choice === "right") {
+  } else if (side === "right") {
     merged.push(right[ri++]);
   } else {
-    merged.push(left[li++], right[ri++]);
+    merged.push(left[li++]);
   }
 
   updateProgress();
   showBattle();
-}
+};
 
-/* ================= UNDO ================= */
+/* =====================================================
+   UNDO
+===================================================== */
 
-function undo() {
-  if (!history.length) return;
+window.undo = function () {
+  if (!historyStack.length) return;
 
-  const prev = history.pop();
+  const prev = historyStack.pop();
   lists = prev.lists;
   left = prev.left;
   right = prev.right;
   merged = prev.merged;
   li = prev.li;
   ri = prev.ri;
-  current = prev.current;
+  currentStep = prev.currentStep;
 
   updateProgress();
   showBattle();
-}
+};
 
-/* ================= PROGRESS BAR ================= */
+/* =====================================================
+   PROGRESS BAR (CLICK BASED)
+===================================================== */
 
 function updateProgress(forceDone = false) {
   let percent = forceDone
     ? 100
-    : Math.min((current / total) * 100, 100);
+    : Math.min((currentStep / totalSteps) * 100, 100);
 
   progressFill.style.width = percent + "%";
+  progressFill.style.background =
+    "linear-gradient(90deg,#ff4d6d,#ffa94d,#51cf66,#4dabf7,#9775fa)";
 
-  progressFill.style.background = `
-    linear-gradient(
-      90deg,
-      #ff4d6d,
-      #ffb703,
-      #52b788,
-      #4dabf7,
-      #9775fa
-    )
-  `;
-
-  progressText.innerText =
-    `${Math.round(percent)}%`;
-
+  progressText.textContent = Math.round(percent) + "%";
   progressText.style.color = "#fff";
   progressText.style.fontWeight = "700";
 }
 
-/* ================= RESULT ================= */
+/* =====================================================
+   FINISH
+===================================================== */
 
-function showResult(finalList) {
+function finishSorter(result) {
   updateProgress(true);
 
-  document.body.innerHTML = `
-    <h1>Hasil Ranking</h1>
+  document.getElementById("sorterScreen").innerHTML = `
+    <h2>Hasil Ranking</h2>
 
     <p style="opacity:.8;margin-bottom:12px">
       Tidak mencapai target biasanya sudah <b>DONE</b>,
       karena kamu hanya memilih <b>oshi yang tepat</b> 💙
     </p>
 
-    <div class="result-grid"></div>
-    <button onclick="location.reload()">Ulangi Sorter</button>
-  `;
-
-  const grid = document.querySelector(".result-grid");
-
-  finalList.forEach((m, i) => {
-    grid.innerHTML += `
-      <div class="result-card">
-        <div class="rank">#${i + 1}</div>
-        <img src="${m.img}">
-        <div class="info">
-          <p class="name">${m.name}</p>
-          <p class="meta">Gen ${m.gen} · Team ${m.team}</p>
+    <div class="result-grid">
+      ${result.map((m,i)=>`
+        <div class="result-card">
+          <div class="rank">#${i+1}</div>
+          <img src="${m.img}">
+          <div class="name">${m.name}</div>
         </div>
-      </div>
-    `;
-  });
+      `).join("")}
+    </div>
+
+    <button onclick="location.reload()">Ulangi</button>
+  `;
 }
