@@ -189,24 +189,20 @@ function toggleTeam(cb) {
 }
 
 /* ==================================================
-   SMART CONFIG
+   INTERACTIVE SORTER (MERGE SORT STYLE)
 ================================================== */
 
-const BASE_BATTLE_FACTOR = 5.5;
-
-/* ==================================================
-   GLOBAL STATE
-================================================== */
-
-let selectedMembers = [];
-let battles = [];
-let battleIndex = 0;
-let results = {};
+let items = [];
+let leftArr = [];
+let rightArr = [];
+let merged = [];
+let stack = [];
 let history = [];
-let MAX_BATTLES = 0;
+let totalBattles = 0;
+let doneBattles = 0;
 
 /* ==================================================
-   START FROM SELECTION
+   START
 ================================================== */
 
 function startFromSelection() {
@@ -216,12 +212,8 @@ function startFromSelection() {
   if (mode === "all") {
     selected = members;
   } else {
-    const checked =
-      document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
-
-    selected = members.filter(m =>
-      [...checked].some(c => c.value === m.id)
-    );
+    const checked = document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
+    selected = members.filter(m => [...checked].some(c => c.value === m.id));
   }
 
   if (selected.length < 2) {
@@ -232,103 +224,116 @@ function startFromSelection() {
   document.getElementById("selectScreen").style.display = "none";
   document.getElementById("sorterScreen").style.display = "block";
 
-  initSorter(selected);
+  initSort(selected);
 }
 
 /* ==================================================
-   INIT SORTER
+   INIT
 ================================================== */
 
-function initSorter(selected) {
-  selectedMembers = selected;
-  battleIndex = 0;
+function initSort(list) {
+  items = list.map(m => [m]);
+  stack = [];
   history = [];
+  totalBattles = estimateBattles(list.length);
+  doneBattles = 0;
 
-  results = {};
-  selectedMembers.forEach(m => results[m.id] = 0);
-
-  battles = [];
-  for (let i = 0; i < selectedMembers.length; i++) {
-    for (let j = i + 1; j < selectedMembers.length; j++) {
-      battles.push([i, j]);
-    }
-  }
-
-  shuffle(battles);
-
-  MAX_BATTLES = Math.min(
-    battles.length,
-    Math.ceil(selectedMembers.length * BASE_BATTLE_FACTOR)
-  );
-
-  showBattle();
+  prepareMerge();
 }
 
 /* ==================================================
-   SHOW BATTLE (ADAPTIVE SMART)
+   MERGE PREP
 ================================================== */
 
-function showBattle() {
-  while (battleIndex < battles.length && battleIndex < MAX_BATTLES) {
-
-    const [i, j] = battles[battleIndex];
-    const left = selectedMembers[i];
-    const right = selectedMembers[j];
-
-    const scoreDiff = Math.abs(results[left.id] - results[right.id]);
-
-    // Threshold makin besar seiring progress
-    const progressRatio = battleIndex / MAX_BATTLES;
-    const dynamicThreshold = Math.floor(3 + progressRatio * 4);
-
-    if (scoreDiff >= dynamicThreshold) {
-      // auto resolve
-      if (results[left.id] > results[right.id]) {
-        results[left.id]++;
-      } else {
-        results[right.id]++;
-      }
-      battleIndex++;
-      continue;
-    }
-
-    document.getElementById("leftImg").src = left.img;
-    document.getElementById("leftName").innerText = left.name;
-    document.getElementById("rightImg").src = right.img;
-    document.getElementById("rightName").innerText = right.name;
-
-    updateProgress();
+function prepareMerge() {
+  if (items.length <= 1) {
+    showResult(items[0]);
     return;
   }
 
-  showResult();
+  const next = [];
+  for (let i = 0; i < items.length; i += 2) {
+    if (i + 1 < items.length) {
+      stack.push([items[i], items[i + 1]]);
+      next.push(null);
+    } else {
+      next.push(items[i]);
+    }
+  }
+
+  items = next;
+  nextMerge();
+}
+
+function nextMerge() {
+  if (!stack.length) {
+    prepareMerge();
+    return;
+  }
+
+  [leftArr, rightArr] = stack.shift();
+  merged = [];
+
+  showCompare();
 }
 
 /* ==================================================
-   CHOOSE
+   BATTLE
+================================================== */
+
+function showCompare() {
+  if (!leftArr.length || !rightArr.length) {
+    const rest = leftArr.length ? leftArr : rightArr;
+    merged.push(...rest);
+    finishMerge();
+    return;
+  }
+
+  const L = leftArr[0];
+  const R = rightArr[0];
+
+  document.getElementById("leftImg").src = L.img;
+  document.getElementById("leftName").innerText = L.name;
+  document.getElementById("rightImg").src = R.img;
+  document.getElementById("rightName").innerText = R.name;
+
+  updateProgress();
+}
+
+/* ==================================================
+   CHOICE
 ================================================== */
 
 function choose(choice) {
-  const [i, j] = battles[battleIndex];
-  const left = selectedMembers[i];
-  const right = selectedMembers[j];
-
   history.push({
-    battleIndex,
-    scores: { ...results }
+    left: [...leftArr],
+    right: [...rightArr],
+    merged: [...merged],
+    stack: JSON.parse(JSON.stringify(stack)),
+    items: JSON.parse(JSON.stringify(items))
   });
 
   if (choice === "left") {
-    results[left.id]++;
+    merged.push(leftArr.shift());
   } else if (choice === "right") {
-    results[right.id]++;
+    merged.push(rightArr.shift());
   } else {
-    results[left.id] += 0.5;
-    results[right.id] += 0.5;
+    merged.push(leftArr.shift());
+    merged.push(rightArr.shift());
   }
 
-  battleIndex++;
-  showBattle();
+  doneBattles++;
+  showCompare();
+}
+
+/* ==================================================
+   FINISH MERGE
+================================================== */
+
+function finishMerge() {
+  const index = items.indexOf(null);
+  items[index] = merged;
+  nextMerge();
 }
 
 /* ==================================================
@@ -338,48 +343,49 @@ function choose(choice) {
 function undo() {
   if (!history.length) return;
 
-  const prev = history.pop();
-  battleIndex = prev.battleIndex;
-  results = prev.scores;
+  const h = history.pop();
+  leftArr = h.left;
+  rightArr = h.right;
+  merged = h.merged;
+  stack = h.stack;
+  items = h.items;
 
-  showBattle();
+  doneBattles--;
+  showCompare();
 }
 
 /* ==================================================
    PROGRESS
 ================================================== */
 
-function updateProgress() {
-  const current = Math.min(battleIndex + 1, MAX_BATTLES);
-  const percent = (current / MAX_BATTLES) * 100;
+function estimateBattles(n) {
+  return Math.ceil(n * Math.log2(n));
+}
 
+function updateProgress() {
+  const percent = Math.min((doneBattles / totalBattles) * 100, 100);
   progressFill.style.width = percent + "%";
-  progressText.innerText = `Battle ${current} / ${MAX_BATTLES}`;
+  progressText.innerText = `Battle ${doneBattles} / ~${totalBattles}`;
 }
 
 /* ==================================================
    RESULT
 ================================================== */
 
-function showResult() {
-  const ranking = [...selectedMembers].sort(
-    (a, b) => results[b.id] - results[a.id]
-  );
-
+function showResult(finalList) {
   let html = `
     <h1>🏆 Ranking Result</h1>
-    <p style="opacity:.7">Smart adaptive result</p>
+    <p style="opacity:.7">Fast & smart sorting</p>
     <div class="result-grid">
   `;
 
-  ranking.forEach((m, i) => {
+  finalList.forEach((m, i) => {
     const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
     html += `
       <div class="result-card">
         <div class="rank">${medal} #${i + 1}</div>
         <img src="${m.img}">
         <div class="name">${m.name}</div>
-        <div class="meta">Score: ${results[m.id]}</div>
       </div>
     `;
   });
@@ -390,15 +396,4 @@ function showResult() {
   `;
 
   document.body.innerHTML = html;
-}
-
-/* ==================================================
-   UTIL
-================================================== */
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
 }
