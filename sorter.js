@@ -62,90 +62,113 @@ const members = [
   { id: "nur_intan", name: "Nur Intan", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Nur_Intan.jpg" }
 ];
 
-/* ================= ELEMENT ================= */
+/* ==================================================
+   ELEMENT
+================================================== */
 
 const genBox = document.getElementById("genSelect");
 const teamBox = document.getElementById("teamSelect");
 const progressFill = document.getElementById("progressFill");
 const progressText = document.getElementById("progressText");
 
-/* ================= MODE HANDLER (FIX) ================= */
+/* ==================================================
+   MODE HANDLER (FIX TOTAL)
+================================================== */
 
 document.querySelectorAll('input[name="mode"]').forEach(radio => {
   radio.addEventListener("change", () => {
-    const mode = document.querySelector('input[name="mode"]:checked').value;
+    genBox.innerHTML = "";
+    teamBox.innerHTML = "";
     genBox.style.display = "none";
     teamBox.style.display = "none";
 
-    if (mode === "gen") renderGen();
-    if (mode === "team") renderTeam();
+    const mode = document.querySelector('input[name="mode"]:checked').value;
+    if (mode === "gen") renderGenMode();
+    if (mode === "team") renderTeamMode();
   });
 });
 
-function renderGen() {
-  genBox.innerHTML = "<h4>Pilih Generasi</h4>";
-  genBox.style.display = "block";
+/* ================= GEN MODE ================= */
 
-  [...new Set(members.map(m => m.gen))].sort().forEach(gen => {
+function renderGenMode() {
+  genBox.style.display = "block";
+  genBox.innerHTML = "<h4>Pilih 1 Generasi</h4>";
+
+  const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
+
+  gens.forEach(gen => {
     genBox.innerHTML += `
       <label>
-        <input type="checkbox" value="gen-${gen}">
+        <input type="radio" name="genRadio" value="${gen}">
         Generasi ${gen}
-      </label>`;
+      </label>
+    `;
   });
 
-  genBox.querySelectorAll("input").forEach(cb =>
-    cb.addEventListener("change", renderGenMembers)
-  );
+  genBox.querySelectorAll('input[name="genRadio"]').forEach(radio => {
+    radio.addEventListener("change", renderGenMembers);
+  });
 }
 
 function renderGenMembers() {
   genBox.querySelectorAll(".member").forEach(e => e.remove());
-  const gens = [...genBox.querySelectorAll("input:checked")]
-    .map(i => Number(i.value.replace("gen-","")));
 
-  members.filter(m => gens.includes(m.gen)).forEach(m => {
-    genBox.innerHTML += `
-      <label class="member">
-        <input type="checkbox" value="${m.id}">
-        ${m.name}
-      </label>`;
-  });
+  const gen = Number(document.querySelector('input[name="genRadio"]:checked').value);
+
+  members
+    .filter(m => m.gen === gen)
+    .forEach(m => {
+      genBox.innerHTML += `
+        <label class="member">
+          <input type="checkbox" value="${m.id}">
+          ${m.name}
+        </label>
+      `;
+    });
 }
 
-function renderTeam() {
-  teamBox.innerHTML = "<h4>Pilih Team</h4>";
-  teamBox.style.display = "block";
+/* ================= TEAM MODE ================= */
 
-  [...new Set(members.map(m => m.team))].forEach(team => {
+function renderTeamMode() {
+  teamBox.style.display = "block";
+  teamBox.innerHTML = "<h4>Pilih 1 Team</h4>";
+
+  const teams = [...new Set(members.map(m => m.team))];
+
+  teams.forEach(team => {
     teamBox.innerHTML += `
       <label>
-        <input type="checkbox" value="team-${team}">
+        <input type="radio" name="teamRadio" value="${team}">
         Team ${team}
-      </label>`;
+      </label>
+    `;
   });
 
-  teamBox.querySelectorAll("input").forEach(cb =>
-    cb.addEventListener("change", renderTeamMembers)
-  );
+  teamBox.querySelectorAll('input[name="teamRadio"]').forEach(radio => {
+    radio.addEventListener("change", renderTeamMembers);
+  });
 }
 
 function renderTeamMembers() {
   teamBox.querySelectorAll(".member").forEach(e => e.remove());
-  const teams = [...teamBox.querySelectorAll("input:checked")]
-    .map(i => i.value.replace("team-",""));
 
-  members.filter(m => teams.includes(m.team)).forEach(m => {
-    teamBox.innerHTML += `
-      <label class="member">
-        <input type="checkbox" value="${m.id}">
-        ${m.name}
-      </label>`;
-  });
+  const team = document.querySelector('input[name="teamRadio"]:checked').value;
+
+  members
+    .filter(m => m.team === team)
+    .forEach(m => {
+      teamBox.innerHTML += `
+        <label class="member">
+          <input type="checkbox" value="${m.id}">
+          ${m.name}
+        </label>
+      `;
+    });
 }
 
-/* ================== SORTER CORE (ASLI KAMU) ================== */
-/* TIDAK DIUBAH SAMA SEKALI */
+/* ==================================================
+   SORTER CORE (ASLI PUNYA KAMU – TIDAK DIUBAH)
+================================================== */
 
 let lists = [];
 let left = [];
