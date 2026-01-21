@@ -189,57 +189,84 @@ function toggleTeam(cb) {
 }
 
 /* ==================================================
-   SMART & SAFE SORTER
+   SORTER CORE – MEMBER SORTER STYLE
 ================================================== */
 
-let pool = [];
+let selectedMembers = [];
 let battles = [];
 let battleIndex = 0;
+let results = {};
 let history = [];
-const K = 24;
+
+/* ==================================================
+   START FROM SELECTION (ASLI KAMU – FIXED)
+================================================== */
+
+function startFromSelection() {
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+  let selected = [];
+
+  if (mode === "all") {
+    selected = members;
+  } else {
+    const checked =
+      document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
+    selected = members.filter(m =>
+      [...checked].some(c => c.value === m.id)
+    );
+  }
+
+  if (selected.length < 2) {
+    alert("Pilih minimal 2 member");
+    return;
+  }
+
+  document.getElementById("selectScreen").style.display = "none";
+  document.getElementById("sorterScreen").style.display = "block";
+
+  initSorter(selected);
+}
 
 /* ==================================================
    INIT SORTER
 ================================================== */
 
 function initSorter(selected) {
-  pool = selected.map(m => ({
-    ...m,
-    score: 1000
-  }));
-
-  battles = [];
-  history = [];
+  selectedMembers = selected;
   battleIndex = 0;
+  history = [];
 
-  // Buat semua kombinasi battle (UNIK & FIX)
-  for (let i = 0; i < pool.length; i++) {
-    for (let j = i + 1; j < pool.length; j++) {
+  // Init result score
+  results = {};
+  selectedMembers.forEach(m => {
+    results[m.id] = 0;
+  });
+
+  // Buat semua kombinasi battle (ROUND ROBIN)
+  battles = [];
+  for (let i = 0; i < selectedMembers.length; i++) {
+    for (let j = i + 1; j < selectedMembers.length; j++) {
       battles.push([i, j]);
     }
   }
 
   shuffle(battles);
-
-  document.getElementById("selectScreen").style.display = "none";
-  document.getElementById("sorterScreen").style.display = "block";
-
-  nextBattle();
+  showBattle();
 }
 
 /* ==================================================
-   BATTLE FLOW
+   SHOW BATTLE (ASLI FLOW)
 ================================================== */
 
-function nextBattle() {
+function showBattle() {
   if (battleIndex >= battles.length) {
     showResult();
     return;
   }
 
   const [i, j] = battles[battleIndex];
-  const left = pool[i];
-  const right = pool[j];
+  const left = selectedMembers[i];
+  const right = selectedMembers[j];
 
   document.getElementById("leftImg").src = left.img;
   document.getElementById("leftName").innerText = left.name;
@@ -255,27 +282,25 @@ function nextBattle() {
 
 function choose(choice) {
   const [i, j] = battles[battleIndex];
-  const a = pool[i];
-  const b = pool[j];
+  const left = selectedMembers[i];
+  const right = selectedMembers[j];
 
   history.push({
     battleIndex,
-    scores: pool.map(p => p.score)
+    scores: { ...results }
   });
 
   if (choice === "left") {
-    a.score += K;
-    b.score -= K;
+    results[left.id]++;
   } else if (choice === "right") {
-    b.score += K;
-    a.score -= K;
+    results[right.id]++;
   } else {
-    a.score += K / 2;
-    b.score += K / 2;
+    results[left.id] += 0.5;
+    results[right.id] += 0.5;
   }
 
   battleIndex++;
-  nextBattle();
+  showBattle();
 }
 
 /* ==================================================
@@ -285,11 +310,11 @@ function choose(choice) {
 function undo() {
   if (!history.length) return;
 
-  const last = history.pop();
-  battleIndex = last.battleIndex;
-  pool.forEach((p, i) => p.score = last.scores[i]);
+  const prev = history.pop();
+  battleIndex = prev.battleIndex;
+  results = prev.scores;
 
-  nextBattle();
+  showBattle();
 }
 
 /* ==================================================
@@ -306,19 +331,21 @@ function updateProgress() {
 }
 
 /* ==================================================
-   RESULT (KEREN + STABIL)
+   RESULT – MEMBER SORTER STYLE
 ================================================== */
 
 function showResult() {
-  pool.sort((a, b) => b.score - a.score);
+  const ranking = [...selectedMembers].sort(
+    (a, b) => results[b.id] - results[a.id]
+  );
 
   let html = `
-    <h1>🏆 Final Ranking</h1>
-    <p style="opacity:.8">Berdasarkan pilihanmu secara konsisten</p>
+    <h1>🏆 Ranking Result</h1>
+    <p style="opacity:.8">Berdasarkan pilihanmu</p>
     <div class="result-grid">
   `;
 
-  pool.forEach((m, i) => {
+  ranking.forEach((m, i) => {
     const medal =
       i === 0 ? "🥇" :
       i === 1 ? "🥈" :
@@ -329,7 +356,7 @@ function showResult() {
         <div class="rank">${medal} #${i + 1}</div>
         <img src="${m.img}">
         <div class="name">${m.name}</div>
-        <div class="meta">Score ${Math.round(m.score)}</div>
+        <div class="meta">Score: ${results[m.id]}</div>
       </div>
     `;
   });
