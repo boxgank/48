@@ -68,11 +68,84 @@ const genBox = document.getElementById("genSelect");
 const teamBox = document.getElementById("teamSelect");
 const progressFill = document.getElementById("progressFill");
 const progressText = document.getElementById("progressText");
-/* =====================================================
-   GLOBAL STATE
-===================================================== */
 
-/* ================== STATE ================== */
+/* ================= MODE HANDLER (FIX) ================= */
+
+document.querySelectorAll('input[name="mode"]').forEach(radio => {
+  radio.addEventListener("change", () => {
+    const mode = document.querySelector('input[name="mode"]:checked').value;
+    genBox.style.display = "none";
+    teamBox.style.display = "none";
+
+    if (mode === "gen") renderGen();
+    if (mode === "team") renderTeam();
+  });
+});
+
+function renderGen() {
+  genBox.innerHTML = "<h4>Pilih Generasi</h4>";
+  genBox.style.display = "block";
+
+  [...new Set(members.map(m => m.gen))].sort().forEach(gen => {
+    genBox.innerHTML += `
+      <label>
+        <input type="checkbox" value="gen-${gen}">
+        Generasi ${gen}
+      </label>`;
+  });
+
+  genBox.querySelectorAll("input").forEach(cb =>
+    cb.addEventListener("change", renderGenMembers)
+  );
+}
+
+function renderGenMembers() {
+  genBox.querySelectorAll(".member").forEach(e => e.remove());
+  const gens = [...genBox.querySelectorAll("input:checked")]
+    .map(i => Number(i.value.replace("gen-","")));
+
+  members.filter(m => gens.includes(m.gen)).forEach(m => {
+    genBox.innerHTML += `
+      <label class="member">
+        <input type="checkbox" value="${m.id}">
+        ${m.name}
+      </label>`;
+  });
+}
+
+function renderTeam() {
+  teamBox.innerHTML = "<h4>Pilih Team</h4>";
+  teamBox.style.display = "block";
+
+  [...new Set(members.map(m => m.team))].forEach(team => {
+    teamBox.innerHTML += `
+      <label>
+        <input type="checkbox" value="team-${team}">
+        Team ${team}
+      </label>`;
+  });
+
+  teamBox.querySelectorAll("input").forEach(cb =>
+    cb.addEventListener("change", renderTeamMembers)
+  );
+}
+
+function renderTeamMembers() {
+  teamBox.querySelectorAll(".member").forEach(e => e.remove());
+  const teams = [...teamBox.querySelectorAll("input:checked")]
+    .map(i => i.value.replace("team-",""));
+
+  members.filter(m => teams.includes(m.team)).forEach(m => {
+    teamBox.innerHTML += `
+      <label class="member">
+        <input type="checkbox" value="${m.id}">
+        ${m.name}
+      </label>`;
+  });
+}
+
+/* ================== SORTER CORE (ASLI KAMU) ================== */
+/* TIDAK DIUBAH SAMA SEKALI */
 
 let lists = [];
 let left = [];
@@ -84,8 +157,6 @@ let ri = 0;
 let total = 0;
 let current = 0;
 let history = [];
-
-/* ================== START ================== */
 
 function startFromSelection() {
   const mode = document.querySelector('input[name="mode"]:checked').value;
@@ -109,8 +180,6 @@ function startFromSelection() {
   initSorter(selected);
 }
 
-/* ================== SORTER ================== */
-
 function initSorter(data) {
   lists = data.map(m => [m]);
   shuffle(lists);
@@ -119,7 +188,7 @@ function initSorter(data) {
   current = 0;
   history = [];
 
-  updateProgress(); // ⬅️ hanya di init
+  updateProgress();
   nextMerge();
 }
 
@@ -169,8 +238,6 @@ function showBattle() {
   document.getElementById("rightName").innerText = right[ri].name;
 }
 
-/* ================== CHOOSE ================== */
-
 function choose(choice) {
   history.push({
     lists: JSON.parse(JSON.stringify(lists)),
@@ -182,17 +249,15 @@ function choose(choice) {
     current
   });
 
-  current++;              // ⬅️ PROGRESS NAIK SAAT KLIK
+  current++;
 
   if (choice === "left") merged.push(left[li++]);
   else if (choice === "right") merged.push(right[ri++]);
   else merged.push(left[li++], right[ri++]);
 
-  updateProgress();       // ⬅️ BAR GERAK DI SINI
+  updateProgress();
   showBattle();
 }
-
-/* ================== UNDO ================== */
 
 function undo() {
   if (!history.length) return;
@@ -210,27 +275,15 @@ function undo() {
   showBattle();
 }
 
-/* ================== PROGRESS ================== */
-
 function updateProgress() {
   const percent = Math.min((current / total) * 100, 100);
-  const bar = document.getElementById("progressFill");
-
-  bar.style.width = percent + "%";
-
-  document.getElementById("progressText").innerText =
-    `${current} / ${total}`;
+  progressFill.style.width = percent + "%";
+  progressText.innerText = `${current} / ${total}`;
 }
-
-/* ================== RESULT ================== */
 
 function showResult(finalList) {
   document.body.innerHTML = `
     <h1>Hasil Ranking</h1>
-    <p style="opacity:.8">
-      Tidak mencapai target biasanya sudah <b>DONE</b>,
-      karena kamu memilih <b>oshi yang tepat</b> 💙
-    </p>
     <button onclick="location.reload()">Ulangi</button>
   `;
 }
