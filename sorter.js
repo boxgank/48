@@ -188,29 +188,42 @@ function toggleTeam(cb) {
     });
 }
 
-/* ==================================================
-   INTERACTIVE MERGE SORT (J-SORTER STYLE)
-================================================== */
+/* =====================================================
+   INTERACTIVE INSERTION SORT (TRUE J-SORTER LOGIC)
+===================================================== */
 
-let stack = [];
-let currentMerge = null;
+/*
+member object minimal:
+{
+  id: "xxx",
+  name: "Nur Intan",
+  img: "img.jpg"
+}
+*/
+
+let ranking = [];
+let pending = [];
+let challenger = null;
+let compareIndex = 0;
+
 let history = [];
-let finalResult = null;
+let battleCount = 0;
 
-/* ==================================================
-   START SORTER
-================================================== */
+/* =====================================================
+   START FROM SELECTION
+===================================================== */
 
 function startFromSelection() {
   let selected = [];
-
   const mode = document.querySelector('input[name="mode"]:checked').value;
 
   if (mode === "all") {
     selected = [...members];
   } else {
     const checked = document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
-    selected = members.filter(m => [...checked].some(c => c.value === m.id));
+    selected = members.filter(m =>
+      [...checked].some(c => c.value === m.id)
+    );
   }
 
   if (selected.length < 2) {
@@ -221,172 +234,147 @@ function startFromSelection() {
   document.getElementById("selectScreen").style.display = "none";
   document.getElementById("sorterScreen").style.display = "block";
 
-  initMergeSorter(selected);
+  initSorter(selected);
 }
 
-/* ==================================================
-   INIT
-================================================== */
+/* =====================================================
+   INIT SORTER
+===================================================== */
 
-function initMergeSorter(list) {
-  stack = [{
-    type: "split",
-    list
-  }];
-
+function initSorter(list) {
+  ranking = [list[0]];
+  pending = list.slice(1);
+  challenger = null;
+  compareIndex = 0;
   history = [];
-  finalResult = null;
-  currentMerge = null;
+  battleCount = 0;
 
-  nextStep();
+  nextChallenger();
 }
 
-/* ==================================================
-   PROCESS STACK
-================================================== */
+/* =====================================================
+   NEXT MEMBER
+===================================================== */
 
-function nextStep() {
-  if (currentMerge) return;
-
-  if (!stack.length) {
+function nextChallenger() {
+  if (!pending.length) {
     showResult();
     return;
   }
 
-  const task = stack.pop();
+  challenger = pending.shift();
+  compareIndex = ranking.length - 1;
 
-  if (task.type === "split") {
-    if (task.list.length <= 1) {
-      stack.push({ type: "result", list: task.list });
-    } else {
-      const mid = Math.floor(task.list.length / 2);
-      stack.push({ type: "merge" });
-      stack.push({ type: "split", list: task.list.slice(mid) });
-      stack.push({ type: "split", list: task.list.slice(0, mid) });
-    }
-  }
-
-  else if (task.type === "merge") {
-    const right = stack.pop().list;
-    const left = stack.pop().list;
-
-    currentMerge = {
-      left,
-      right,
-      i: 0,
-      j: 0,
-      result: []
-    };
-
-    showCompare();
-  }
-
-  else if (task.type === "result") {
-    stack.push(task);
-    nextStep();
-  }
+  showCompare();
 }
 
-/* ==================================================
+/* =====================================================
    SHOW COMPARE
-================================================== */
+===================================================== */
 
 function showCompare() {
-  const { left, right, i, j } = currentMerge;
-
-  if (i >= left.length) {
-    currentMerge.result.push(...right.slice(j));
-    finishMerge();
+  if (compareIndex < 0) {
+    ranking.unshift(challenger);
+    challenger = null;
+    nextChallenger();
     return;
   }
 
-  if (j >= right.length) {
-    currentMerge.result.push(...left.slice(i));
-    finishMerge();
-    return;
-  }
+  const upper = ranking[compareIndex];
 
-  const L = left[i];
-  const R = right[j];
+  // kiri = challenger, kanan = ranking
+  document.getElementById("leftImg").src = challenger.img;
+  document.getElementById("leftName").innerText = challenger.name;
 
-  document.getElementById("leftImg").src = L.img;
-  document.getElementById("leftName").innerText = L.name;
-  document.getElementById("rightImg").src = R.img;
-  document.getElementById("rightName").innerText = R.name;
+  document.getElementById("rightImg").src = upper.img;
+  document.getElementById("rightName").innerText = upper.name;
 
   updateProgress();
 }
 
-/* ==================================================
-   USER CHOICE
-================================================== */
+/* =====================================================
+   USER PICK
+===================================================== */
 
 function choose(choice) {
-  if (!currentMerge) return;
+  if (!challenger) return;
 
-  history.push(JSON.parse(JSON.stringify(currentMerge)));
-
-  if (choice === "left") {
-    currentMerge.result.push(currentMerge.left[currentMerge.i++]);
-  } else if (choice === "right") {
-    currentMerge.result.push(currentMerge.right[currentMerge.j++]);
-  } else {
-    currentMerge.result.push(currentMerge.left[currentMerge.i++]);
-    currentMerge.result.push(currentMerge.right[currentMerge.j++]);
-  }
-
-  showCompare();
-}
-
-/* ==================================================
-   FINISH MERGE
-================================================== */
-
-function finishMerge() {
-  stack.push({
-    type: "result",
-    list: currentMerge.result
+  history.push({
+    ranking: [...ranking],
+    pending: [...pending],
+    challenger,
+    compareIndex
   });
 
-  currentMerge = null;
-  nextStep();
+  battleCount++;
+
+  if (choice === "left") {
+    // challenger menang → naik
+    compareIndex--;
+    showCompare();
+  }
+  else if (choice === "right") {
+    // challenger kalah → masuk di bawah
+    ranking.splice(compareIndex + 1, 0, challenger);
+    challenger = null;
+    nextChallenger();
+  }
+  else {
+    // tie → treat as kalah tipis
+    ranking.splice(compareIndex + 1, 0, challenger);
+    challenger = null;
+    nextChallenger();
+  }
 }
 
-/* ==================================================
+/* =====================================================
    UNDO
-================================================== */
+===================================================== */
 
 function undo() {
   if (!history.length) return;
 
-  currentMerge = history.pop();
+  const last = history.pop();
+  ranking = [...last.ranking];
+  pending = [...last.pending];
+  challenger = last.challenger;
+  compareIndex = last.compareIndex;
+
+  battleCount = Math.max(0, battleCount - 1);
+
   showCompare();
 }
 
-/* ==================================================
-   PROGRESS (ESTIMASI)
-================================================== */
+/* =====================================================
+   PROGRESS (SMART ESTIMATION)
+===================================================== */
 
 function updateProgress() {
-  const done = history.length;
-  const total = Math.ceil(members.length * Math.log2(members.length));
-  const percent = Math.min(100, Math.floor((done / total) * 100));
+  const n = ranking.length + pending.length + (challenger ? 1 : 0);
+  const estimatedTotal = Math.ceil(n * Math.log2(n));
+  const percent = Math.min(100, Math.floor((battleCount / estimatedTotal) * 100));
 
   progressFill.style.width = percent + "%";
-  progressText.innerText = `Battle ${done + 1} / ~${total}`;
+  progressText.innerText = `Battle ${battleCount} / ~${estimatedTotal}`;
 }
 
-/* ==================================================
+/* =====================================================
    RESULT
-================================================== */
+===================================================== */
 
 function showResult() {
-  finalResult = stack.pop().list;
+  let html = `
+    <h1>🏆 Ranking Result</h1>
+    <p style="opacity:.7">Based on your choices</p>
+    <div class="result-grid">
+  `;
 
-  let html = `<h1>🏆 Ranking Result</h1><div class="result-grid">`;
+  ranking.forEach((m, i) => {
+    const medal =
+      i === 0 ? "🥇" :
+      i === 1 ? "🥈" :
+      i === 2 ? "🥉" : "";
 
-  finalResult.forEach((m, i) => {
-    const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
     html += `
       <div class="result-card">
         <div class="rank">${medal} #${i + 1}</div>
@@ -396,19 +384,23 @@ function showResult() {
     `;
   });
 
-  html += `</div><button onclick="location.reload()">Ulangi</button>`;
+  html += `
+    </div>
+    <button onclick="location.reload()">Ulangi</button>
+  `;
 
   document.body.innerHTML = html;
 }
 
-/* ==================================================
+/* =====================================================
    KEYBOARD SUPPORT
-================================================== */
+===================================================== */
 
-document.addEventListener("keydown", e => {
+document.addEventListener("keydown", function (e) {
   if (e.repeat) return;
-  if (!document.getElementById("sorterScreen") ||
-      document.getElementById("sorterScreen").style.display === "none") return;
+
+  const sorter = document.getElementById("sorterScreen");
+  if (!sorter || sorter.style.display === "none") return;
 
   if (e.key === "1") choose("left");
   if (e.key === "2") choose("right");
