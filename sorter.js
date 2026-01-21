@@ -189,21 +189,19 @@ function toggleTeam(cb) {
 }
 
 /* ==================================================
-   INTERACTIVE QUICK SORTER (SHORT VERSION)
+   MERGE SORT BATTLE SYSTEM (REFERENCE LOGIC)
 ================================================== */
 
-let pool = [];
-let stack = [];
-let current = null;
-let higher = [];
-let lower = [];
+let battles = [];
+let currentBattleIndex = 0;
+let homeIndex = 0;
+let awayIndex = 0;
 let history = [];
 
-let totalEstimate = 0;
-let doneBattles = 0;
+let finalRanking = [];
 
 /* ==================================================
-   START
+   START FROM SELECTION
 ================================================== */
 
 function startFromSelection() {
@@ -229,66 +227,76 @@ function startFromSelection() {
 }
 
 /* ==================================================
-   INIT
+   INIT SORTER
 ================================================== */
 
 function initSorter(list) {
-  pool = [...list];
-  stack = [];
+  battles = [];
   history = [];
-  doneBattles = 0;
+  currentBattleIndex = 0;
+  homeIndex = 0;
+  awayIndex = 0;
 
-  totalEstimate = Math.ceil(list.length * Math.log2(list.length));
+  const result = generateMergeBattles(list);
+  battles = result.battles;
+  finalRanking = result.final;
 
-  stack.push(pool);
-  nextPartition();
+  showBattle();
 }
 
 /* ==================================================
-   PARTITION
+   GENERATE MERGE SORT BATTLES
 ================================================== */
 
-function nextPartition() {
-  if (!stack.length) {
+function generateMergeBattles(list) {
+  const battles = [];
+
+  function mergeSort(arr) {
+    if (arr.length <= 1) return arr;
+
+    const mid = Math.floor(arr.length / 2);
+    const left = mergeSort(arr.slice(0, mid));
+    const right = mergeSort(arr.slice(mid));
+
+    battles.push({
+      home: left,
+      away: right
+    });
+
+    return [...left, ...right];
+  }
+
+  const final = mergeSort(list);
+  return { battles, final };
+}
+
+/* ==================================================
+   SHOW BATTLE
+================================================== */
+
+function showBattle() {
+  if (currentBattleIndex >= battles.length) {
     showResult();
     return;
   }
 
-  const arr = stack.pop();
+  const battle = battles[currentBattleIndex];
 
-  if (arr.length <= 1) {
-    pool = [...arr, ...pool.filter(m => !arr.includes(m))];
-    nextPartition();
+  if (homeIndex >= battle.home.length || awayIndex >= battle.away.length) {
+    currentBattleIndex++;
+    homeIndex = 0;
+    awayIndex = 0;
+    showBattle();
     return;
   }
 
-  current = arr[Math.floor(Math.random() * arr.length)];
-  higher = [];
-  lower = [];
+  const left = battle.home[homeIndex];
+  const right = battle.away[awayIndex];
 
-  arr.forEach(m => {
-    if (m !== current) higher.push(m);
-  });
-
-  showCompare();
-}
-
-/* ==================================================
-   SHOW COMPARE
-================================================== */
-
-function showCompare() {
-  if (!higher.length) {
-    finalizePartition();
-    return;
-  }
-
-  const opponent = higher[0];
-
-  document.getElementById("leftImg").src = current.img;
-  document.getElementById("leftName").innerText = current.name;
-  document.getElementById("rightImg").src = opponent.img;
-  document.getElementById("rightName").innerText = opponent.name;
+  document.getElementById("leftImg").src = left.img;
+  document.getElementById("leftName").innerText = left.name;
+  document.getElementById("rightImg").src = right.img;
+  document.getElementById("rightName").innerText = right.name;
 
   updateProgress();
 }
@@ -298,38 +306,24 @@ function showCompare() {
 ================================================== */
 
 function choose(choice) {
+  const battle = battles[currentBattleIndex];
+
   history.push({
-    current,
-    higher: [...higher],
-    lower: [...lower],
-    stack: JSON.parse(JSON.stringify(stack)),
-    pool: [...pool]
+    currentBattleIndex,
+    homeIndex,
+    awayIndex
   });
 
-  const opponent = higher.shift();
-
   if (choice === "left") {
-    lower.push(opponent);
+    homeIndex++;
   } else if (choice === "right") {
-    higher.push(opponent);
+    awayIndex++;
   } else {
-    lower.push(opponent);
+    homeIndex++;
+    awayIndex++;
   }
 
-  doneBattles++;
-  showCompare();
-}
-
-/* ==================================================
-   FINALIZE PARTITION
-================================================== */
-
-function finalizePartition() {
-  // Fokus urutkan yang lebih kuat dulu
-  stack.push(lower);
-  pool.push(current);
-  stack.push(higher);
-  nextPartition();
+  showBattle();
 }
 
 /* ==================================================
@@ -340,14 +334,11 @@ function undo() {
   if (!history.length) return;
 
   const h = history.pop();
-  current = h.current;
-  higher = h.higher;
-  lower = h.lower;
-  stack = h.stack;
-  pool = h.pool;
+  currentBattleIndex = h.currentBattleIndex;
+  homeIndex = h.homeIndex;
+  awayIndex = h.awayIndex;
 
-  doneBattles--;
-  showCompare();
+  showBattle();
 }
 
 /* ==================================================
@@ -355,9 +346,9 @@ function undo() {
 ================================================== */
 
 function updateProgress() {
-  const percent = Math.min((doneBattles / totalEstimate) * 100, 100);
+  const percent = Math.floor((currentBattleIndex / battles.length) * 100);
   progressFill.style.width = percent + "%";
-  progressText.innerText = `Battle ${doneBattles} / ~${totalEstimate}`;
+  progressText.innerText = `Battle ${currentBattleIndex + 1} / ${battles.length}`;
 }
 
 /* ==================================================
@@ -367,11 +358,11 @@ function updateProgress() {
 function showResult() {
   let html = `
     <h1>🏆 Ranking Result</h1>
-    <p style="opacity:.7">Fast smart sorting</p>
+    <p style="opacity:.7">Merge sort based ranking</p>
     <div class="result-grid">
   `;
 
-  pool.forEach((m, i) => {
+  finalRanking.forEach((m, i) => {
     const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
     html += `
       <div class="result-card">
