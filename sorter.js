@@ -72,7 +72,7 @@ const progressFill = document.getElementById("progressFill");
 const progressText = document.getElementById("progressText");
 
 /* ==================================================
-   MODE HANDLER (FIX TOTAL)
+   MODE HANDLER
 ================================================== */
 
 document.querySelectorAll('input[name="mode"]').forEach(radio => {
@@ -83,16 +83,16 @@ document.querySelectorAll('input[name="mode"]').forEach(radio => {
     teamBox.style.display = "none";
 
     const mode = document.querySelector('input[name="mode"]:checked').value;
-    if (mode === "gen") renderGenMode();
-    if (mode === "team") renderTeamMode();
+    if (mode === "gen") showGenMode();
+    if (mode === "team") showTeamMode();
   });
 });
 
 /* ================= GEN MODE ================= */
 
-function renderGenMode() {
+function showGenMode() {
   genBox.style.display = "block";
-  genBox.innerHTML = "<h4>Pilih 1 Generasi</h4>";
+  genBox.innerHTML = "<h4>Pilih Generasi</h4>";
 
   const gens = [...new Set(members.map(m => m.gen))].sort((a,b)=>a-b);
 
@@ -113,7 +113,11 @@ function renderGenMode() {
 function renderGenMembers() {
   genBox.querySelectorAll(".member").forEach(e => e.remove());
 
-  const gen = Number(document.querySelector('input[name="genRadio"]:checked').value);
+  const gen = Number(
+    document.querySelector('input[name="genRadio"]:checked').value
+  );
+
+  genBox.innerHTML += `<h4 class="member">Pilih Member</h4>`;
 
   members
     .filter(m => m.gen === gen)
@@ -129,9 +133,9 @@ function renderGenMembers() {
 
 /* ================= TEAM MODE ================= */
 
-function renderTeamMode() {
+function showTeamMode() {
   teamBox.style.display = "block";
-  teamBox.innerHTML = "<h4>Pilih 1 Team</h4>";
+  teamBox.innerHTML = "<h4>Pilih Team</h4>";
 
   const teams = [...new Set(members.map(m => m.team))];
 
@@ -152,7 +156,10 @@ function renderTeamMode() {
 function renderTeamMembers() {
   teamBox.querySelectorAll(".member").forEach(e => e.remove());
 
-  const team = document.querySelector('input[name="teamRadio"]:checked').value;
+  const team =
+    document.querySelector('input[name="teamRadio"]:checked').value;
+
+  teamBox.innerHTML += `<h4 class="member">Pilih Member</h4>`;
 
   members
     .filter(m => m.team === team)
@@ -188,8 +195,11 @@ function startFromSelection() {
   if (mode === "all") {
     selected = members;
   } else {
-    const checked = document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
-    selected = members.filter(m => [...checked].some(c => c.value === m.id));
+    const checked =
+      document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
+    selected = members.filter(m =>
+      [...checked].some(c => c.value === m.id)
+    );
   }
 
   if (selected.length < 2) {
