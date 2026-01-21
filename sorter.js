@@ -189,6 +189,36 @@ function toggleTeam(cb) {
 }
 
 /* ==================================================
+   KEYBOARD CONTROLS
+================================================== */
+
+document.addEventListener("keydown", function (e) {
+  // jangan jalan kalau lagi di halaman select
+  const sorterScreen = document.getElementById("sorterScreen");
+  if (!sorterScreen || sorterScreen.style.display === "none") return;
+
+  // cegah spam kalau key ditahan
+  if (e.repeat) return;
+
+  switch (e.key) {
+    case "1":
+      choose("left");
+      break;
+    case "2":
+      choose("right");
+      break;
+    case "3":
+      choose("tie");
+      break;
+    case "z":
+    case "Z":
+      undo();
+      break;
+  }
+});
+
+
+/* ==================================================
    MERGE SORT BATTLE SYSTEM (REFERENCE LOGIC)
 ================================================== */
 
