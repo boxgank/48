@@ -83,14 +83,16 @@ document.querySelectorAll('input[name="mode"]').forEach(radio => {
     teamBox.style.display = "none";
 
     const mode = document.querySelector('input[name="mode"]:checked').value;
-    if (mode === "gen") showGenMode();
-    if (mode === "team") showTeamMode();
+    if (mode === "gen") renderGenMode();
+    if (mode === "team") renderTeamMode();
   });
 });
 
-/* ================= GEN MODE ================= */
+/* ==================================================
+   GEN MODE (CHECKBOX GEN → MEMBER AUTO CHECK)
+================================================== */
 
-function showGenMode() {
+function renderGenMode() {
   genBox.style.display = "block";
   genBox.innerHTML = "<h4>Pilih Generasi</h4>";
 
@@ -99,41 +101,48 @@ function showGenMode() {
   gens.forEach(gen => {
     genBox.innerHTML += `
       <label>
-        <input type="radio" name="genRadio" value="${gen}">
+        <input type="checkbox" value="gen-${gen}">
         Generasi ${gen}
       </label>
+      <div class="gen-members" data-gen="${gen}" style="margin-left:22px; display:none"></div>
     `;
   });
 
-  genBox.querySelectorAll('input[name="genRadio"]').forEach(radio => {
-    radio.addEventListener("change", renderGenMembers);
+  genBox.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener("change", () => toggleGen(cb));
   });
 }
 
-function renderGenMembers() {
-  genBox.querySelectorAll(".member").forEach(e => e.remove());
+function toggleGen(cb) {
+  const gen = Number(cb.value.replace("gen-",""));
+  const container = genBox.querySelector(`[data-gen="${gen}"]`);
 
-  const gen = Number(
-    document.querySelector('input[name="genRadio"]:checked').value
-  );
+  container.innerHTML = "";
 
-  genBox.innerHTML += `<h4 class="member">Pilih Member</h4>`;
+  if (!cb.checked) {
+    container.style.display = "none";
+    return;
+  }
+
+  container.style.display = "block";
 
   members
     .filter(m => m.gen === gen)
     .forEach(m => {
-      genBox.innerHTML += `
-        <label class="member">
-          <input type="checkbox" value="${m.id}">
+      container.innerHTML += `
+        <label>
+          <input type="checkbox" value="${m.id}" checked>
           ${m.name}
         </label>
       `;
     });
 }
 
-/* ================= TEAM MODE ================= */
+/* ==================================================
+   TEAM MODE (CHECKBOX TEAM → MEMBER AUTO CHECK)
+================================================== */
 
-function showTeamMode() {
+function renderTeamMode() {
   teamBox.style.display = "block";
   teamBox.innerHTML = "<h4>Pilih Team</h4>";
 
@@ -142,31 +151,37 @@ function showTeamMode() {
   teams.forEach(team => {
     teamBox.innerHTML += `
       <label>
-        <input type="radio" name="teamRadio" value="${team}">
+        <input type="checkbox" value="team-${team}">
         Team ${team}
       </label>
+      <div class="team-members" data-team="${team}" style="margin-left:22px; display:none"></div>
     `;
   });
 
-  teamBox.querySelectorAll('input[name="teamRadio"]').forEach(radio => {
-    radio.addEventListener("change", renderTeamMembers);
+  teamBox.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener("change", () => toggleTeam(cb));
   });
 }
 
-function renderTeamMembers() {
-  teamBox.querySelectorAll(".member").forEach(e => e.remove());
+function toggleTeam(cb) {
+  const team = cb.value.replace("team-","");
+  const container = teamBox.querySelector(`[data-team="${team}"]`);
 
-  const team =
-    document.querySelector('input[name="teamRadio"]:checked').value;
+  container.innerHTML = "";
 
-  teamBox.innerHTML += `<h4 class="member">Pilih Member</h4>`;
+  if (!cb.checked) {
+    container.style.display = "none";
+    return;
+  }
+
+  container.style.display = "block";
 
   members
     .filter(m => m.team === team)
     .forEach(m => {
-      teamBox.innerHTML += `
-        <label class="member">
-          <input type="checkbox" value="${m.id}">
+      container.innerHTML += `
+        <label>
+          <input type="checkbox" value="${m.id}" checked>
           ${m.name}
         </label>
       `;
@@ -174,7 +189,7 @@ function renderTeamMembers() {
 }
 
 /* ==================================================
-   SORTER CORE (ASLI PUNYA KAMU – TIDAK DIUBAH)
+   SORTER CORE (ASLI – TIDAK DIUBAH)
 ================================================== */
 
 let lists = [];
