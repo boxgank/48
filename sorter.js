@@ -189,149 +189,145 @@ function toggleTeam(cb) {
 }
 
 /* ==================================================
-   SORTER CORE (ASLI – TIDAK DIUBAH)
+   SMART SORTER STATE
 ================================================== */
 
-let lists = [];
-let left = [];
-let right = [];
-let merged = [];
-let li = 0;
-let ri = 0;
-
-let total = 0;
-let current = 0;
+let pool = [];
+let currentPair = [];
 let history = [];
+let round = 0;
+const K = 32;
 
-function startFromSelection() {
-  const mode = document.querySelector('input[name="mode"]:checked').value;
-  let selected = [];
+/* ==================================================
+   INIT
+================================================== */
 
-  if (mode === "all") {
-    selected = members;
-  } else {
-    const checked =
-      document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
-    selected = members.filter(m =>
-      [...checked].some(c => c.value === m.id)
-    );
-  }
+function initSorter(selected) {
+  pool = selected.map(m => ({
+    ...m,
+    score: 1000,
+    played: 0
+  }));
 
-  if (selected.length < 2) {
-    alert("Pilih minimal 2 member");
-    return;
-  }
+  history = [];
+  round = 0;
 
   document.getElementById("selectScreen").style.display = "none";
   document.getElementById("sorterScreen").style.display = "block";
 
-  initSorter(selected);
+  nextBattle();
 }
 
-function initSorter(data) {
-  lists = data.map(m => [m]);
-  shuffle(lists);
+/* ==================================================
+   PAIRING LOGIC (SMART)
+================================================== */
 
-  total = Math.ceil(data.length * Math.log2(data.length));
-  current = 0;
-  history = [];
+function nextBattle() {
+  if (round >= pool.length * 2) {
+    showResult();
+    return;
+  }
+
+  pool.sort((a, b) =>
+    a.played - b.played || Math.abs(a.score - 1000) - Math.abs(b.score - 1000)
+  );
+
+  const a = pool[0];
+  const b = pool.find(m => m.id !== a.id);
+
+  currentPair = [a, b];
+  round++;
+
+  renderBattle();
+}
+
+function renderBattle() {
+  const [l, r] = currentPair;
+
+  document.getElementById("leftImg").src = l.img;
+  document.getElementById("leftName").innerText = l.name;
+  document.getElementById("rightImg").src = r.img;
+  document.getElementById("rightName").innerText = r.name;
 
   updateProgress();
-  nextMerge();
 }
 
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
-
-function nextMerge() {
-  if (lists.length <= 1) {
-    showResult(lists[0]);
-    return;
-  }
-
-  left = lists.shift();
-  right = lists.shift();
-  merged = [];
-  li = ri = 0;
-
-  showBattle();
-}
-
-function showBattle() {
-  if (li >= left.length && ri >= right.length) {
-    lists.push(merged);
-    nextMerge();
-    return;
-  }
-
-  if (li >= left.length) {
-    merged.push(right[ri++]);
-    showBattle();
-    return;
-  }
-
-  if (ri >= right.length) {
-    merged.push(left[li++]);
-    showBattle();
-    return;
-  }
-
-  document.getElementById("leftImg").src = left[li].img;
-  document.getElementById("leftName").innerText = left[li].name;
-  document.getElementById("rightImg").src = right[ri].img;
-  document.getElementById("rightName").innerText = right[ri].name;
-}
+/* ==================================================
+   CHOICE
+================================================== */
 
 function choose(choice) {
-  history.push({
-    lists: JSON.parse(JSON.stringify(lists)),
-    left: [...left],
-    right: [...right],
-    merged: [...merged],
-    li,
-    ri,
-    current
-  });
+  const [a, b] = currentPair;
 
-  current++;
+  history.push(JSON.parse(JSON.stringify(pool)));
 
-  if (choice === "left") merged.push(left[li++]);
-  else if (choice === "right") merged.push(right[ri++]);
-  else merged.push(left[li++], right[ri++]);
+  if (choice === "left") {
+    a.score += K;
+    b.score -= K;
+  } else if (choice === "right") {
+    b.score += K;
+    a.score -= K;
+  } else {
+    a.score += K / 2;
+    b.score += K / 2;
+  }
 
-  updateProgress();
-  showBattle();
+  a.played++;
+  b.played++;
+
+  nextBattle();
 }
 
 function undo() {
   if (!history.length) return;
-
-  const prev = history.pop();
-  lists = prev.lists;
-  left = prev.left;
-  right = prev.right;
-  merged = prev.merged;
-  li = prev.li;
-  ri = prev.ri;
-  current = prev.current;
-
-  updateProgress();
-  showBattle();
+  pool = history.pop();
+  round--;
+  nextBattle();
 }
+
+/* ==================================================
+   PROGRESS
+================================================== */
 
 function updateProgress() {
-  const percent = Math.min((current / total) * 100, 100);
+  const percent = Math.min((round / (pool.length * 2)) * 100, 100);
   progressFill.style.width = percent + "%";
-  progressText.innerText = `${current} / ${total}`;
+  progressText.innerText = `Battle ${round}`;
 }
 
-function showResult(finalList) {
-  document.body.innerHTML = `
-    <h1>Hasil Ranking</h1>
+/* ==================================================
+   RESULT (PREMIUM)
+================================================== */
+
+function showResult() {
+  pool.sort((a, b) => b.score - a.score);
+
+  let html = `
+    <h1>🏆 Final Ranking</h1>
+    <p style="opacity:.8">Berdasarkan pilihanmu secara konsisten</p>
+    <div class="result-grid">
+  `;
+
+  pool.forEach((m, i) => {
+    const medal =
+      i === 0 ? "🥇" :
+      i === 1 ? "🥈" :
+      i === 2 ? "🥉" : "";
+
+    html += `
+      <div class="result-card">
+        <div class="rank">${medal} #${i + 1}</div>
+        <img src="${m.img}">
+        <div class="name">${m.name}</div>
+        <div class="meta">Score: ${Math.round(m.score)}</div>
+      </div>
+    `;
+  });
+
+  html += `
+    </div>
     <button onclick="location.reload()">Ulangi</button>
   `;
+
+  document.body.innerHTML = html;
 }
