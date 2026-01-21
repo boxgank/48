@@ -189,7 +189,17 @@ function toggleTeam(cb) {
 }
 
 /* ==================================================
-   SORTER CORE – MEMBER SORTER STYLE
+   CONFIG
+================================================== */
+
+// Selisih skor untuk auto-skip battle
+const SKIP_THRESHOLD = 5;
+
+// Batas maksimal battle agar tidak capek
+const MAX_BATTLES_LIMIT = 500;
+
+/* ==================================================
+   GLOBAL STATE
 ================================================== */
 
 let selectedMembers = [];
@@ -197,9 +207,10 @@ let battles = [];
 let battleIndex = 0;
 let results = {};
 let history = [];
+let MAX_BATTLES = 0;
 
 /* ==================================================
-   START FROM SELECTION (ASLI KAMU – FIXED)
+   START FROM SELECTION
 ================================================== */
 
 function startFromSelection() {
@@ -211,6 +222,7 @@ function startFromSelection() {
   } else {
     const checked =
       document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
+
     selected = members.filter(m =>
       [...checked].some(c => c.value === m.id)
     );
@@ -236,13 +248,13 @@ function initSorter(selected) {
   battleIndex = 0;
   history = [];
 
-  // Init result score
+  // Init score
   results = {};
   selectedMembers.forEach(m => {
     results[m.id] = 0;
   });
 
-  // Buat semua kombinasi battle (ROUND ROBIN)
+  // Buat semua kombinasi battle (round-robin)
   battles = [];
   for (let i = 0; i < selectedMembers.length; i++) {
     for (let j = i + 1; j < selectedMembers.length; j++) {
@@ -251,29 +263,48 @@ function initSorter(selected) {
   }
 
   shuffle(battles);
+
+  // Tentukan batas battle
+  MAX_BATTLES = Math.min(battles.length, MAX_BATTLES_LIMIT);
+
   showBattle();
 }
 
 /* ==================================================
-   SHOW BATTLE (ASLI FLOW)
+   SHOW BATTLE (SMART + SKIP)
 ================================================== */
 
 function showBattle() {
-  if (battleIndex >= battles.length) {
-    showResult();
+  while (battleIndex < battles.length && battleIndex < MAX_BATTLES) {
+
+    const [i, j] = battles[battleIndex];
+    const left = selectedMembers[i];
+    const right = selectedMembers[j];
+
+    const diff = Math.abs(results[left.id] - results[right.id]);
+
+    // AUTO SKIP jika sudah terlalu jelas
+    if (diff >= SKIP_THRESHOLD) {
+      if (results[left.id] > results[right.id]) {
+        results[left.id]++;
+      } else {
+        results[right.id]++;
+      }
+      battleIndex++;
+      continue;
+    }
+
+    // Tampilkan battle normal
+    document.getElementById("leftImg").src = left.img;
+    document.getElementById("leftName").innerText = left.name;
+    document.getElementById("rightImg").src = right.img;
+    document.getElementById("rightName").innerText = right.name;
+
+    updateProgress();
     return;
   }
 
-  const [i, j] = battles[battleIndex];
-  const left = selectedMembers[i];
-  const right = selectedMembers[j];
-
-  document.getElementById("leftImg").src = left.img;
-  document.getElementById("leftName").innerText = left.name;
-  document.getElementById("rightImg").src = right.img;
-  document.getElementById("rightName").innerText = right.name;
-
-  updateProgress();
+  showResult();
 }
 
 /* ==================================================
@@ -318,20 +349,20 @@ function undo() {
 }
 
 /* ==================================================
-   PROGRESS (AKURAT)
+   PROGRESS (AKURAT & TERASA PINTER)
 ================================================== */
 
 function updateProgress() {
-  const total = battles.length;
-  const current = battleIndex + 1;
-  const percent = Math.min((current / total) * 100, 100);
+  const total = MAX_BATTLES;
+  const current = Math.min(battleIndex + 1, total);
+  const percent = (current / total) * 100;
 
   progressFill.style.width = percent + "%";
   progressText.innerText = `Battle ${current} / ${total}`;
 }
 
 /* ==================================================
-   RESULT – MEMBER SORTER STYLE
+   RESULT (MEMBER SORTER STYLE)
 ================================================== */
 
 function showResult() {
@@ -341,7 +372,7 @@ function showResult() {
 
   let html = `
     <h1>🏆 Ranking Result</h1>
-    <p style="opacity:.8">Berdasarkan pilihanmu</p>
+    <p style="opacity:.75">Hasil berdasarkan pilihanmu</p>
     <div class="result-grid">
   `;
 
