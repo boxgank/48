@@ -189,14 +189,10 @@ function toggleTeam(cb) {
 }
 
 /* ==================================================
-   CONFIG
+   SMART CONFIG
 ================================================== */
 
-// Selisih skor untuk auto-skip battle
-const SKIP_THRESHOLD = 5;
-
-// Batas maksimal battle agar tidak capek
-const MAX_BATTLES_LIMIT = 500;
+const BASE_BATTLE_FACTOR = 5.5;
 
 /* ==================================================
    GLOBAL STATE
@@ -248,13 +244,9 @@ function initSorter(selected) {
   battleIndex = 0;
   history = [];
 
-  // Init score
   results = {};
-  selectedMembers.forEach(m => {
-    results[m.id] = 0;
-  });
+  selectedMembers.forEach(m => results[m.id] = 0);
 
-  // Buat semua kombinasi battle (round-robin)
   battles = [];
   for (let i = 0; i < selectedMembers.length; i++) {
     for (let j = i + 1; j < selectedMembers.length; j++) {
@@ -264,14 +256,16 @@ function initSorter(selected) {
 
   shuffle(battles);
 
-  // Tentukan batas battle
-  MAX_BATTLES = Math.min(battles.length, MAX_BATTLES_LIMIT);
+  MAX_BATTLES = Math.min(
+    battles.length,
+    Math.ceil(selectedMembers.length * BASE_BATTLE_FACTOR)
+  );
 
   showBattle();
 }
 
 /* ==================================================
-   SHOW BATTLE (SMART + SKIP)
+   SHOW BATTLE (ADAPTIVE SMART)
 ================================================== */
 
 function showBattle() {
@@ -281,10 +275,14 @@ function showBattle() {
     const left = selectedMembers[i];
     const right = selectedMembers[j];
 
-    const diff = Math.abs(results[left.id] - results[right.id]);
+    const scoreDiff = Math.abs(results[left.id] - results[right.id]);
 
-    // AUTO SKIP jika sudah terlalu jelas
-    if (diff >= SKIP_THRESHOLD) {
+    // Threshold makin besar seiring progress
+    const progressRatio = battleIndex / MAX_BATTLES;
+    const dynamicThreshold = Math.floor(3 + progressRatio * 4);
+
+    if (scoreDiff >= dynamicThreshold) {
+      // auto resolve
       if (results[left.id] > results[right.id]) {
         results[left.id]++;
       } else {
@@ -294,7 +292,6 @@ function showBattle() {
       continue;
     }
 
-    // Tampilkan battle normal
     document.getElementById("leftImg").src = left.img;
     document.getElementById("leftName").innerText = left.name;
     document.getElementById("rightImg").src = right.img;
@@ -349,20 +346,19 @@ function undo() {
 }
 
 /* ==================================================
-   PROGRESS (AKURAT & TERASA PINTER)
+   PROGRESS
 ================================================== */
 
 function updateProgress() {
-  const total = MAX_BATTLES;
-  const current = Math.min(battleIndex + 1, total);
-  const percent = (current / total) * 100;
+  const current = Math.min(battleIndex + 1, MAX_BATTLES);
+  const percent = (current / MAX_BATTLES) * 100;
 
   progressFill.style.width = percent + "%";
-  progressText.innerText = `Battle ${current} / ${total}`;
+  progressText.innerText = `Battle ${current} / ${MAX_BATTLES}`;
 }
 
 /* ==================================================
-   RESULT (MEMBER SORTER STYLE)
+   RESULT
 ================================================== */
 
 function showResult() {
@@ -372,16 +368,12 @@ function showResult() {
 
   let html = `
     <h1>🏆 Ranking Result</h1>
-    <p style="opacity:.75">Hasil berdasarkan pilihanmu</p>
+    <p style="opacity:.7">Smart adaptive result</p>
     <div class="result-grid">
   `;
 
   ranking.forEach((m, i) => {
-    const medal =
-      i === 0 ? "🥇" :
-      i === 1 ? "🥈" :
-      i === 2 ? "🥉" : "";
-
+    const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
     html += `
       <div class="result-card">
         <div class="rank">${medal} #${i + 1}</div>
