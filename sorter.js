@@ -189,28 +189,37 @@ function toggleTeam(cb) {
 }
 
 /* ==================================================
-   SMART SORTER STATE
+   SMART & SAFE SORTER
 ================================================== */
 
 let pool = [];
-let currentPair = [];
+let battles = [];
+let battleIndex = 0;
 let history = [];
-let round = 0;
-const K = 32;
+const K = 24;
 
 /* ==================================================
-   INIT
+   INIT SORTER
 ================================================== */
 
 function initSorter(selected) {
   pool = selected.map(m => ({
     ...m,
-    score: 1000,
-    played: 0
+    score: 1000
   }));
 
+  battles = [];
   history = [];
-  round = 0;
+  battleIndex = 0;
+
+  // Buat semua kombinasi battle (UNIK & FIX)
+  for (let i = 0; i < pool.length; i++) {
+    for (let j = i + 1; j < pool.length; j++) {
+      battles.push([i, j]);
+    }
+  }
+
+  shuffle(battles);
 
   document.getElementById("selectScreen").style.display = "none";
   document.getElementById("sorterScreen").style.display = "block";
@@ -219,47 +228,40 @@ function initSorter(selected) {
 }
 
 /* ==================================================
-   PAIRING LOGIC (SMART)
+   BATTLE FLOW
 ================================================== */
 
 function nextBattle() {
-  if (round >= pool.length * 2) {
+  if (battleIndex >= battles.length) {
     showResult();
     return;
   }
 
-  pool.sort((a, b) =>
-    a.played - b.played || Math.abs(a.score - 1000) - Math.abs(b.score - 1000)
-  );
+  const [i, j] = battles[battleIndex];
+  const left = pool[i];
+  const right = pool[j];
 
-  const a = pool[0];
-  const b = pool.find(m => m.id !== a.id);
-
-  currentPair = [a, b];
-  round++;
-
-  renderBattle();
-}
-
-function renderBattle() {
-  const [l, r] = currentPair;
-
-  document.getElementById("leftImg").src = l.img;
-  document.getElementById("leftName").innerText = l.name;
-  document.getElementById("rightImg").src = r.img;
-  document.getElementById("rightName").innerText = r.name;
+  document.getElementById("leftImg").src = left.img;
+  document.getElementById("leftName").innerText = left.name;
+  document.getElementById("rightImg").src = right.img;
+  document.getElementById("rightName").innerText = right.name;
 
   updateProgress();
 }
 
 /* ==================================================
-   CHOICE
+   CHOOSE
 ================================================== */
 
 function choose(choice) {
-  const [a, b] = currentPair;
+  const [i, j] = battles[battleIndex];
+  const a = pool[i];
+  const b = pool[j];
 
-  history.push(JSON.parse(JSON.stringify(pool)));
+  history.push({
+    battleIndex,
+    scores: pool.map(p => p.score)
+  });
 
   if (choice === "left") {
     a.score += K;
@@ -272,31 +274,39 @@ function choose(choice) {
     b.score += K / 2;
   }
 
-  a.played++;
-  b.played++;
-
+  battleIndex++;
   nextBattle();
 }
+
+/* ==================================================
+   UNDO
+================================================== */
 
 function undo() {
   if (!history.length) return;
-  pool = history.pop();
-  round--;
+
+  const last = history.pop();
+  battleIndex = last.battleIndex;
+  pool.forEach((p, i) => p.score = last.scores[i]);
+
   nextBattle();
 }
 
 /* ==================================================
-   PROGRESS
+   PROGRESS (AKURAT)
 ================================================== */
 
 function updateProgress() {
-  const percent = Math.min((round / (pool.length * 2)) * 100, 100);
+  const total = battles.length;
+  const current = battleIndex + 1;
+  const percent = Math.min((current / total) * 100, 100);
+
   progressFill.style.width = percent + "%";
-  progressText.innerText = `Battle ${round}`;
+  progressText.innerText = `Battle ${current} / ${total}`;
 }
 
 /* ==================================================
-   RESULT (PREMIUM)
+   RESULT (KEREN + STABIL)
 ================================================== */
 
 function showResult() {
@@ -319,7 +329,7 @@ function showResult() {
         <div class="rank">${medal} #${i + 1}</div>
         <img src="${m.img}">
         <div class="name">${m.name}</div>
-        <div class="meta">Score: ${Math.round(m.score)}</div>
+        <div class="meta">Score ${Math.round(m.score)}</div>
       </div>
     `;
   });
@@ -330,4 +340,15 @@ function showResult() {
   `;
 
   document.body.innerHTML = html;
+}
+
+/* ==================================================
+   UTIL
+================================================== */
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
 }
