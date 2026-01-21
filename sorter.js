@@ -189,57 +189,25 @@ function toggleTeam(cb) {
 }
 
 /* ==================================================
-   KEYBOARD CONTROLS
+   INTERACTIVE MERGE SORT (J-SORTER STYLE)
 ================================================== */
 
-document.addEventListener("keydown", function (e) {
-  // jangan jalan kalau lagi di halaman select
-  const sorterScreen = document.getElementById("sorterScreen");
-  if (!sorterScreen || sorterScreen.style.display === "none") return;
-
-  // cegah spam kalau key ditahan
-  if (e.repeat) return;
-
-  switch (e.key) {
-    case "1":
-      choose("left");
-      break;
-    case "2":
-      choose("right");
-      break;
-    case "3":
-      choose("tie");
-      break;
-    case "z":
-    case "Z":
-      undo();
-      break;
-  }
-});
-
-
-/* ==================================================
-   MERGE SORT BATTLE SYSTEM (REFERENCE LOGIC)
-================================================== */
-
-let battles = [];
-let currentBattleIndex = 0;
-let homeIndex = 0;
-let awayIndex = 0;
+let stack = [];
+let currentMerge = null;
 let history = [];
-
-let finalRanking = [];
+let finalResult = null;
 
 /* ==================================================
-   START FROM SELECTION
+   START SORTER
 ================================================== */
 
 function startFromSelection() {
-  const mode = document.querySelector('input[name="mode"]:checked').value;
   let selected = [];
 
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+
   if (mode === "all") {
-    selected = members;
+    selected = [...members];
   } else {
     const checked = document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
     selected = members.filter(m => [...checked].some(c => c.value === m.id));
@@ -253,107 +221,135 @@ function startFromSelection() {
   document.getElementById("selectScreen").style.display = "none";
   document.getElementById("sorterScreen").style.display = "block";
 
-  initSorter(selected);
+  initMergeSorter(selected);
 }
 
 /* ==================================================
-   INIT SORTER
+   INIT
 ================================================== */
 
-function initSorter(list) {
-  battles = [];
+function initMergeSorter(list) {
+  stack = [{
+    type: "split",
+    list
+  }];
+
   history = [];
-  currentBattleIndex = 0;
-  homeIndex = 0;
-  awayIndex = 0;
+  finalResult = null;
+  currentMerge = null;
 
-  const result = generateMergeBattles(list);
-  battles = result.battles;
-  finalRanking = result.final;
-
-  showBattle();
+  nextStep();
 }
 
 /* ==================================================
-   GENERATE MERGE SORT BATTLES
+   PROCESS STACK
 ================================================== */
 
-function generateMergeBattles(list) {
-  const battles = [];
+function nextStep() {
+  if (currentMerge) return;
 
-  function mergeSort(arr) {
-    if (arr.length <= 1) return arr;
-
-    const mid = Math.floor(arr.length / 2);
-    const left = mergeSort(arr.slice(0, mid));
-    const right = mergeSort(arr.slice(mid));
-
-    battles.push({
-      home: left,
-      away: right
-    });
-
-    return [...left, ...right];
-  }
-
-  const final = mergeSort(list);
-  return { battles, final };
-}
-
-/* ==================================================
-   SHOW BATTLE
-================================================== */
-
-function showBattle() {
-  if (currentBattleIndex >= battles.length) {
+  if (!stack.length) {
     showResult();
     return;
   }
 
-  const battle = battles[currentBattleIndex];
+  const task = stack.pop();
 
-  if (homeIndex >= battle.home.length || awayIndex >= battle.away.length) {
-    currentBattleIndex++;
-    homeIndex = 0;
-    awayIndex = 0;
-    showBattle();
+  if (task.type === "split") {
+    if (task.list.length <= 1) {
+      stack.push({ type: "result", list: task.list });
+    } else {
+      const mid = Math.floor(task.list.length / 2);
+      stack.push({ type: "merge" });
+      stack.push({ type: "split", list: task.list.slice(mid) });
+      stack.push({ type: "split", list: task.list.slice(0, mid) });
+    }
+  }
+
+  else if (task.type === "merge") {
+    const right = stack.pop().list;
+    const left = stack.pop().list;
+
+    currentMerge = {
+      left,
+      right,
+      i: 0,
+      j: 0,
+      result: []
+    };
+
+    showCompare();
+  }
+
+  else if (task.type === "result") {
+    stack.push(task);
+    nextStep();
+  }
+}
+
+/* ==================================================
+   SHOW COMPARE
+================================================== */
+
+function showCompare() {
+  const { left, right, i, j } = currentMerge;
+
+  if (i >= left.length) {
+    currentMerge.result.push(...right.slice(j));
+    finishMerge();
     return;
   }
 
-  const left = battle.home[homeIndex];
-  const right = battle.away[awayIndex];
+  if (j >= right.length) {
+    currentMerge.result.push(...left.slice(i));
+    finishMerge();
+    return;
+  }
 
-  document.getElementById("leftImg").src = left.img;
-  document.getElementById("leftName").innerText = left.name;
-  document.getElementById("rightImg").src = right.img;
-  document.getElementById("rightName").innerText = right.name;
+  const L = left[i];
+  const R = right[j];
+
+  document.getElementById("leftImg").src = L.img;
+  document.getElementById("leftName").innerText = L.name;
+  document.getElementById("rightImg").src = R.img;
+  document.getElementById("rightName").innerText = R.name;
 
   updateProgress();
 }
 
 /* ==================================================
-   CHOOSE
+   USER CHOICE
 ================================================== */
 
 function choose(choice) {
-  const battle = battles[currentBattleIndex];
+  if (!currentMerge) return;
 
-  history.push({
-    currentBattleIndex,
-    homeIndex,
-    awayIndex
-  });
+  history.push(JSON.parse(JSON.stringify(currentMerge)));
 
   if (choice === "left") {
-    homeIndex++;
+    currentMerge.result.push(currentMerge.left[currentMerge.i++]);
   } else if (choice === "right") {
-    awayIndex++;
+    currentMerge.result.push(currentMerge.right[currentMerge.j++]);
   } else {
-    homeIndex++;
-    awayIndex++;
+    currentMerge.result.push(currentMerge.left[currentMerge.i++]);
+    currentMerge.result.push(currentMerge.right[currentMerge.j++]);
   }
 
-  showBattle();
+  showCompare();
+}
+
+/* ==================================================
+   FINISH MERGE
+================================================== */
+
+function finishMerge() {
+  stack.push({
+    type: "result",
+    list: currentMerge.result
+  });
+
+  currentMerge = null;
+  nextStep();
 }
 
 /* ==================================================
@@ -363,22 +359,21 @@ function choose(choice) {
 function undo() {
   if (!history.length) return;
 
-  const h = history.pop();
-  currentBattleIndex = h.currentBattleIndex;
-  homeIndex = h.homeIndex;
-  awayIndex = h.awayIndex;
-
-  showBattle();
+  currentMerge = history.pop();
+  showCompare();
 }
 
 /* ==================================================
-   PROGRESS
+   PROGRESS (ESTIMASI)
 ================================================== */
 
 function updateProgress() {
-  const percent = Math.floor((currentBattleIndex / battles.length) * 100);
+  const done = history.length;
+  const total = Math.ceil(members.length * Math.log2(members.length));
+  const percent = Math.min(100, Math.floor((done / total) * 100));
+
   progressFill.style.width = percent + "%";
-  progressText.innerText = `Battle ${currentBattleIndex + 1} / ${battles.length}`;
+  progressText.innerText = `Battle ${done + 1} / ~${total}`;
 }
 
 /* ==================================================
@@ -386,13 +381,11 @@ function updateProgress() {
 ================================================== */
 
 function showResult() {
-  let html = `
-    <h1>🏆 Ranking Result</h1>
-    <p style="opacity:.7">Merge sort based ranking</p>
-    <div class="result-grid">
-  `;
+  finalResult = stack.pop().list;
 
-  finalRanking.forEach((m, i) => {
+  let html = `<h1>🏆 Ranking Result</h1><div class="result-grid">`;
+
+  finalResult.forEach((m, i) => {
     const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
     html += `
       <div class="result-card">
@@ -403,10 +396,22 @@ function showResult() {
     `;
   });
 
-  html += `
-    </div>
-    <button onclick="location.reload()">Ulangi</button>
-  `;
+  html += `</div><button onclick="location.reload()">Ulangi</button>`;
 
   document.body.innerHTML = html;
 }
+
+/* ==================================================
+   KEYBOARD SUPPORT
+================================================== */
+
+document.addEventListener("keydown", e => {
+  if (e.repeat) return;
+  if (!document.getElementById("sorterScreen") ||
+      document.getElementById("sorterScreen").style.display === "none") return;
+
+  if (e.key === "1") choose("left");
+  if (e.key === "2") choose("right");
+  if (e.key === "3") choose("tie");
+  if (e.key === "z" || e.key === "Z") undo();
+});
