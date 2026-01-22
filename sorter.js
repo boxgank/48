@@ -188,6 +188,19 @@ function toggleTeam(cb) {
     });
 }
 
+function flashSelect(card) {
+  card.classList.add("selected");
+  setTimeout(() => card.classList.remove("selected"), 220);
+}
+
+function choose(side) {
+  const card = side === "left" ? leftCard : rightCard;
+  flashSelect(card);
+
+  // lanjutkan logic sorter kamu di sini
+}
+
+
 /* =====================================================
    INTERACTIVE INSERTION SORT (TRUE J-SORTER LOGIC)
 ===================================================== */
@@ -423,6 +436,12 @@ function handlePick(side) {
 
 /* ================= MOUSE ================= */
 
+const leftCard = document.getElementById("leftCard");
+const rightCard = document.getElementById("rightCard");
+
+leftCard.addEventListener("click", () => choose("left"));
+rightCard.addEventListener("click", () => choose("right"));
+
 document.getElementById("leftCard")?.addEventListener("click", () => {
   handlePick("left");
 });
@@ -455,5 +474,12 @@ document.addEventListener("keydown", function (e) {
       break;
   }
 });
+
+function applyMember(card, member) {
+  card.className = `member-card team-${member.team.toLowerCase()} gen-${member.gen}`;
+}
+
+applyMember(leftCard, memberLeft);
+applyMember(rightCard, memberRight);
 
 
