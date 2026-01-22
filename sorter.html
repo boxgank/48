@@ -37,20 +37,24 @@
 
   <div class="battle">
     <div class="cards">
-      <div class="card" onclick="choose('left')">
+
+      <!-- LEFT CARD -->
+      <div class="member-card card" id="leftCard">
         <img id="leftImg">
         <p id="leftName"></p>
       </div>
 
-      <div class="card" onclick="choose('right')">
+      <!-- RIGHT CARD -->
+      <div class="member-card card" id="rightCard">
         <img id="rightImg">
         <p id="rightName"></p>
       </div>
+
     </div>
 
     <div class="battle-controls">
-      <button class="undo-btn" onclick="undo()">UNDO</button>
-      <button class="tie-btn" onclick="choose('tie')">TIE</button>
+      <button class="undo-btn" onclick="undo()">UNDO (Z)</button>
+      <button class="tie-btn" onclick="choose('tie')">TIE (3)</button>
     </div>
   </div>
 </div>
