@@ -62,34 +62,41 @@ const members = [
   { id: "nur_intan", name: "Nur Intan", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Nur_Intan.jpg" }
 ];
 
-// ================== VARIABEL GLOBAL ==================
-const leftCard = document.getElementById("leftCard");
-const rightCard = document.getElementById("rightCard");
+/* =====================================================
+   GLOBAL CARD (DIAMBIL SAAT START)
+===================================================== */
+let leftCard = null;
+let rightCard = null;
 
-// ================== FUNGSI HELPER (TARUH DI SINI) ==================
+/* =====================================================
+   HELPER: APPLY MEMBER → CARD (TEAM + GEN + CONTENT)
+===================================================== */
 function applyMemberToCard(card, member) {
+  if (!card || !member) return;
+
   card.className = "member-card card";
   card.classList.add(`team-${member.team.toLowerCase()}`);
   card.classList.add(`gen-${member.gen}`);
 
-  card.querySelector("img").src = member.img;
-  card.querySelector("img").alt = member.name;
-  card.querySelector("p").textContent = member.name;
+  const img = card.querySelector("img");
+  const name = card.querySelector("p");
+
+  img.src = member.img;
+  img.alt = member.name;
+  name.textContent = member.name;
 }
 
-/* ==================================================
+/* =====================================================
    ELEMENT
-================================================== */
-
+===================================================== */
 const genBox = document.getElementById("genSelect");
 const teamBox = document.getElementById("teamSelect");
 const progressFill = document.getElementById("progressFill");
 const progressText = document.getElementById("progressText");
 
-/* ==================================================
+/* =====================================================
    MODE HANDLER
-================================================== */
-
+===================================================== */
 document.querySelectorAll('input[name="mode"]').forEach(radio => {
   radio.addEventListener("change", () => {
     genBox.innerHTML = "";
@@ -103,10 +110,9 @@ document.querySelectorAll('input[name="mode"]').forEach(radio => {
   });
 });
 
-/* ==================================================
-   GEN MODE (CHECKBOX GEN → MEMBER AUTO CHECK)
-================================================== */
-
+/* =====================================================
+   GEN MODE
+===================================================== */
 function renderGenMode() {
   genBox.style.display = "block";
   genBox.innerHTML = "<h4>Pilih Generasi</h4>";
@@ -131,7 +137,6 @@ function renderGenMode() {
 function toggleGen(cb) {
   const gen = Number(cb.value.replace("gen-",""));
   const container = genBox.querySelector(`[data-gen="${gen}"]`);
-
   container.innerHTML = "";
 
   if (!cb.checked) {
@@ -141,22 +146,19 @@ function toggleGen(cb) {
 
   container.style.display = "block";
 
-  members
-    .filter(m => m.gen === gen)
-    .forEach(m => {
-      container.innerHTML += `
-        <label>
-          <input type="checkbox" value="${m.id}" checked>
-          ${m.name}
-        </label>
-      `;
-    });
+  members.filter(m => m.gen === gen).forEach(m => {
+    container.innerHTML += `
+      <label>
+        <input type="checkbox" value="${m.id}" checked>
+        ${m.name}
+      </label>
+    `;
+  });
 }
 
-/* ==================================================
-   TEAM MODE (CHECKBOX TEAM → MEMBER AUTO CHECK)
-================================================== */
-
+/* =====================================================
+   TEAM MODE
+===================================================== */
 function renderTeamMode() {
   teamBox.style.display = "block";
   teamBox.innerHTML = "<h4>Pilih Team</h4>";
@@ -181,7 +183,6 @@ function renderTeamMode() {
 function toggleTeam(cb) {
   const team = cb.value.replace("team-","");
   const container = teamBox.querySelector(`[data-team="${team}"]`);
-
   container.innerHTML = "";
 
   if (!cb.checked) {
@@ -191,29 +192,16 @@ function toggleTeam(cb) {
 
   container.style.display = "block";
 
-  members
-    .filter(m => m.team === team)
-    .forEach(m => {
-      container.innerHTML += `
-        <label>
-          <input type="checkbox" value="${m.id}" checked>
-          ${m.name}
-        </label>
-      `;
-    });
+  members.filter(m => m.team === team).forEach(m => {
+    container.innerHTML += `
+      <label>
+        <input type="checkbox" value="${m.id}" checked>
+        ${m.name}
+      </label>
+    `;
+  });
 }
 
-function flashSelect(card) {
-  card.classList.add("selected");
-  setTimeout(() => card.classList.remove("selected"), 220);
-}
-
-function choose(side) {
-  const card = side === "left" ? leftCard : rightCard;
-  flashSelect(card);
-
-  // lanjutkan logic sorter kamu di sini
-}
 
 
 /* =====================================================
