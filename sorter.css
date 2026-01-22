@@ -1,59 +1,50 @@
+/* =====================================================
+   GLOBAL
+===================================================== */
+
 * {
   box-sizing: border-box;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
 }
 
 html, body {
-  width: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
-}
-
-body {
-  margin: 0;
-  padding: 24px;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: #fff;
 }
 
-/* ===== TITLE ===== */
+/* =====================================================
+   TITLE
+===================================================== */
+
 h1 {
   text-align: center;
-  margin-bottom: 24px;
+  margin: 24px 0;
   font-size: 2.2rem;
-  letter-spacing: 1px;
 }
 
-h4 {
-  margin: 24px 0 8px;
-  font-size: 1.1rem;
-  color: #ffd6ff;
-}
+/* =====================================================
+   SELECT SCREEN
+===================================================== */
 
-/* ===== SELECT SCREEN ===== */
 #selectScreen {
   max-width: 900px;
   margin: auto;
+  padding: 24px;
   background: rgba(255,255,255,0.06);
   backdrop-filter: blur(12px);
   border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
 }
 
-/* ===== MODE RADIO ===== */
 #selectScreen label {
+  display: inline-flex;
+  gap: 8px;
   margin-right: 16px;
-  cursor: pointer;
   font-weight: 600;
+  cursor: pointer;
 }
 
-input[type="radio"] {
-  accent-color: #ff79c6;
-}
-
-/* ===== TEAM / GEN BOX ===== */
 #genSelect,
 #teamSelect {
   margin-top: 20px;
@@ -62,69 +53,31 @@ input[type="radio"] {
   background: rgba(0,0,0,0.25);
 }
 
-/* ===== ALL BUTTON ===== */
+/* =====================================================
+   BUTTON
+===================================================== */
+
 button {
   border: none;
-  outline: none;
   cursor: pointer;
-  padding: 8px 14px;
+  padding: 10px 18px;
   border-radius: 999px;
   font-weight: 700;
-  font-size: 0.85rem;
-  background: linear-gradient(135deg, #ff79c6, #8be9fd);
+  background: linear-gradient(135deg, #50fa7b, #8be9fd);
   color: #111;
-  margin: 6px 0 10px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-button:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(255,121,198,0.4);
-}
-
-button:active {
-  transform: scale(0.95);
-}
-
-/* ===== CHECKBOX MEMBER ===== */
-label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  margin-bottom: 6px;
-  background: rgba(255,255,255,0.05);
-  transition: background 0.15s ease;
-}
-
-label:hover {
-  background: rgba(255,255,255,0.12);
-}
-
-input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: #8be9fd;
-  cursor: pointer;
-}
-
-/* ===== START BUTTON ===== */
 #selectScreen > button {
   display: block;
   margin: 30px auto 0;
-  padding: 14px 36px;
+  padding: 14px 40px;
   font-size: 1rem;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #50fa7b, #8be9fd);
-  box-shadow: 0 12px 30px rgba(80,250,123,0.4);
 }
 
-#selectScreen > button:hover {
-  box-shadow: 0 16px 40px rgba(80,250,123,0.6);
-}
+/* =====================================================
+   SORTER SCREEN
+===================================================== */
 
-/* ===== SORTER SCREEN ===== */
 #sorterScreen {
   max-width: 900px;
   margin: auto;
@@ -132,128 +85,9 @@ input[type="checkbox"] {
   text-align: center;
 }
 
-/* ===== PROGRESS ===== */
-#progress {
-  margin-bottom: 14px;
-  font-weight: 600;
-  opacity: 0.85;
-}
-
-/* ===== BATTLE CARD ===== */
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 14px;
-  flex-wrap: wrap;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 0 10px;
-}
-
-
-.card {
-  width: 100%;
-  max-width: 170px;
-  min-width: 140px;
-  text-align: center;
-}
-
-.card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 18px 40px rgba(255,121,198,0.45);
-}
-
-.card img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  border-radius: 14px;
-}
-
-.card p {
-  margin-top: 28px;
-  font-size: 14px;
-  line-height: 1.2;
-}
-
-/* ===== TIE BUTTON ===== */
-#sorterScreen button {
-  margin-top: 20px;
-  background: linear-gradient(135deg, #ffb86c, #ff79c6);
-  box-shadow: 0 10px 30px rgba(255,184,108,0.4);
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .container {
-    grid-template-columns: 1fr;
-  }
-
-  h1 {
-    font-size: 1.8rem;
-  }
-}
-
-.result-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.result-card {
-  background: rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 12px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-}
-
-.result-card img {
-  width: 100%;
-  border-radius: 12px;
-  aspect-ratio: 3/4;
-  object-fit: cover;
-}
-
-.rank {
-  font-weight: 900;
-  font-size: 1.1rem;
-  color: #ff79c6;
-  margin-bottom: 6px;
-}
-
-.name {
-  font-weight: 700;
-  margin-top: 8px;
-}
-
-.meta {
-  font-size: 0.8rem;
-  opacity: 0.75;
-}
-
-#genSelect label,
-#teamSelect label {
-  font-size: 0.85rem;
-  padding: 6px 8px;
-  border-radius: 10px;
-}
-
-#genSelect input[type="checkbox"],
-#teamSelect input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
-}
-
-#genSelect h4,
-#teamSelect h4 {
-  font-size: 0.95rem;
-  margin-top: 18px;
-}
+/* =====================================================
+   BATTLE LAYOUT
+===================================================== */
 
 .battle {
   display: flex;
@@ -267,72 +101,137 @@ input[type="checkbox"] {
   gap: 32px;
 }
 
-.card {
-  width: 220px;
-  text-align: center;
-  cursor: pointer;
-}
+/* =====================================================
+   MEMBER CARD BASE (POSTER STYLE)
+===================================================== */
 
-.card img {
-  width: 100%;
+.member-card {
+  position: relative;
+  width: 170px;
+  padding: 10px;
   border-radius: 18px;
-  transition: transform 0.2s ease;
-}
-
-.card:hover img {
-  transform: scale(1.04);
-}
-
-.battle-controls {
-  display: flex;
-  gap: 16px;
-}
-
-.battle-controls button {
-  padding: 10px 20px;
-  border-radius: 14px;
-  border: none;
-  font-weight: bold;
   cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
-.undo-btn {
-  background: #333;
-  color: #fff;
+/* =====================================================
+   TEAM BACKGROUND (SOLID)
+===================================================== */
+
+.team-love {
+  background: rgba(255, 105, 180, 0.85);
 }
 
-.tie-btn {
-  background: #ff5c8a;
-  color: white;
+.team-passion {
+  background: rgba(255, 165, 0, 0.85);
 }
 
-#progress {
+.team-dream {
+  background: rgba(60, 120, 255, 0.85);
+}
+
+.team-trainee {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* =====================================================
+   MEMBER IMAGE
+===================================================== */
+
+.member-card img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+/* =====================================================
+   MEMBER NAME
+===================================================== */
+
+.member-card p {
+  margin-top: 8px;
+  text-align: center;
+  font-weight: 700;
   font-size: 14px;
-  opacity: 0.7;
+  color: #111;
 }
+
+/* =====================================================
+   GEN BAR (TOP STRIP)
+===================================================== */
+
+.gen-bar {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  right: 10px;
+  height: 10px;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+/* =====================================================
+   GEN COLORS (3 – 13)
+===================================================== */
+
+.gen-3  .gen-bar { background: #ff3b3b; }
+.gen-6  .gen-bar { background: #ff9800; }
+.gen-7  .gen-bar { background: #4caf50; }
+.gen-8  .gen-bar { background: #673ab7; }
+.gen-9  .gen-bar { background: #2196f3; }
+.gen-10 .gen-bar { background: #00bcd4; }
+.gen-11 .gen-bar { background: #ff9800; }
+.gen-12 .gen-bar { background: #ff5ca8; }
+.gen-13 .gen-bar { background: #ffd700; }
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.member-card:hover {
+  transform: scale(1.03);
+}
+
+/* =====================================================
+   GLOW ON SELECT (TEAM COLOR)
+===================================================== */
+
+.member-card.selected.team-love {
+  box-shadow: 0 0 26px rgba(255,105,180,1);
+}
+
+.member-card.selected.team-passion {
+  box-shadow: 0 0 26px rgba(255,165,0,1);
+}
+
+.member-card.selected.team-dream {
+  box-shadow: 0 0 26px rgba(60,120,255,1);
+}
+
+.member-card.selected.team-trainee {
+  box-shadow: 0 0 22px rgba(255,255,255,1);
+}
+
+/* =====================================================
+   PROGRESS BAR
+===================================================== */
 
 .progress-wrapper {
-  width: 100%;
   max-width: 420px;
-  margin: 18px auto 0;
-  text-align: center;
+  margin: 18px auto;
 }
 
 .progress-bar {
-  position: relative;
-  width: 100%;
   height: 12px;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.15);
   border-radius: 999px;
   overflow: hidden;
 }
 
-/* BAR UTAMA */
 #progressFill {
-  position: relative;
   height: 100%;
   width: 0%;
-  border-radius: 999px;
   background: linear-gradient(
     270deg,
     #ff4fd8,
@@ -342,159 +241,41 @@ input[type="checkbox"] {
   );
   background-size: 400% 400%;
   animation: gradientFlow 4s ease infinite;
-  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  box-shadow: 0 0 14px rgba(255, 120, 255, 0.8);
+  transition: width 0.4s ease;
 }
 
-/* SHIMMER */
-#progressFill::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -40%;
-  width: 40%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,0.6),
-    transparent
-  );
-  animation: shimmer 1.8s infinite;
-}
-
-/* TEXT */
-#progressText {
-  margin-top: 6px;
-  font-size: 13px;
-  opacity: 0.85;
-  font-weight: 600;
-}
-
-/* ANIMATIONS */
 @keyframes gradientFlow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-@keyframes shimmer {
-  0% { left: -40%; }
-  100% { left: 120%; }
+/* =====================================================
+   RESULT GRID
+===================================================== */
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
 }
 
-/* PULSE SAAT UPDATE */
-.progress-pulse {
-  animation: pulseGlow 0.35s ease;
-}
-
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 0 rgba(255,255,255,0); }
-  50% { box-shadow: 0 0 22px rgba(255,255,255,0.9); }
-  100% { box-shadow: 0 0 14px rgba(255,120,255,0.8); }
-}
-
-/* ================= MEMBER CARD BASE ================= */
-
-.member-card {
-  position: relative;
-  width: 160px;
-  border-radius: 14px;
-  padding: 8px;
-  cursor: pointer;
-  border: 2px solid rgba(255,255,255,0.9);
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-
-.member-card img {
-  width: 100%;
-  border-radius: 10px;
-  display: block;
-}
-
-/* ================= MEMBER NAME ================= */
-
-.member-name,
-.member-card p {
+.result-card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 12px;
   text-align: center;
-  font-weight: 600;
-  margin-top: 6px;
-  font-size: 14px;
-  color: #111;
 }
 
-/* ================= GEN BAR ================= */
-
-.gen-bar {
-  position: absolute;
-  top: 6px;
-  left: 8px;
-  right: 8px;
-  height: 8px;
-  border-radius: 6px;
+.result-card img {
+  width: 100%;
+  border-radius: 12px;
+  aspect-ratio: 3/4;
+  object-fit: cover;
 }
 
-/* ================= TEAM BACKGROUND 50% ================= */
-
-.team-love {
-  background: linear-gradient(
-    to bottom,
-    rgba(255,105,180,0.45),
-    rgba(255,255,255,0.9)
-  );
-}
-
-.team-passion {
-  background: linear-gradient(
-    to bottom,
-    rgba(255,170,0,0.45),
-    rgba(255,255,255,0.9)
-  );
-}
-
-.team-dream {
-  background: linear-gradient(
-    to bottom,
-    rgba(60,90,200,0.45),
-    rgba(255,255,255,0.9)
-  );
-}
-
-.team-trainee {
-  background: rgba(255,255,255,0.95);
-}
-
-/* ================= GEN COLORS ================= */
-
-.gen-13 .gen-bar { background:#ffffff; }
-.gen-12 .gen-bar { background:#ff6aa2; }
-.gen-11 .gen-bar { background:#ff8c42; }
-.gen-10 .gen-bar { background:#ffd000; }
-.gen-9  .gen-bar { background:#4aa3ff; }
-.gen-8  .gen-bar { background:#7c5cff; }
-.gen-7  .gen-bar { background:#2ecc71; }
-.gen-6  .gen-bar { background:#e74c3c; }
-
-/* ================= HOVER ================= */
-
-.member-card:hover {
-  transform: scale(1.03);
-}
-
-/* ================= GLOW SELECT ================= */
-
-.member-card.selected.team-love {
-  box-shadow: 0 0 20px rgba(255,105,180,0.9);
-}
-
-.member-card.selected.team-passion {
-  box-shadow: 0 0 20px rgba(255,170,0,0.9);
-}
-
-.member-card.selected.team-dream {
-  box-shadow: 0 0 20px rgba(60,90,200,0.9);
-}
-
-.member-card.selected.team-trainee {
-  box-shadow: 0 0 18px rgba(255,255,255,0.9);
+.rank {
+  font-weight: 900;
+  color: #ff79c6;
 }
