@@ -10,7 +10,9 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.08), transparent 40%),
+    linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: #fff;
 }
 
@@ -25,53 +27,77 @@ h1 {
 }
 
 /* =====================================================
-   SELECT SCREEN
+   SELECT SCREEN (PILIH MODE)
 ===================================================== */
 
 #selectScreen {
   max-width: 900px;
   margin: auto;
-  padding: 24px;
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
+  padding: 28px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.35);
 }
 
-#selectScreen label {
+#selectScreen h3 {
+  margin-bottom: 14px;
+  font-size: 1.2rem;
+  color: #ffd6ff;
+}
+
+/* MODE RADIO */
+#selectScreen > label {
   display: inline-flex;
+  align-items: center;
   gap: 8px;
-  margin-right: 16px;
-  font-weight: 600;
+  margin-right: 18px;
+  font-weight: 700;
   cursor: pointer;
 }
 
+input[type="radio"] {
+  accent-color: #ff79c6;
+}
+
+/* GEN / TEAM BOX */
 #genSelect,
 #teamSelect {
   margin-top: 20px;
-  padding: 16px;
+  padding: 18px;
   border-radius: 16px;
-  background: rgba(0,0,0,0.25);
+  background: rgba(0,0,0,0.3);
 }
 
-/* =====================================================
-   BUTTON
-===================================================== */
-
-button {
-  border: none;
-  cursor: pointer;
-  padding: 10px 18px;
-  border-radius: 999px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #50fa7b, #8be9fd);
-  color: #111;
+/* CHECKBOX MEMBER */
+#genSelect label,
+#teamSelect label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: .85rem;
+  background: rgba(255,255,255,0.06);
+  padding: 6px 10px;
+  border-radius: 10px;
 }
 
+input[type="checkbox"] {
+  accent-color: #8be9fd;
+}
+
+/* START BUTTON */
 #selectScreen > button {
   display: block;
   margin: 30px auto 0;
   padding: 14px 40px;
   font-size: 1rem;
+  border-radius: 999px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #50fa7b, #8be9fd);
+  box-shadow: 0 12px 30px rgba(80,250,123,.45);
 }
 
 /* =====================================================
@@ -83,6 +109,69 @@ button {
   margin: auto;
   margin-top: 30px;
   text-align: center;
+}
+
+/* =====================================================
+   PROGRESS BAR (DENGAN SHIMMER)
+===================================================== */
+
+.progress-wrapper {
+  max-width: 420px;
+  margin: 18px auto;
+}
+
+.progress-bar {
+  position: relative;
+  height: 12px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#progressFill {
+  position: relative;
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(
+    270deg,
+    #ff4fd8,
+    #7b6cff,
+    #00f2ff,
+    #ff4fd8
+  );
+  background-size: 400% 400%;
+  animation: gradientFlow 4s ease infinite;
+  transition: width .45s cubic-bezier(.22,1,.36,1);
+  box-shadow: 0 0 14px rgba(255,120,255,.8);
+}
+
+/* CAHAYA BERJALAN */
+#progressFill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,.7),
+    transparent
+  );
+  animation: shimmer 1.8s infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0% { left: -40%; }
+  100% { left: 120%; }
 }
 
 /* =====================================================
@@ -102,7 +191,7 @@ button {
 }
 
 /* =====================================================
-   MEMBER CARD BASE (POSTER STYLE)
+   MEMBER CARD
 ===================================================== */
 
 .member-card {
@@ -114,30 +203,13 @@ button {
   transition: transform .15s ease, box-shadow .15s ease;
 }
 
-/* =====================================================
-   TEAM BACKGROUND (SOLID)
-===================================================== */
+/* TEAM BACKGROUND (OPACITY ±50%) */
+.team-love     { background: rgba(255,105,180,.5); }
+.team-passion  { background: rgba(255,165,0,.5); }
+.team-dream    { background: rgba(60,120,255,.5); }
+.team-trainee  { background: rgba(255,255,255,.55); }
 
-.team-love {
-  background: rgba(255, 105, 180, 0.85);
-}
-
-.team-passion {
-  background: rgba(255, 165, 0, 0.85);
-}
-
-.team-dream {
-  background: rgba(60, 120, 255, 0.85);
-}
-
-.team-trainee {
-  background: rgba(255, 255, 255, 0.9);
-}
-
-/* =====================================================
-   MEMBER IMAGE
-===================================================== */
-
+/* IMAGE */
 .member-card img {
   width: 100%;
   aspect-ratio: 3 / 4;
@@ -145,22 +217,16 @@ button {
   border-radius: 14px;
 }
 
-/* =====================================================
-   MEMBER NAME
-===================================================== */
-
+/* NAME */
 .member-card p {
   margin-top: 8px;
-  text-align: center;
   font-weight: 700;
   font-size: 14px;
   color: #111;
+  text-align: center;
 }
 
-/* =====================================================
-   GEN BAR (TOP STRIP)
-===================================================== */
-
+/* GEN BAR */
 .gen-bar {
   position: absolute;
   top: 8px;
@@ -171,32 +237,23 @@ button {
   z-index: 2;
 }
 
-/* =====================================================
-   GEN COLORS (3 – 13)
-===================================================== */
+/* GEN COLORS */
+.gen-3  .gen-bar { background:#ff3b3b; }
+.gen-6  .gen-bar { background:#ff9800; }
+.gen-7  .gen-bar { background:#4caf50; }
+.gen-8  .gen-bar { background:#673ab7; }
+.gen-9  .gen-bar { background:#2196f3; }
+.gen-10 .gen-bar { background:#00bcd4; }
+.gen-11 .gen-bar { background:#ff9800; }
+.gen-12 .gen-bar { background:#ff5ca8; }
+.gen-13 .gen-bar { background:#ffd700; }
 
-.gen-3  .gen-bar { background: #ff3b3b; }
-.gen-6  .gen-bar { background: #ff9800; }
-.gen-7  .gen-bar { background: #4caf50; }
-.gen-8  .gen-bar { background: #673ab7; }
-.gen-9  .gen-bar { background: #2196f3; }
-.gen-10 .gen-bar { background: #00bcd4; }
-.gen-11 .gen-bar { background: #ff9800; }
-.gen-12 .gen-bar { background: #ff5ca8; }
-.gen-13 .gen-bar { background: #ffd700; }
-
-/* =====================================================
-   HOVER
-===================================================== */
-
+/* HOVER */
 .member-card:hover {
   transform: scale(1.03);
 }
 
-/* =====================================================
-   GLOW ON SELECT (TEAM COLOR)
-===================================================== */
-
+/* GLOW SAAT DIPILIH */
 .member-card.selected.team-love {
   box-shadow: 0 0 26px rgba(255,105,180,1);
 }
@@ -211,71 +268,4 @@ button {
 
 .member-card.selected.team-trainee {
   box-shadow: 0 0 22px rgba(255,255,255,1);
-}
-
-/* =====================================================
-   PROGRESS BAR
-===================================================== */
-
-.progress-wrapper {
-  max-width: 420px;
-  margin: 18px auto;
-}
-
-.progress-bar {
-  height: 12px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-#progressFill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(
-    270deg,
-    #ff4fd8,
-    #7b6cff,
-    #00f2ff,
-    #ff4fd8
-  );
-  background-size: 400% 400%;
-  animation: gradientFlow 4s ease infinite;
-  transition: width 0.4s ease;
-}
-
-@keyframes gradientFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* =====================================================
-   RESULT GRID
-===================================================== */
-
-.result-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.result-card {
-  background: rgba(255,255,255,0.1);
-  border-radius: 16px;
-  padding: 12px;
-  text-align: center;
-}
-
-.result-card img {
-  width: 100%;
-  border-radius: 12px;
-  aspect-ratio: 3/4;
-  object-fit: cover;
-}
-
-.rank {
-  font-weight: 900;
-  color: #ff79c6;
 }
