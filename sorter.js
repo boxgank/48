@@ -393,8 +393,45 @@ function showResult() {
 }
 
 /* =====================================================
-   KEYBOARD SUPPORT
+   CLICK + KEYBOARD SUPPORT (MATCH HTML KAMU)
 ===================================================== */
+
+function flashSelect(card) {
+  if (!card) return;
+  card.classList.add("selected");
+  setTimeout(() => card.classList.remove("selected"), 220);
+}
+
+function handlePick(side) {
+  const leftCard = document.getElementById("leftCard");
+  const rightCard = document.getElementById("rightCard");
+
+  if (side === "left") {
+    flashSelect(leftCard);
+    choose("left");
+  }
+  else if (side === "right") {
+    flashSelect(rightCard);
+    choose("right");
+  }
+  else if (side === "tie") {
+    flashSelect(leftCard);
+    flashSelect(rightCard);
+    choose("tie");
+  }
+}
+
+/* ================= MOUSE ================= */
+
+document.getElementById("leftCard")?.addEventListener("click", () => {
+  handlePick("left");
+});
+
+document.getElementById("rightCard")?.addEventListener("click", () => {
+  handlePick("right");
+});
+
+/* ================= KEYBOARD ================= */
 
 document.addEventListener("keydown", function (e) {
   if (e.repeat) return;
@@ -402,8 +439,21 @@ document.addEventListener("keydown", function (e) {
   const sorter = document.getElementById("sorterScreen");
   if (!sorter || sorter.style.display === "none") return;
 
-  if (e.key === "1") choose("left");
-  if (e.key === "2") choose("right");
-  if (e.key === "3") choose("tie");
-  if (e.key === "z" || e.key === "Z") undo();
+  switch (e.key) {
+    case "1":
+      handlePick("left");
+      break;
+    case "2":
+      handlePick("right");
+      break;
+    case "3":
+      handlePick("tie");
+      break;
+    case "z":
+    case "Z":
+      undo();
+      break;
+  }
 });
+
+
