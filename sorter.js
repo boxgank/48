@@ -63,29 +63,13 @@ const members = [
 ];
 
 /* =====================================================
-   GLOBAL STATE
+   GLOBAL CARD
 ===================================================== */
-let leftCard = null;
-let rightCard = null;
-
-let ranking = [];
-let pending = [];
-let challenger = null;
-let compareIndex = 0;
-
-let history = [];
-let battleCount = 0;
+const leftCard = document.getElementById("leftCard");
+const rightCard = document.getElementById("rightCard");
 
 /* =====================================================
-   ELEMENT (AMAN – TIDAK CARD)
-===================================================== */
-const genBox = document.getElementById("genSelect");
-const teamBox = document.getElementById("teamSelect");
-const progressFill = document.getElementById("progressFill");
-const progressText = document.getElementById("progressText");
-
-/* =====================================================
-   APPLY MEMBER → CARD (TEAM + GEN + CONTENT)
+   APPLY MEMBER → CARD
 ===================================================== */
 function applyMemberToCard(card, member) {
   if (!card || !member) return;
@@ -94,13 +78,18 @@ function applyMemberToCard(card, member) {
   card.classList.add(`team-${member.team.toLowerCase()}`);
   card.classList.add(`gen-${member.gen}`);
 
-  const img = card.querySelector("img");
-  const name = card.querySelector("p");
-
-  img.src = member.img;
-  img.alt = member.name;
-  name.textContent = member.name;
+  card.querySelector("img").src = member.img;
+  card.querySelector("img").alt = member.name;
+  card.querySelector("p").textContent = member.name;
 }
+
+/* =====================================================
+   ELEMENT
+===================================================== */
+const genBox = document.getElementById("genSelect");
+const teamBox = document.getElementById("teamSelect");
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
 
 /* =====================================================
    MODE HANDLER
@@ -137,25 +126,24 @@ function renderGenMode() {
     `;
   });
 
-  genBox.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+  genBox.querySelectorAll('input').forEach(cb => {
     cb.addEventListener("change", () => toggleGen(cb));
   });
 }
 
 function toggleGen(cb) {
   const gen = Number(cb.value.replace("gen-",""));
-  const container = genBox.querySelector(`[data-gen="${gen}"]`);
-  container.innerHTML = "";
+  const box = genBox.querySelector(`[data-gen="${gen}"]`);
+  box.innerHTML = "";
 
   if (!cb.checked) {
-    container.style.display = "none";
+    box.style.display = "none";
     return;
   }
 
-  container.style.display = "block";
-
+  box.style.display = "block";
   members.filter(m => m.gen === gen).forEach(m => {
-    container.innerHTML += `
+    box.innerHTML += `
       <label>
         <input type="checkbox" value="${m.id}" checked>
         ${m.name}
@@ -183,25 +171,24 @@ function renderTeamMode() {
     `;
   });
 
-  teamBox.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+  teamBox.querySelectorAll('input').forEach(cb => {
     cb.addEventListener("change", () => toggleTeam(cb));
   });
 }
 
 function toggleTeam(cb) {
   const team = cb.value.replace("team-","");
-  const container = teamBox.querySelector(`[data-team="${team}"]`);
-  container.innerHTML = "";
+  const box = teamBox.querySelector(`[data-team="${team}"]`);
+  box.innerHTML = "";
 
   if (!cb.checked) {
-    container.style.display = "none";
+    box.style.display = "none";
     return;
   }
 
-  container.style.display = "block";
-
+  box.style.display = "block";
   members.filter(m => m.team === team).forEach(m => {
-    container.innerHTML += `
+    box.innerHTML += `
       <label>
         <input type="checkbox" value="${m.id}" checked>
         ${m.name}
@@ -211,7 +198,17 @@ function toggleTeam(cb) {
 }
 
 /* =====================================================
-   START FROM SELECTION
+   SORTER LOGIC (INSERTION SORT)
+===================================================== */
+let ranking = [];
+let pending = [];
+let challenger = null;
+let compareIndex = 0;
+let history = [];
+let battleCount = 0;
+
+/* =====================================================
+   START
 ===================================================== */
 function startFromSelection() {
   let selected = [];
@@ -221,9 +218,7 @@ function startFromSelection() {
     selected = [...members];
   } else {
     const checked = document.querySelectorAll('#selectScreen input[type="checkbox"]:checked');
-    selected = members.filter(m =>
-      [...checked].some(c => c.value === m.id)
-    );
+    selected = members.filter(m => [...checked].some(c => c.value === m.id));
   }
 
   if (selected.length < 2) {
@@ -234,135 +229,70 @@ function startFromSelection() {
   document.getElementById("selectScreen").style.display = "none";
   document.getElementById("sorterScreen").style.display = "block";
 
-  leftCard = document.getElementById("leftCard");
-  rightCard = document.getElementById("rightCard");
-
-  leftCard.onclick = () => handlePick("left");
-  rightCard.onclick = () => handlePick("right");
-
-  initSorter(selected);
-}
-
-/* =====================================================
-   INIT SORTER
-===================================================== */
-function initSorter(list) {
-  ranking = [list[0]];
-  pending = list.slice(1);
-  challenger = null;
-  compareIndex = 0;
-  history = [];
-  battleCount = 0;
-
+  ranking = [selected[0]];
+  pending = selected.slice(1);
   nextChallenger();
 }
 
 /* =====================================================
-   NEXT MEMBER
+   FLOW
 ===================================================== */
-
 function nextChallenger() {
-  if (!pending.length) {
-    showResult();
-    return;
-  }
-
+  if (!pending.length) return showResult();
   challenger = pending.shift();
   compareIndex = ranking.length - 1;
-
   showCompare();
 }
-
-/* =====================================================
-   SHOW COMPARE
-===================================================== */
 
 function showCompare() {
   if (compareIndex < 0) {
     ranking.unshift(challenger);
-    challenger = null;
-    nextChallenger();
-    return;
+    return nextChallenger();
   }
 
-  const upper = ranking[compareIndex];
-
-  // kiri = challenger, kanan = ranking
-  document.getElementById("leftImg").src = challenger.img;
-  document.getElementById("leftName").innerText = challenger.name;
-
-  document.getElementById("rightImg").src = upper.img;
-  document.getElementById("rightName").innerText = upper.name;
-
+  applyMemberToCard(leftCard, challenger);
+  applyMemberToCard(rightCard, ranking[compareIndex]);
   updateProgress();
 }
 
 /* =====================================================
-   USER PICK
+   PICK
 ===================================================== */
-
-function choose(choice) {
+function choose(side) {
   if (!challenger) return;
 
-  history.push({
-    ranking: [...ranking],
-    pending: [...pending],
-    challenger,
-    compareIndex
-  });
-
+  history.push({ ranking:[...ranking], pending:[...pending], challenger, compareIndex });
   battleCount++;
 
-  if (choice === "left") {
-    // challenger menang → naik
+  if (side === "left") {
     compareIndex--;
     showCompare();
-  }
-  else if (choice === "right") {
-    // challenger kalah → masuk di bawah
-    ranking.splice(compareIndex + 1, 0, challenger);
-    challenger = null;
-    nextChallenger();
-  }
-  else {
-    // tie → treat as kalah tipis
-    ranking.splice(compareIndex + 1, 0, challenger);
+  } else {
+    ranking.splice(compareIndex+1, 0, challenger);
     challenger = null;
     nextChallenger();
   }
 }
 
-/* =====================================================
-   UNDO
-===================================================== */
-
 function undo() {
   if (!history.length) return;
-
-  const last = history.pop();
-  ranking = [...last.ranking];
-  pending = [...last.pending];
-  challenger = last.challenger;
-  compareIndex = last.compareIndex;
-
-  battleCount = Math.max(0, battleCount - 1);
-
+  const h = history.pop();
+  ranking = h.ranking;
+  pending = h.pending;
+  challenger = h.challenger;
+  compareIndex = h.compareIndex;
   showCompare();
 }
 
 /* =====================================================
-   PROGRESS (SMART ESTIMATION)
+   PROGRESS
 ===================================================== */
-
 function updateProgress() {
-  const n = ranking.length + pending.length + (challenger ? 1 : 0);
-  const estimatedTotal = Math.ceil(n * Math.log2(n));
-  const percent = Math.min(100, Math.floor((battleCount / estimatedTotal) * 100));
-
-  progressFill.style.width = percent + "%";
-  progressText.innerText = `Battle ${battleCount} / ~${estimatedTotal}`;
+  const n = ranking.length + pending.length + 1;
+  const total = Math.ceil(n * Math.log2(n));
+  progressFill.style.width = Math.min(100, battleCount/total*100) + "%";
+  progressText.textContent = `Battle ${battleCount} / ~${total}`;
 }
-
 /* =====================================================
    RESULT
 ===================================================== */
