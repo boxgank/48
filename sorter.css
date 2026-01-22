@@ -269,3 +269,169 @@ input[type="checkbox"] {
 .member-card.selected.team-trainee {
   box-shadow: 0 0 22px rgba(255,255,255,1);
 }
+
+/* =====================================================
+   RESULT SCREEN
+===================================================== */
+
+#resultScreen {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 18px 14px 60px;
+}
+
+/* HEADER */
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.result-header h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #222;
+}
+
+.restart-btn {
+  font-size: .75rem;
+  font-weight: 700;
+  color: #ff4b4b;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* =====================================================
+   FILTER BUTTONS
+===================================================== */
+
+.result-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.result-filters button {
+  border: none;
+  padding: 8px 14px;
+  font-size: .75rem;
+  font-weight: 700;
+  border-radius: 999px;
+  background: #ff5c5c;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* =====================================================
+   RESULT LIST
+===================================================== */
+
+.result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* =====================================================
+   RESULT CARD
+===================================================== */
+
+.result-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.08);
+  position: relative;
+}
+
+/* RANK BADGE */
+.result-rank {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 28px;
+  height: 28px;
+  background: #ff4b4b;
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* MEMBER IMAGE */
+.result-card img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* INFO */
+.result-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.result-info h3 {
+  margin: 0;
+  font-size: .95rem;
+  font-weight: 800;
+  color: #222;
+}
+
+.result-info span {
+  font-size: .7rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+/* STATUS */
+.result-status {
+  font-size: .7rem;
+  font-weight: 800;
+  margin-top: 4px;
+  color: #2ecc71;
+}
+
+/* =====================================================
+   GRID MODE (RANK 4+)
+===================================================== */
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.result-grid .result-card {
+  flex-direction: row;
+}
+
+/* SMALL IMAGE */
+.result-grid img {
+  width: 52px;
+  height: 52px;
+}
+
+/* =====================================================
+   MOBILE FIX
+===================================================== */
+
+@media (max-width: 480px) {
+  .result-header h2 {
+    font-size: 1.15rem;
+  }
+
+  .result-card {
+    padding: 12px;
+  }
+}
