@@ -484,36 +484,41 @@ input[type="checkbox"] {
   transform: scale(1.03);
 }
 
-/* ================= GLOW SELECT (TEAM-SAFE) ================= */
+/* ================= GLOW SELECT (NO JS, AUTO COLOR) ================= */
 
 .member-card {
   position: relative;
   z-index: 1;
 }
 
-/* SET WARNA GLOW PER TEAM */
-.member-card.team-love {
-  --glow: 255, 105, 180;   /* PINK */
+/* layer glow */
+.member-card::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 24px;
+  background: inherit;          /* AMBIL WARNA TEAM */
+  opacity: 0;
+  filter: blur(18px);
+  z-index: -1;
+  transition: opacity .25s ease;
 }
 
-.member-card.team-passion {
-  --glow: 255, 170, 0;     /* ORANGE */
-}
-
-.member-card.team-dream {
-  --glow: 60, 120, 255;    /* BLUE */
-}
-
-.member-card.team-trainee {
-  --glow: 255, 255, 255;   /* WHITE */
-}
-
-/* GLOW AKTIF */
+/* aktif saat dipilih */
 .member-card.selected {
-  z-index: 20;
   transform: scale(1.05);
-  box-shadow:
-    0 0 18px rgba(var(--glow), .9),
-    0 0 36px rgba(var(--glow), .6),
-    0 0 60px rgba(var(--glow), .4);
+  z-index: 20;
+}
+
+.member-card.selected::after {
+  opacity: .85;                 /* INTENSITAS GLOW */
+}
+
+.member-card.selected::after {
+  animation: glowPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%,100% { opacity: .6; }
+  50% { opacity: .95; }
 }
