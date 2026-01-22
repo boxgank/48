@@ -484,46 +484,46 @@ input[type="checkbox"] {
   transform: scale(1.03);
 }
 
-/* ================= GLOW SELECT (FIX TOTAL) ================= */
+/* ================= GLOW SELECT (TEAM-CORRECT) ================= */
 
 .member-card {
-  position: relative;      /* WAJIB */
+  position: relative;
   z-index: 1;
 }
 
 .member-card.selected {
-  z-index: 20;             /* NAIKKAN CARD */
-  transform: scale(1.05);
+  z-index: 30;
+  transform: scale(1.06);
 }
 
-/* LOVE */
+/* LOVE – PINK */
 .member-card.selected.team-love {
   box-shadow:
-    0 0 18px rgba(255,105,180,.9),
-    0 0 36px rgba(255,105,180,.6),
-    0 0 60px rgba(255,105,180,.4);
+    0 0 16px rgba(255, 95, 162, 0.9),
+    0 0 32px rgba(255, 95, 162, 0.65),
+    0 0 60px rgba(255, 95, 162, 0.4);
 }
 
-/* PASSION */
+/* PASSION – KUNING ORANGE */
 .member-card.selected.team-passion {
   box-shadow:
-    0 0 18px rgba(255,170,0,.9),
-    0 0 36px rgba(255,170,0,.6),
-    0 0 60px rgba(255,170,0,.4);
+    0 0 16px rgba(255, 179, 0, 0.95),
+    0 0 32px rgba(255, 179, 0, 0.7),
+    0 0 60px rgba(255, 179, 0, 0.45);
 }
 
-/* DREAM */
+/* DREAM – BIRU */
 .member-card.selected.team-dream {
   box-shadow:
-    0 0 18px rgba(60,90,200,.9),
-    0 0 36px rgba(60,90,200,.6),
-    0 0 60px rgba(60,90,200,.4);
+    0 0 16px rgba(59, 108, 255, 0.95),
+    0 0 32px rgba(59, 108, 255, 0.7),
+    0 0 60px rgba(59, 108, 255, 0.45);
 }
 
-/* TRAINEE */
+/* TRAINEE – PUTIH */
 .member-card.selected.team-trainee {
   box-shadow:
-    0 0 14px rgba(255,255,255,.9),
-    0 0 28px rgba(255,255,255,.6),
-    0 0 50px rgba(255,255,255,.4);
+    0 0 14px rgba(255,255,255,0.95),
+    0 0 30px rgba(255,255,255,0.7),
+    0 0 55px rgba(255,255,255,0.45);
 }
