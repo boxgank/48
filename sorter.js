@@ -63,13 +63,29 @@ const members = [
 ];
 
 /* =====================================================
-   GLOBAL CARD (DIAMBIL SAAT START)
+   GLOBAL STATE
 ===================================================== */
 let leftCard = null;
 let rightCard = null;
 
+let ranking = [];
+let pending = [];
+let challenger = null;
+let compareIndex = 0;
+
+let history = [];
+let battleCount = 0;
+
 /* =====================================================
-   HELPER: APPLY MEMBER → CARD (TEAM + GEN + CONTENT)
+   ELEMENT (AMAN – TIDAK CARD)
+===================================================== */
+const genBox = document.getElementById("genSelect");
+const teamBox = document.getElementById("teamSelect");
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
+
+/* =====================================================
+   APPLY MEMBER → CARD (TEAM + GEN + CONTENT)
 ===================================================== */
 function applyMemberToCard(card, member) {
   if (!card || !member) return;
@@ -85,14 +101,6 @@ function applyMemberToCard(card, member) {
   img.alt = member.name;
   name.textContent = member.name;
 }
-
-/* =====================================================
-   ELEMENT
-===================================================== */
-const genBox = document.getElementById("genSelect");
-const teamBox = document.getElementById("teamSelect");
-const progressFill = document.getElementById("progressFill");
-const progressText = document.getElementById("progressText");
 
 /* =====================================================
    MODE HANDLER
@@ -202,33 +210,9 @@ function toggleTeam(cb) {
   });
 }
 
-
-
-/* =====================================================
-   INTERACTIVE INSERTION SORT (TRUE J-SORTER LOGIC)
-===================================================== */
-
-/*
-member object minimal:
-{
-  id: "xxx",
-  name: "Nur Intan",
-  img: "img.jpg"
-}
-*/
-
-let ranking = [];
-let pending = [];
-let challenger = null;
-let compareIndex = 0;
-
-let history = [];
-let battleCount = 0;
-
 /* =====================================================
    START FROM SELECTION
 ===================================================== */
-
 function startFromSelection() {
   let selected = [];
   const mode = document.querySelector('input[name="mode"]:checked').value;
@@ -250,13 +234,18 @@ function startFromSelection() {
   document.getElementById("selectScreen").style.display = "none";
   document.getElementById("sorterScreen").style.display = "block";
 
+  leftCard = document.getElementById("leftCard");
+  rightCard = document.getElementById("rightCard");
+
+  leftCard.onclick = () => handlePick("left");
+  rightCard.onclick = () => handlePick("right");
+
   initSorter(selected);
 }
 
 /* =====================================================
    INIT SORTER
 ===================================================== */
-
 function initSorter(list) {
   ranking = [list[0]];
   pending = list.slice(1);
