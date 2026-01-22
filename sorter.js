@@ -62,6 +62,21 @@ const members = [
   { id: "nur_intan", name: "Nur Intan", gen: 13, team: "Trainee", img: "https://jkt48.com/profile/Nur_Intan.jpg" }
 ];
 
+// ================== VARIABEL GLOBAL ==================
+const leftCard = document.getElementById("leftCard");
+const rightCard = document.getElementById("rightCard");
+
+// ================== FUNGSI HELPER (TARUH DI SINI) ==================
+function applyMemberToCard(card, member) {
+  card.className = "member-card card";
+  card.classList.add(`team-${member.team.toLowerCase()}`);
+  card.classList.add(`gen-${member.gen}`);
+
+  card.querySelector("img").src = member.img;
+  card.querySelector("img").alt = member.name;
+  card.querySelector("p").textContent = member.name;
+}
+
 /* ==================================================
    ELEMENT
 ================================================== */
@@ -474,12 +489,4 @@ document.addEventListener("keydown", function (e) {
       break;
   }
 });
-
-function applyMember(card, member) {
-  card.className = `member-card team-${member.team.toLowerCase()} gen-${member.gen}`;
-}
-
-applyMember(leftCard, memberLeft);
-applyMember(rightCard, memberRight);
-
 
