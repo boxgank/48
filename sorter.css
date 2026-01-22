@@ -1,3 +1,75 @@
+/* ================= SELECT MODE ================= */
+
+#selectScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  padding: 20px;
+}
+
+.select-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.select-options button {
+  padding: 18px;
+  border-radius: 18px;
+  border: none;
+  font-weight: 900;
+  font-size: .9rem;
+  color: #fff;
+  cursor: pointer;
+  transition: .3s;
+  box-shadow: 0 10px 20px rgba(0,0,0,.25);
+}
+
+.select-options button:hover {
+  transform: translateY(-3px);
+}
+
+/* ================= SORTER CARD CENTER ================= */
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+/* ================= UNDO & TIE ================= */
+
+.sorter-controls {
+  display: flex;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.sorter-controls button {
+  flex: 1;
+  padding: 14px;
+  border-radius: 16px;
+  font-weight: 900;
+  font-size: .85rem;
+  border: none;
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: .25s;
+}
+
+.sorter-controls button:hover {
+  background: rgba(255,255,255,.3);
+}
+
 /* =====================================================
    RESET & BASE
 ===================================================== */
@@ -41,6 +113,24 @@ button {
   );
   opacity: .5;
   z-index: -1;
+}
+
+/* ================= RESULT BACKGROUND BY TEAM ================= */
+
+#resultScreen.team-love {
+  background: rgba(255,105,180,.12);
+}
+
+#resultScreen.team-dream {
+  background: rgba(52,152,219,.12);
+}
+
+#resultScreen.team-passion {
+  background: rgba(241,196,15,.12);
+}
+
+#resultScreen.team-trainee {
+  background: rgba(255,255,255,.15);
 }
 
 /* =====================================================
@@ -353,3 +443,12 @@ button {
   font-weight: 900;
   color: #2ecc71;
 }
+
+/* ================= RESULT CARD ================= */
+
+.result-card {
+  background: rgba(255,255,255,.92);
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.12);
+}
+
