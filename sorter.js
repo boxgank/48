@@ -358,9 +358,6 @@ function handlePick(side) {
 
 /* ================= MOUSE ================= */
 
-const leftCard = document.getElementById("leftCard");
-const rightCard = document.getElementById("rightCard");
-
 leftCard.addEventListener("click", () => choose("left"));
 rightCard.addEventListener("click", () => choose("right"));
 
