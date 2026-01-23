@@ -464,26 +464,27 @@ input[type="checkbox"] {
   z-index: 2;
 }
 
-/* ================= TEAM BACKGROUND 50% ================= */
 
-/* ========== TEAM BACKGROUND SOLID (50%) ========== */
+
+/* ===== TEAM BACKGROUND 50% ===== */
 
 .team-love {
-  background: rgba(255,105,180,0.5); /* PINK */
+  background-color: rgba(255,105,180,0.5) !important;
 }
 
 .team-passion {
-  background: rgba(255,200,60,0.5); /* YELLOW */
+  background-color: rgba(255,200,60,0.5) !important;
 }
 
 .team-dream {
-  background: rgba(80,140,255,0.5); /* BLUE */
+  background-color: rgba(80,140,255,0.5) !important;
 }
 
 .team-trainee {
-  background: rgba(255,255,255,0.5); /* WHITE */
+  background-color: rgba(255,255,255,0.5) !important;
   color: #111;
 }
+
 
 
 /* ================= GEN COLORS ================= */
@@ -509,6 +510,7 @@ input[type="checkbox"] {
 .member-card {
   position: relative;
   z-index: 1;
+  background: transparent !important;
 }
 
 /* layer glow */
