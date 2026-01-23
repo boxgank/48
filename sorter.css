@@ -167,29 +167,28 @@ input[type="checkbox"] {
 
 /* ========== SHADOW GLOW PER TEAM ========== */
 
-/* LOVE → PINK */
+/* ===== SHADOW DI BELAKANG ===== */
+
 .team-love:hover,
 .team-love.selected {
-  box-shadow: 0 0 26px rgba(255,105,180,0.85);
+  box-shadow: 0 0 28px rgba(255,105,180,0.9);
 }
 
-/* PASSION → YELLOW */
 .team-passion:hover,
 .team-passion.selected {
-  box-shadow: 0 0 26px rgba(255,200,60,0.85);
+  box-shadow: 0 0 28px rgba(255,200,60,0.9);
 }
 
-/* DREAM → BLUE */
 .team-dream:hover,
 .team-dream.selected {
-  box-shadow: 0 0 26px rgba(80,140,255,0.85);
+  box-shadow: 0 0 28px rgba(80,140,255,0.9);
 }
 
-/* TRAINEE → WHITE */
 .team-trainee:hover,
 .team-trainee.selected {
-  box-shadow: 0 0 26px rgba(255,255,255,0.9);
+  box-shadow: 0 0 28px rgba(255,255,255,0.9);
 }
+
 
 
 .card img {
@@ -466,24 +465,36 @@ input[type="checkbox"] {
 
 
 
-/* ===== TEAM BACKGROUND 50% ===== */
+/* ===== TEAM BACKGROUND (50%) VIA ::before ===== */
 
-.team-love {
-  background-color: rgba(255,105,180,0.5) !important;
+.team-love::before {
+  background: rgba(255,105,180,0.5);
 }
 
-.team-passion {
-  background-color: rgba(255,200,60,0.5) !important;
+.team-passion::before {
+  background: rgba(255,200,60,0.5);
 }
 
-.team-dream {
-  background-color: rgba(80,140,255,0.5) !important;
+.team-dream::before {
+  background: rgba(80,140,255,0.5);
 }
 
-.team-trainee {
-  background-color: rgba(255,255,255,0.5) !important;
-  color: #111;
+.team-trainee::before {
+  background: rgba(255,255,255,0.5);
 }
+
+
+.member-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  z-index: -1;
+
+  /* default (akan dioverride team) */
+  background: transparent;
+}
+
 
 
 
@@ -509,8 +520,9 @@ input[type="checkbox"] {
 
 .member-card {
   position: relative;
-  z-index: 1;
   background: transparent !important;
+  overflow: visible;
+  z-index: 1;
 }
 
 /* layer glow */
@@ -561,11 +573,6 @@ input[type="checkbox"] {
 .team-trainee {
   background: rgba(255,255,255,0.95);
   color: #111;
-}
-
-/* hover */
-.team-trainee:hover {
-  box-shadow: 0 0 26px rgba(255,255,255,0.75);
 }
 
 /* selected */
