@@ -466,44 +466,37 @@ input[type="checkbox"] {
 
 /* ================= TEAM BACKGROUND 50% ================= */
 
+/* ========== TEAM BACKGROUND SOLID (50%) ========== */
+
 .team-love {
-  background: linear-gradient(
-    to bottom,
-    rgba(255,105,180,0.45),
-    rgba(255,255,255,0.9)
-  );
+  background: rgba(255,105,180,0.5); /* PINK */
 }
 
 .team-passion {
-  background: linear-gradient(
-    to bottom,
-    rgba(255,170,0,0.45),
-    rgba(255,255,255,0.9)
-  );
+  background: rgba(255,200,60,0.5); /* YELLOW */
 }
 
 .team-dream {
-  background: linear-gradient(
-    to bottom,
-    rgba(60,90,200,0.45),
-    rgba(255,255,255,0.9)
-  );
+  background: rgba(80,140,255,0.5); /* BLUE */
 }
 
 .team-trainee {
-  background: rgba(255,255,255,0.95);
+  background: rgba(255,255,255,0.5); /* WHITE */
+  color: #111;
 }
+
 
 /* ================= GEN COLORS ================= */
 
-.gen-13 .gen-bar { background:#ffffff; }
-.gen-12 .gen-bar { background:#ff6aa2; }
-.gen-11 .gen-bar { background:#ff8c42; }
-.gen-10 .gen-bar { background:#ffd000; }
-.gen-9  .gen-bar { background:#4aa3ff; }
-.gen-8  .gen-bar { background:#7c5cff; }
-.gen-7  .gen-bar { background:#2ecc71; }
-.gen-6  .gen-bar { background:#e74c3c; }
+.gen-13 .gen-bar { background:#f3c101; }
+.gen-12 .gen-bar { background:#bf7e7a; }
+.gen-11 .gen-bar { background:#fe924a; }
+.gen-10 .gen-bar { background:#04989c; }
+.gen-9  .gen-bar { background:#3cb7fa; }
+.gen-8  .gen-bar { background:#0249a9; }
+.gen-7  .gen-bar { background:#01803a; }
+.gen-6  .gen-bar { background:#7ed559; }
+.gen-3  .gen-bar { background:#fb62be; }
 
 /* ================= HOVER ================= */
 
