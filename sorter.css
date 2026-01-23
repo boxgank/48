@@ -458,11 +458,25 @@ input[type="checkbox"] {
 
 
 .member-card img,
-.member-card p,
-.member-card .gen-bar {
-  position: relative;
-  z-index: 1;
+.member-card p {
+  margin-top: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
 }
+
+.member-card .gen-bar {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;          /* LEBIH PANJANG */
+  height: 10px;         /* LEBIH TINGGI */
+  border-radius: 999px;
+  z-index: 10;          /* DI ATAS SEMUA */
+}
+
 
 
 
