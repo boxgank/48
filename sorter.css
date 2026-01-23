@@ -560,3 +560,21 @@ input[type="checkbox"] {
   background: rgba(255,255,255,0.95);
   box-shadow: 0 0 28px rgba(255,255,255,0.95);
 }
+
+/* ===== FIX TRAINEE ===== */
+
+.team-trainee {
+  background: rgba(255,255,255,0.95);
+  color: #111;
+}
+
+/* hover */
+.team-trainee:hover {
+  box-shadow: 0 0 26px rgba(255,255,255,0.75);
+}
+
+/* selected */
+.team-trainee.selected {
+  box-shadow: 0 0 30px rgba(255,255,255,0.9);
+}
+
