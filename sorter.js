@@ -80,7 +80,11 @@ function applyMemberToCard(card, member) {
 
   card.querySelector("img").src = member.img;
   card.querySelector("img").alt = member.name;
-  card.querySelector("p").textContent = member.name;
+  card.querySelector(".gen-bar").textContent = `GEN ${member.gen}`;
+   card.querySelector("p").innerHTML = `
+   <span class="member-name">${member.name}</span>
+   <span class="member-team">Team ${member.team}</span>
+   `;
 }
 
 /* =====================================================
