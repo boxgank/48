@@ -504,7 +504,7 @@ input[type="checkbox"] {
 }
 
 .member-card.selected::after {
-  opacity: 1;
+  animation: none;
 }
 
 
@@ -512,37 +512,24 @@ input[type="checkbox"] {
 /* ================= TEAM GLOW COLORS ================= */
 
 /* LOVE → PINK */
+/* ========== FIX GLOW WARNA PER TEAM ========== */
+
 .team-love.selected::after {
-  background: radial-gradient(circle,
-    rgba(255,105,180,0.9),
-    rgba(255,105,180,0.4),
-    transparent 70%
-  );
+  background: rgba(255,105,180,0.9);
+  box-shadow: 0 0 28px rgba(255,105,180,0.9);
 }
 
-/* PASSION → YELLOW */
 .team-passion.selected::after {
-  background: radial-gradient(circle,
-    rgba(255,200,60,0.9),
-    rgba(255,200,60,0.4),
-    transparent 70%
-  );
+  background: rgba(255,200,60,0.9);
+  box-shadow: 0 0 28px rgba(255,200,60,0.9);
 }
 
-/* DREAM → BLUE */
 .team-dream.selected::after {
-  background: radial-gradient(circle,
-    rgba(80,140,255,0.9),
-    rgba(80,140,255,0.4),
-    transparent 70%
-  );
+  background: rgba(80,140,255,0.9);
+  box-shadow: 0 0 28px rgba(80,140,255,0.9);
 }
 
-/* TRAINEE → WHITE */
 .team-trainee.selected::after {
-  background: radial-gradient(circle,
-    rgba(255,255,255,0.95),
-    rgba(255,255,255,0.45),
-    transparent 70%
-  );
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 0 28px rgba(255,255,255,0.95);
 }
