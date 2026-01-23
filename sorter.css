@@ -454,56 +454,55 @@ input[type="checkbox"] {
   filter: none;
 }
 
-/* ===== FOTO MEMBER: BORDER PUTIH + RGB SHADOW BERPUTAR ===== */
+/* ===== FOTO MEMBER BASE ===== */
 .member-card img {
   position: relative;
   z-index: 1;
 
-  /* BORDER TETAP PUTIH */
-  border: 3px solid rgba(255, 255, 255, 0.95);
+  border: 3px solid rgba(255,255,255,0.95);
   border-radius: 16px;
   box-sizing: border-box;
   background: #fff;
 
-  /* SHADOW RGB (TIDAK TERPENGARUH DARK/LIGHT MODE) */
-  box-shadow:
-    0 0 12px rgb(255 0 0 / 55%),
-    0 0 20px rgb(0 255 0 / 55%),
-    0 0 28px rgb(0 0 255 / 55%);
-
-  animation: rgbShadowSpin 7s linear infinite;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25); /* fallback */
 }
 
-/* ===== ANIMASI RGB SHADOW SAJA ===== */
-@keyframes rgbShadowSpin {
-  0% {
-    box-shadow:
-      0 0 12px rgb(255 0 0 / 55%),
-      0 0 20px rgb(0 255 0 / 55%),
-      0 0 28px rgb(0 0 255 / 55%);
-  }
-
-  33% {
-    box-shadow:
-      0 0 12px rgb(0 255 0 / 55%),
-      0 0 20px rgb(0 0 255 / 55%),
-      0 0 28px rgb(255 0 0 / 55%);
-  }
-
-  66% {
-    box-shadow:
-      0 0 12px rgb(0 0 255 / 55%),
-      0 0 20px rgb(255 0 0 / 55%),
-      0 0 28px rgb(0 255 0 / 55%);
-  }
-
-  100% {
-    box-shadow:
-      0 0 12px rgb(255 0 0 / 55%),
-      0 0 20px rgb(0 255 0 / 55%),
-      0 0 28px rgb(0 0 255 / 55%);
-  }
+.gen-13 img {
+  box-shadow: 0 0 18px rgba(243,193,1,0.75);
 }
+
+.gen-12 img {
+  box-shadow: 0 0 18px rgba(191,126,122,0.75);
+}
+
+.gen-11 img {
+  box-shadow: 0 0 18px rgba(254,146,74,0.75);
+}
+
+.gen-10 img {
+  box-shadow: 0 0 18px rgba(4,152,156,0.75);
+}
+
+.gen-9 img {
+  box-shadow: 0 0 18px rgba(60,183,250,0.75);
+}
+
+.gen-8 img {
+  box-shadow: 0 0 18px rgba(2,73,169,0.8);
+}
+
+.gen-7 img {
+  box-shadow: 0 0 18px rgba(1,128,58,0.75);
+}
+
+.gen-6 img {
+  box-shadow: 0 0 18px rgba(126,213,89,0.75);
+}
+
+.gen-3 img {
+  box-shadow: 0 0 18px rgba(251,98,190,0.75);
+}
+
 
 
 .member-card p {
