@@ -11,28 +11,19 @@ html, body {
 }
 
 body {
+  color: #fff;
   background-color: #0f1b2d; /* WARNA UTAMA TETAP */
 
   background-image:
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.06), transparent 35%),
-    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05), transparent 40%),
-    radial-gradient(circle at 70% 80%, rgba(255,255,255,0.04), transparent 45%),
-    radial-gradient(circle at 30% 75%, rgba(255,255,255,0.05), transparent 40%),
+    /* BLOK CAHAYA ABSTRAK */
+    radial-gradient(600px 400px at 10% 15%, rgba(255,255,255,0.06), transparent 60%),
+    radial-gradient(500px 350px at 85% 20%, rgba(255,255,255,0.05), transparent 65%),
+    radial-gradient(550px 450px at 70% 80%, rgba(255,255,255,0.04), transparent 65%),
+    radial-gradient(450px 350px at 20% 75%, rgba(255,255,255,0.05), transparent 65%),
 
-    repeating-linear-gradient(
-      45deg,
-      rgba(255,255,255,0.03) 0,
-      rgba(255,255,255,0.03) 1px,
-      transparent 1px,
-      transparent 18px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(255,255,255,0.025) 0,
-      rgba(255,255,255,0.025) 1px,
-      transparent 1px,
-      transparent 22px
-    );
+    /* GARIS ABSTRAK LEMBUT */
+    linear-gradient(120deg, rgba(255,255,255,0.03), transparent 60%),
+    linear-gradient(-120deg, rgba(255,255,255,0.025), transparent 65%);
 }
 
 /* ===== TITLE ===== */
@@ -464,6 +455,9 @@ input[type="checkbox"] {
 }
 
 .member-card {
+  background-color: rgba(15, 27, 45, 0.5); /* 50% tembus */
+  backdrop-filter: blur(2px);              /* HALUS, OPSIONAL */
+  -webkit-backdrop-filter: blur(2px);
   position: relative;
   width: 220px;
   padding: 14px;
