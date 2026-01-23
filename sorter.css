@@ -11,19 +11,16 @@ html, body {
 }
 
 body {
-  color: #fff;
-  background-color: #0f1b2d; /* WARNA UTAMA TETAP */
+  margin: 0;
+  min-height: 100vh;
 
-  background-image:
-    /* BLOK CAHAYA ABSTRAK */
-    radial-gradient(600px 400px at 10% 15%, rgba(255,255,255,0.06), transparent 60%),
-    radial-gradient(500px 350px at 85% 20%, rgba(255,255,255,0.05), transparent 65%),
-    radial-gradient(550px 450px at 70% 80%, rgba(255,255,255,0.04), transparent 65%),
-    radial-gradient(450px 350px at 20% 75%, rgba(255,255,255,0.05), transparent 65%),
+  background-image: url("https://raw.githubusercontent.com/boxgank/48/main/img/20260124_030612.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 
-    /* GARIS ABSTRAK LEMBUT */
-    linear-gradient(120deg, rgba(255,255,255,0.03), transparent 60%),
-    linear-gradient(-120deg, rgba(255,255,255,0.025), transparent 65%);
+  color: #fff; /* FONT TETAP PUTIH */
 }
 
 /* ===== TITLE ===== */
