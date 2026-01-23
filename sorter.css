@@ -162,8 +162,35 @@ input[type="checkbox"] {
 
 .card:hover {
   transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 18px 40px rgba(255,121,198,0.45);
+  box-shadow: none;
 }
+
+/* ========== SHADOW GLOW PER TEAM ========== */
+
+/* LOVE → PINK */
+.team-love:hover,
+.team-love.selected {
+  box-shadow: 0 0 26px rgba(255,105,180,0.85);
+}
+
+/* PASSION → YELLOW */
+.team-passion:hover,
+.team-passion.selected {
+  box-shadow: 0 0 26px rgba(255,200,60,0.85);
+}
+
+/* DREAM → BLUE */
+.team-dream:hover,
+.team-dream.selected {
+  box-shadow: 0 0 26px rgba(80,140,255,0.85);
+}
+
+/* TRAINEE → WHITE */
+.team-trainee:hover,
+.team-trainee.selected {
+  box-shadow: 0 0 26px rgba(255,255,255,0.9);
+}
+
 
 .card img {
   width: 100%;
