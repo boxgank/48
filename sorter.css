@@ -426,42 +426,19 @@ input[type="checkbox"] {
 
 .member-card {
   position: relative;
-  width: 48%;
-  max-width: 220px;
-  border-radius: 22px;
-  padding: 14px;
-  text-align: center;
-  cursor: pointer;
-  transition: .3s ease;
-  overflow: visible;
+  background: transparent !important;
+  overflow: hidden;          /* penting */
+  z-index: 0;
 }
 
-/* IMAGE */
-.member-card img {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  border-radius: 16px;
+
+.member-card img,
+.member-card p,
+.member-card .gen-bar {
+  position: relative;
+  z-index: 1;
 }
 
-/* NAME */
-.member-card p {
-  margin-top: 10px;
-  font-weight: 800;
-  font-size: .9rem;
-}
-
-/* GEN BAR */
-.gen-bar {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 38px;
-  height: 6px;
-  border-radius: 999px;
-  z-index: 2;
-}
 
 
 
@@ -483,16 +460,13 @@ input[type="checkbox"] {
   background: rgba(255,255,255,0.5);
 }
 
-
 .member-card::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 22px;
-  z-index: -1;
-
-  /* default (akan dioverride team) */
-  background: transparent;
+  z-index: 0;                /* DI DALAM CARD */
+  pointer-events: none;
 }
 
 
@@ -548,25 +522,26 @@ input[type="checkbox"] {
 /* LOVE → PINK */
 /* ========== FIX GLOW WARNA PER TEAM ========== */
 
-.team-love.selected::after {
-  background: rgba(255,105,180,0.9);
+.team-love:hover,
+.team-love.selected {
   box-shadow: 0 0 28px rgba(255,105,180,0.9);
 }
 
-.team-passion.selected::after {
-  background: rgba(255,200,60,0.9);
+.team-passion:hover,
+.team-passion.selected {
   box-shadow: 0 0 28px rgba(255,200,60,0.9);
 }
 
-.team-dream.selected::after {
-  background: rgba(80,140,255,0.9);
+.team-dream:hover,
+.team-dream.selected {
   box-shadow: 0 0 28px rgba(80,140,255,0.9);
 }
 
-.team-trainee.selected::after {
-  background: rgba(255,255,255,0.95);
-  box-shadow: 0 0 28px rgba(255,255,255,0.95);
+.team-trainee:hover,
+.team-trainee.selected {
+  box-shadow: 0 0 28px rgba(255,255,255,0.9);
 }
+
 
 /* ===== FIX TRAINEE ===== */
 
