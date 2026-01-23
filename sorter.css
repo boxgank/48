@@ -23,66 +23,48 @@ body {
   color: #fff; /* FONT TETAP PUTIH */
 }
 
-/* ===== TITLE UTAMA ===== */
-h1 {
+/* ===== JUDUL WARNA BERGERAK ===== */
+.main-title {
   text-align: center;
-  margin-bottom: 28px;
+  margin: 36px 0 40px;
 
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.6rem;
+  font-size: 3rem;
   font-weight: 900;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   text-transform: uppercase;
 
-  color: #ffffff;
-
-  /* efek sangar */
-  text-shadow:
-    0 2px 0 rgba(0,0,0,0.4),
-    0 6px 20px rgba(0,0,0,0.8);
-
-  position: relative;
-}
-
-h1::after {
-  content: "";
-  display: block;
-  margin: 12px auto 0;
-
-  width: 120px;
-  height: 4px;
-  border-radius: 999px;
-
+  /* GRADIENT WARNA */
   background: linear-gradient(
     90deg,
-    transparent,
+    #ff3cac,
+    #784ba0,
+    #2b86c5,
     #3cb7fa,
     #ffd000,
     #fe924a,
-    transparent
+    #ff3cac
   );
-}
+  background-size: 300% 100%;
 
-/* ===== SUBTITLE ===== */
-h4 {
-  margin: 26px 0 10px;
-  text-align: center;
+  /* TEKS JADI GRADIENT */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-
-  color: rgba(255,255,255,0.85);
-}
-
-h1 {
+  /* DEPTH BIAR TETAP GARANG */
   text-shadow:
-    0 0 12px rgba(60,183,250,0.4),
-    0 0 28px rgba(60,183,250,0.25);
+    0 2px 0 rgba(0,0,0,0.7),
+    0 8px 30px rgba(0,0,0,0.9);
+
+  animation: titleGradientMove 6s linear infinite;
 }
 
+/* ===== ANIMASI GRADIENT ===== */
+@keyframes titleGradientMove {
+  0%   { background-position:   0% 50%; }
+  100% { background-position: 100% 50%; }
+}
 /* ===== SELECT SCREEN ===== */
 #selectScreen {
   max-width: 900px;
