@@ -529,15 +529,18 @@ input[type="checkbox"] {
   letter-spacing: 0.3px;
 }
 
-/* ===== GEN BAR (PANJANG, UJUNG BULAT) ===== */
 .gen-bar {
-  height: 12px;
-  width: 80%;              /* PANJANG seperti sebelumnya */
-  max-width: 140px;
-  margin: 8px auto 0;
+  position: absolute;        /* WAJIB */
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
 
-  border-radius: 8px;      /* TIDAK LANCIP */
-  
+  height: 12px;
+  width: 80%;
+  max-width: 140px;
+
+  border-radius: 8px;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -548,9 +551,8 @@ input[type="checkbox"] {
   color: #111;
   text-transform: uppercase;
 
-  z-index: 10;
+  z-index: 2;               /* normal */
 }
-
 /* ===== TEAM BACKGROUND (50%) VIA ::before ===== */
 
 .team-love::before {
@@ -597,6 +599,10 @@ input[type="checkbox"] {
 
 .member-card:hover {
   transform: scale(1.03);
+}
+
+.member-card:hover .gen-bar {
+  z-index: 999;             /* DI ATAS KARTU + SHADOW */
 }
 
 /* ================= GLOW SELECT (NO JS, AUTO COLOR) ================= */
