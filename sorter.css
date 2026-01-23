@@ -446,11 +446,14 @@ input[type="checkbox"] {
 }
 
 .member-card {
-  background: transparent !important;
-  overflow: visible;
-  box-shadow: none !important;
-  transition: filter .2s ease, transform .2s ease;
+  position: relative;
+  width: 220px;
+  padding: 14px;
+  border-radius: 22px;
+  background-clip: padding-box;
+  filter: none;
 }
+
 
 
 
