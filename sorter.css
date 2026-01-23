@@ -457,7 +457,14 @@ input[type="checkbox"] {
 
 
 
-.member-card img,
+.member-card img {
+  border: 3px solid rgba(255,255,255,0.95);
+  border-radius: 16px;   /* ikutin radius foto */
+  box-sizing: border-box;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);/* supaya foto kelihatan "di atas" */
+}
+
 .member-card p {
   margin-top: 12px;
   font-family: 'Montserrat', sans-serif;
