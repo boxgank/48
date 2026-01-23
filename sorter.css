@@ -517,8 +517,3 @@ input[type="checkbox"] {
 .member-card.selected::after {
   animation: glowPulse 1.6s ease-in-out infinite;
 }
-
-@keyframes glowPulse {
-  0%,100% { opacity: .6; }
-  50% { opacity: .95; }
-}
