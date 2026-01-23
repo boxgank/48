@@ -462,7 +462,6 @@ input[type="checkbox"] {
   border-radius: 16px;   /* ikutin radius foto */
   box-sizing: border-box;
   background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);/* supaya foto kelihatan "di atas" */
 }
 
 .member-card p {
