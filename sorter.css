@@ -462,6 +462,7 @@ input[type="checkbox"] {
   border-radius: 16px;   /* ikutin radius foto */
   box-sizing: border-box;
   background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
 .member-card p {
@@ -481,6 +482,7 @@ input[type="checkbox"] {
   height: 10px;         /* LEBIH TINGGI */
   border-radius: 999px;
   z-index: 10;          /* DI ATAS SEMUA */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
 
