@@ -424,12 +424,16 @@ input[type="checkbox"] {
    MEMBER CARD
 ===================================================== */
 
-.member-card {
-  position: relative;
-  background: transparent !important;
-  overflow: hidden;          /* penting */
-  z-index: 0;
+/* ===== HARD RESET CARD LAYER ===== */
+.member-card::before {
+  display: none !important;
 }
+
+.member-card {
+  background: transparent !important;
+  overflow: visible;
+}
+
 
 
 .member-card img,
@@ -492,28 +496,41 @@ input[type="checkbox"] {
 
 /* ================= GLOW SELECT (NO JS, AUTO COLOR) ================= */
 
-.member-card {
-  position: relative;
-  background: transparent !important;
-  overflow: visible;
-  z-index: 1;
-}
 
 /* layer glow */
 .member-card::after {
   content: "";
   position: absolute;
-  inset: -12px;
-  border-radius: 26px;
-  opacity: 0;
-  filter: blur(20px);
-  z-index: -1;
-  transition: opacity .25s ease;
+  inset: 0;
+  border-radius: 22px;
+  z-index: -1;              /* DI DALAM CARD */
+  opacity: 0.5;             /* 50% */
+  filter: none;             /* HILANGKAN BLUR */
 }
+
 
 .member-card.selected::after {
   animation: none;
 }
+
+
+
+.team-love::after {
+  background: rgb(255,105,180);
+}
+
+.team-passion::after {
+  background: rgb(255,200,60);
+}
+
+.team-dream::after {
+  background: rgb(80,140,255);
+}
+
+.team-trainee::after {
+  background: rgb(255,255,255);
+}
+
 
 
 /* aktif saat dipilih */
@@ -543,15 +560,4 @@ input[type="checkbox"] {
 }
 
 
-/* ===== FIX TRAINEE ===== */
-
-.team-trainee {
-  background: rgba(255,255,255,0.95);
-  color: #111;
-}
-
-/* selected */
-.team-trainee.selected {
-  box-shadow: 0 0 30px rgba(255,255,255,0.9);
-}
 
