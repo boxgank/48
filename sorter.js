@@ -80,10 +80,12 @@ function applyMemberToCard(card, member) {
 
   card.querySelector("img").src = member.img;
   card.querySelector("img").alt = member.name;
-  card.querySelector(".gen-bar").textContent = `GEN ${member.gen}`;
+  card.querySelector(".gen-bar").textContent = `GENERATION ${member.gen}`;
    card.querySelector("p").innerHTML = `
    <span class="member-name">${member.name}</span>
-   <span class="member-team">Team ${member.team}</span>
+   <span class="member-team">
+  ${member.team === 'Trainee' ? 'Trainee' : `Team ${member.team}`}
+</span>
    `;
 }
 
