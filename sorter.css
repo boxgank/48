@@ -166,6 +166,22 @@ input[type="checkbox"] {
 }
 
 /* ========== SHADOW GLOW PER TEAM ========== */
+.team-love {
+  background-color: rgba(255,105,180,0.5);
+}
+
+.team-passion {
+  background-color: rgba(255,200,60,0.5);
+}
+
+.team-dream {
+  background-color: rgba(80,140,255,0.5);
+}
+
+.team-trainee {
+  background-color: rgba(255,255,255,0.5);
+  color: #111;
+}
 
 /* ===== SHADOW DI BELAKANG ===== */
 
@@ -432,6 +448,8 @@ input[type="checkbox"] {
 .member-card {
   background: transparent !important;
   overflow: visible;
+  box-shadow: none !important;
+  transition: filter .2s ease, transform .2s ease;
 }
 
 
@@ -533,31 +551,26 @@ input[type="checkbox"] {
 
 
 
-/* aktif saat dipilih */
-/* ================= TEAM GLOW COLORS ================= */
-
-/* LOVE → PINK */
-/* ========== FIX GLOW WARNA PER TEAM ========== */
+/* ===== SHADOW TEMBUS BACKGROUND ===== */
 
 .team-love:hover,
 .team-love.selected {
-  box-shadow: 0 0 28px rgba(255,105,180,0.9);
+  filter: drop-shadow(0 0 22px rgba(255,105,180,0.9));
 }
 
 .team-passion:hover,
 .team-passion.selected {
-  box-shadow: 0 0 28px rgba(255,200,60,0.9);
+  filter: drop-shadow(0 0 22px rgba(255,200,60,0.9));
 }
 
 .team-dream:hover,
 .team-dream.selected {
-  box-shadow: 0 0 28px rgba(80,140,255,0.9);
+  filter: drop-shadow(0 0 22px rgba(80,140,255,0.9));
 }
 
 .team-trainee:hover,
 .team-trainee.selected {
-  box-shadow: 0 0 28px rgba(255,255,255,0.9);
+  filter: drop-shadow(0 0 22px rgba(255,255,255,0.9));
 }
-
 
 
