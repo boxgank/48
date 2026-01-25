@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   <!-- ===== TOMBOL LOGIN DI BAWAH HERO ===== -->
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
 
   let isLogin = true;
 
@@ -227,6 +227,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const authForm   = document.getElementById("authForm");
   const loggedBox  = document.getElementById("loggedInBox");
   const logoutBtn  = document.getElementById("logoutBtn");
+
+  // PAKSA FORM MUNCUL SAAT LOAD
+  authForm.style.display = "block";
+  loggedBox.style.display = "none";
 
   function renderAuth(){
     if(isLogin){
@@ -245,14 +249,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   renderAuth();
 
-  // 🔁 SWITCH LOGIN / REGISTER
+  // SWITCH LOGIN / REGISTER
   switchAuth.onclick = (e) => {
     e.preventDefault();
     isLogin = !isLogin;
     renderAuth();
   };
 
-  // 🔐 LOGIN / REGISTER
+  // LOGIN / REGISTER
   authBtn.onclick = async () => {
     const email = emailInput.value.trim();
     const password = passInput.value.trim();
@@ -265,7 +269,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     authInfo.textContent = "Loading...";
 
     if(isLogin){
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email, password
       });
 
@@ -274,7 +278,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      showLoggedIn();
+      authForm.style.display = "none";
+      loggedBox.style.display = "block";
 
     } else {
       const { data, error } = await supabase.auth.signUp({
@@ -286,7 +291,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      // SIMPAN KE DATABASE
       await supabase.from("profiles").insert({
         id: data.user.id,
         email: email,
@@ -294,33 +298,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         coin: 0
       });
 
-      showLoggedIn();
+      authForm.style.display = "none";
+      loggedBox.style.display = "block";
     }
   };
 
-  // ✅ SETELAH LOGIN
-  function showLoggedIn(){
-    authForm.style.display = "none";
-    loggedBox.style.display = "block";
-  }
-
-  // 🚪 LOGOUT
+  // LOGOUT (BALIK KE FORM)
   logoutBtn.onclick = async () => {
     await supabase.auth.signOut();
     authForm.style.display = "block";
     loggedBox.style.display = "none";
   };
 
-  // 🔄 AUTO LOGIN SAAT REFRESH
-  const { data: { session } } = await supabase.auth.getSession();
-  if(session){
-    showLoggedIn();
-  }
-
 });
 </script>
-
-
 
 
 <div class="container">
