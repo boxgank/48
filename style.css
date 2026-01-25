@@ -418,6 +418,15 @@ body{
   background: #c80010;
 }
 
+/* FORCE LOGIN HERO MUNCUL */
+.hero-auth,
+#authSection,
+#authForm {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
 
 /* BACKGROUND TEXT */
 .hero-bg{
