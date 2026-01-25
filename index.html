@@ -101,14 +101,41 @@ const supabase = supabase.createClient(
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const loginSection = document.getElementById("loginSection");
-  const loginBtn = document.getElementById("loginBtn");
-  const info = document.getElementById("loginInfo");
+  let isLogin = true;
 
-  const emailInput = document.getElementById("loginEmail");
-  const passInput  = document.getElementById("loginPassword");
+  const title = document.getElementById("authTitle");
+  const btn   = document.getElementById("authBtn");
+  const text  = document.getElementById("authText");
+  const link  = document.getElementById("switchAuth");
+  const info  = document.getElementById("authInfo");
 
-  loginBtn.addEventListener("click", () => {
+  const emailInput = document.getElementById("authEmail");
+  const passInput  = document.getElementById("authPassword");
+
+  function renderAuth(){
+    if(isLogin){
+      title.textContent = "Login Akun";
+      btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Login`;
+      text.textContent = "Belum punya akun?";
+      link.textContent = "Daftar";
+    } else {
+      title.textContent = "Daftar Akun";
+      btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Daftar`;
+      text.textContent = "Sudah punya akun?";
+      link.textContent = "Login";
+    }
+    info.textContent = "";
+  }
+
+  renderAuth();
+
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    isLogin = !isLogin;
+    renderAuth();
+  });
+
+  btn.addEventListener("click", () => {
     const email = emailInput.value.trim();
     const pass  = passInput.value.trim();
 
@@ -117,27 +144,26 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // SIMULASI LOGIN BERHASIL
+    // SIMULASI BERHASIL
     localStorage.setItem("user_email", email);
 
-    // UPDATE DRAWER
     document.getElementById("drawerUsername").textContent = email.split("@")[0];
     document.getElementById("drawerEmail").textContent = email;
 
-    // HILANGKAN FORM LOGIN
-    loginSection.style.display = "none";
+    document.getElementById("authSection").style.display = "none";
   });
 
-  // AUTO LOAD JIKA SUDAH LOGIN
+  // AUTO LOGIN JIKA ADA
   const savedEmail = localStorage.getItem("user_email");
   if(savedEmail){
     document.getElementById("drawerUsername").textContent = savedEmail.split("@")[0];
     document.getElementById("drawerEmail").textContent = savedEmail;
-    loginSection.style.display = "none";
+    document.getElementById("authSection").style.display = "none";
   }
 
 });
 </script>
+
 
   
 <body>
@@ -256,18 +282,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 </section>
 
   <!-- ===== TOMBOL LOGIN DI BAWAH HERO ===== -->
-<section class="hero-auth" id="loginSection">
-  <h3>Login Akun</h3>
+<section class="hero-auth" id="authSection">
+  <h3 id="authTitle">Login Akun</h3>
 
-  <input type="email" id="loginEmail" placeholder="Email" />
-  <input type="password" id="loginPassword" placeholder="Password" />
+  <input type="email" id="authEmail" placeholder="Email" />
+  <input type="password" id="authPassword" placeholder="Password" />
 
-  <button id="loginBtn">
-    <i class="fa-solid fa-right-to-bracket"></i> Login
+  <button id="authBtn">
+    <i class="fa-solid fa-right-to-bracket"></i>
+    Login
   </button>
 
-  <p class="login-info" id="loginInfo"></p>
+  <p class="auth-switch">
+    <span id="authText">Belum punya akun?</span>
+    <a href="#" id="switchAuth">Daftar</a>
+  </p>
+
+  <p class="login-info" id="authInfo"></p>
 </section>
+
 
   <!-- ===== DRAWER ===== -->
   <aside id="drawerMenu">
