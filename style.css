@@ -175,6 +175,27 @@ body{
   font-weight: 900;
 }
 
+.auth-switch{
+  margin-top: 14px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.auth-switch span{
+  color: #666;
+}
+
+.auth-switch a{
+  color: #e60012;
+  font-weight: 700;
+  margin-left: 4px;
+  text-decoration: none;
+}
+
+.auth-switch a:hover{
+  text-decoration: underline;
+}
+
 /* CLOSE BUTTON */
 .close-btn {
   background: none;
