@@ -40,6 +40,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <!-- ===== DRAWER OVERLAY ===== -->
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabase = supabase.createClient(
+  "https://fyumvtdufxfkivwcuwsy.supabase.co",
+  "sb_publishable_QSHBBsl9Efl7EzxTNbvlJQ_o8nxgB7m"
+);
+</script>
+
 <div id="drawerOverlay"></div>
 
 <!-- ===== DRAWER MENU ===== -->
@@ -139,7 +148,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
   </script>
-  
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const userInfo = document.getElementById("userInfo");
+  const authBox  = document.getElementById("authButtons");
+
+  if (!userInfo || !authBox) {
+    console.error("Elemen drawer auth tidak ditemukan");
+    return;
+  }
+
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    // BELUM LOGIN
+    userInfo.innerHTML = `
+      <div class="avatar">?</div>
+      <div>
+        <strong>Guest</strong>
+        <p>Belum login</p>
+      </div>
+    `;
+
+    authBox.innerHTML = `
+      <a href="login.html">
+        <i class="fa-solid fa-right-to-bracket"></i> Login
+      </a>
+      <a href="register.html">
+        <i class="fa-solid fa-user-plus"></i> Daftar
+      </a>
+    `;
+  } else {
+    // SUDAH LOGIN
+    const email = session.user.email;
+
+    userInfo.innerHTML = `
+      <div class="avatar">${email[0].toUpperCase()}</div>
+      <div>
+        <strong>${email}</strong>
+        <p>Online</p>
+      </div>
+    `;
+
+    authBox.innerHTML = `
+      <a href="#" class="logout" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    `;
+  }
+});
+
+async function logout() {
+  await supabase.auth.signOut();
+  location.reload();
+}
+</script>
+
 <section class="hero">
   <div class="hero-bg">
     <div class="line l1">
