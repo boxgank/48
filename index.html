@@ -110,6 +110,28 @@ document.addEventListener("DOMContentLoaded", () => {
     </button>
   </div>
 </header>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const drawer  = document.getElementById("drawerMenu");
+  const overlay = document.getElementById("drawerOverlay");
+  const openBtn = document.getElementById("openDrawer");
+  const closeBtn = document.getElementById("closeDrawer");
+
+  openBtn.onclick = () => {
+    drawer.classList.add("active");
+    overlay.classList.add("active");
+  };
+
+  closeBtn.onclick = overlay.onclick = () => {
+    drawer.classList.remove("active");
+    overlay.classList.remove("active");
+  };
+
+});
+  </script>
+
   
 <section class="hero">
   <div class="hero-bg">
