@@ -151,18 +151,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
-  const userInfo = document.getElementById("userInfo");
-  const authBox  = document.getElementById("authButtons");
 
-  if (!userInfo || !authBox) {
-    console.error("Elemen drawer auth tidak ditemukan");
-    return;
-  }
+  const userInfo = document.getElementById("userInfo");
+  const authButtons = document.getElementById("authButtons");
 
   const { data: { session } } = await supabase.auth.getSession();
 
-  if (!session) {
-    // BELUM LOGIN
+  if (session) {
+    const user = session.user;
+
+    userInfo.innerHTML = `
+      <div class="avatar">${user.email[0].toUpperCase()}</div>
+      <div>
+        <strong>${user.email}</strong>
+        <p>Login</p>
+      </div>
+    `;
+
+    authButtons.innerHTML = `
+      <a href="#" class="logout" id="logoutBtn">
+        <i class="fa-solid fa-right-from-bracket"></i> Keluar
+      </a>
+    `;
+
+    document.getElementById("logoutBtn").onclick = async () => {
+      await supabase.auth.signOut();
+      location.reload();
+    };
+
+  } else {
     userInfo.innerHTML = `
       <div class="avatar">?</div>
       <div>
@@ -171,7 +188,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     `;
 
-    authBox.innerHTML = `
+    authButtons.innerHTML = `
       <a href="login.html">
         <i class="fa-solid fa-right-to-bracket"></i> Login
       </a>
@@ -179,31 +196,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         <i class="fa-solid fa-user-plus"></i> Daftar
       </a>
     `;
-  } else {
-    // SUDAH LOGIN
-    const email = session.user.email;
-
-    userInfo.innerHTML = `
-      <div class="avatar">${email[0].toUpperCase()}</div>
-      <div>
-        <strong>${email}</strong>
-        <p>Online</p>
-      </div>
-    `;
-
-    authBox.innerHTML = `
-      <a href="#" class="logout" onclick="logout()">
-        <i class="fa-solid fa-right-from-bracket"></i> Logout
-      </a>
-    `;
   }
-});
 
-async function logout() {
-  await supabase.auth.signOut();
-  location.reload();
-}
+});
 </script>
+
 
 <section class="hero">
   <div class="hero-bg">
