@@ -88,8 +88,57 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 
 </aside>
+  
+<body>
+  
+<header class="app-header">
+  <div class="app-left">
+    <span class="brand-red">JKT48</span>
+    <span class="brand-black">NOT OFFICIAL</span>
+  </div>
 
+  <div class="app-right">
+    <button class="icon-btn" id="modeToggle">
+      <i class="fa-solid fa-sun"></i>
+    </button>
 
+    <!-- INI TOMBOL DRAWER YANG DIPAKAI -->
+    <button class="icon-btn" id="openDrawer">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+</header>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const drawer  = document.getElementById("drawerMenu");
+  const overlay = document.getElementById("drawerOverlay");
+  const openBtn = document.getElementById("openDrawer");
+  const closeBtn = document.getElementById("closeDrawer");
+
+  if (!drawer || !overlay || !openBtn || !closeBtn) {
+    console.error("Drawer element tidak lengkap");
+    return;
+  }
+
+  openBtn.addEventListener("click", () => {
+    drawer.classList.add("active");
+    overlay.classList.add("active");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    drawer.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    drawer.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+
+});
+  </script>
   
 <section class="hero">
   <div class="hero-bg">
