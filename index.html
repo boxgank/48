@@ -14,6 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const btn  = document.getElementById("modeToggle");
@@ -40,59 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 
-<!-- ===== DRAWER OVERLAY ===== -->
-<div id="drawerOverlay"></div>
-
-<!-- ===== DRAWER MENU ===== -->
-<aside id="drawerMenu">
-
-  <!-- HEADER -->
-  <div class="drawer-header">
-    <div class="user-info">
-      <div class="avatar">U</div>
-      <div>
-        <strong id="drawerUsername">Guest</strong>
-        <p id="drawerEmail">Belum login</p>
-      </div>
-    </div>
-
-    <button id="closeDrawer" class="close-btn">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-  </div>
-
-  <!-- WALLET -->
-  <div class="wallet-box">
-    <div>
-      <span>Coins</span>
-      <strong id="drawerCoin">0</strong>
-    </div>
-    <div>
-      <span>Points</span>
-      <strong>0</strong>
-    </div>
-  </div>
-
-  <!-- ===== LOGIN / REGISTER FORM ===== -->
-  <div class="drawer-section" id="authSection">
-    <h3 id="authTitle">Login Akun</h3>
-
-    <input id="authEmail" type="email" placeholder="Email">
-    <input id="authPassword" type="password" placeholder="Password">
-
-    <button id="authBtn" class="login-btn">Login</button>
-
-    <p class="auth-text">
-      <span id="authText">Belum punya akun?</span>
-      <a href="#" id="switchAuth">Daftar</a>
-    </p>
-
-    <small id="authInfo"></small>
-  </div>
-
-</aside>
-
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -107,6 +55,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const emailInput = document.getElementById("authEmail");
   const passInput  = document.getElementById("authPassword");
 
+  const formBox   = document.getElementById("authForm");
+  const loggedBox = document.getElementById("loggedInBox");
+  const logoutBtn = document.getElementById("logoutBtn");
+
   function renderAuth(){
     if(isLogin){
       title.textContent = "Login Akun";
@@ -120,6 +72,17 @@ document.addEventListener("DOMContentLoaded", () => {
       link.textContent = "Login";
     }
     info.textContent = "";
+  }
+
+  function setLoggedIn(){
+    formBox.style.display = "none";
+    loggedBox.style.display = "block";
+  }
+
+  function setLoggedOut(){
+    formBox.style.display = "block";
+    loggedBox.style.display = "none";
+    renderAuth();
   }
 
   renderAuth();
@@ -142,8 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     info.textContent = "Loading...";
 
     if(isLogin){
-      // 🔐 LOGIN
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
         email, password
       });
 
@@ -152,11 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      loadUserData(data.user.id);
+      afterLogin(data.user.id);
 
     } else {
-      // 🆕 REGISTER
-      const { data, error } = await supabase.auth.signUp({
+      const { data, error } = await supabaseClient.auth.signUp({
         email, password
       });
 
@@ -165,47 +126,50 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // SIMPAN DATA KE DATABASE
-      await supabase.from("profiles").insert({
+      await supabaseClient.from("profiles").insert({
         id: data.user.id,
-        email: email,
+        email,
         username: email.split("@")[0],
         coin: 0
       });
 
-      loadUserData(data.user.id);
+      afterLogin(data.user.id);
     }
   };
 
-  async function loadUserData(uid){
-    const { data, error } = await supabase
+  async function afterLogin(uid){
+    const { data } = await supabaseClient
       .from("profiles")
       .select("*")
       .eq("id", uid)
       .single();
 
-    if(error){
-      info.textContent = "Gagal ambil data user";
-      return;
-    }
-
     document.getElementById("drawerUsername").textContent = data.username;
     document.getElementById("drawerEmail").textContent = data.email;
     document.getElementById("drawerCoin").textContent = data.coin;
 
-    document.getElementById("authSection").style.display = "none";
+    setLoggedIn();
   }
 
-  // AUTO LOGIN
-  supabase.auth.getSession().then(({ data }) => {
+  logoutBtn.onclick = async () => {
+    await supabaseClient.auth.signOut();
+
+    document.getElementById("drawerUsername").textContent = "Guest";
+    document.getElementById("drawerEmail").textContent = "Belum login";
+    document.getElementById("drawerCoin").textContent = "0";
+
+    setLoggedOut();
+  };
+
+  // AUTO LOGIN JIKA SUDAH ADA SESSION
+  supabaseClient.auth.getSession().then(({ data }) => {
     if(data.session){
-      loadUserData(data.session.user.id);
+      afterLogin(data.session.user.id);
     }
   });
 
 });
 </script>
-
 
 
   
@@ -333,68 +297,31 @@ const supabase = window.supabase.createClient(
 </script>
 
 <section class="hero-auth" id="authSection">
-  <h3 id="authTitle">Login Akun</h3>
 
-  <input type="email" id="authEmail" placeholder="Email" />
-  <input type="password" id="authPassword" placeholder="Password" />
+  <h2 id="authTitle">Login Akun</h2>
 
-  <button id="authBtn">
-    <i class="fa-solid fa-right-to-bracket"></i>
-    Login
-  </button>
+  <!-- FORM -->
+  <div id="authForm">
+    <input type="email" id="authEmail" placeholder="Email">
+    <input type="password" id="authPassword" placeholder="Password">
 
-  <p class="auth-switch">
-    <span id="authText">Belum punya akun?</span>
-    <a href="#" id="switchAuth">Daftar</a>
-  </p>
+    <button id="authBtn">Login</button>
 
-  <p class="login-info" id="authInfo"></p>
+    <p id="authSwitch">
+      <span id="authText">Belum punya akun?</span>
+      <a href="#" id="switchAuth">Daftar</a>
+    </p>
+
+    <small id="authInfo"></small>
+  </div>
+
+  <!-- STATUS LOGIN -->
+  <div id="loggedInBox" style="display:none;">
+    <p><strong>Anda sudah login</strong></p>
+    <button id="logoutBtn">Logout</button>
+  </div>
+
 </section>
-
-
-  <!-- ===== DRAWER ===== -->
-  <aside id="drawerMenu">
-
-  <!-- HEADER USER -->
-  <div class="drawer-header">
-    <div class="user-info">
-      <div class="avatar" id="userAvatar">G</div>
-      <div>
-        <strong id="drawerUsername">Guest</strong>
-        <p id="drawerEmail">Belum login</p>
-      </div>
-    </div>
-
-    <button id="closeDrawer" class="close-btn">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-  </div>
-
-  <!-- COIN INFO -->
-  <div class="drawer-coin">
-    <p>Saldo Coin</p>
-    <h2 id="drawerCoin">0</h2>
-  </div>
-
-  <!-- MENU -->
-  <div class="drawer-section">
-    <a href="#"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="#"><i class="fa-solid fa-user"></i> Profil</a>
-  </div>
-
-</aside>
-
-  <!-- ===== JAVASCRIPT ===== -->
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-
-    // INFO USER DEFAULT
-    document.getElementById("drawerUsername").textContent = "Guest";
-    document.getElementById("drawerEmail").textContent = "Belum login";
-    document.getElementById("drawerCoin").textContent = "0";
-
-  });
-  </script>
 
 
 
