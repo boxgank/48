@@ -224,11 +224,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const emailInput = document.getElementById("authEmail");
   const passInput  = document.getElementById("authPassword");
 
-  const authForm   = document.getElementById("authForm");
-  const loggedBox  = document.getElementById("loggedInBox");
-  const logoutBtn  = document.getElementById("logoutBtn");
+  const authForm  = document.getElementById("authForm");
+  const loggedBox = document.getElementById("loggedInBox");
 
-  // PAKSA FORM MUNCUL SAAT LOAD
+  if (!authForm || !loggedBox) {
+    console.error("authForm / loggedInBox tidak ditemukan");
+    return;
+  }
+
   authForm.style.display = "block";
   loggedBox.style.display = "none";
 
