@@ -96,7 +96,159 @@ body{
   background-color: rgba(255, 255, 255, 0.8); /* PUTIH 80% */
   backdrop-filter: blur(8px);
 
-  box-shadow: -10px 0 25px rgba(0,0,0,0.25);
+/* =====================
+   DRAWER MENU
+===================== */
+#drawerMenu {
+  position: fixed;
+  top: 0;
+  right: -420px;              /* diperlebar */
+  width: 420px;               /* sebelumnya 300px */
+  height: 100vh;
+
+  background: rgba(255, 255, 255, 0.8); /* PUTIH 80% */
+  backdrop-filter: blur(6px);
+
+  transition: right .3s ease;
+  z-index: 999;
+
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#drawerMenu.active {
+  right: 0;
+}
+
+/* =====================
+   OVERLAY
+===================== */
+#drawerOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: .3s;
+  z-index: 998;
+}
+
+#drawerOverlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* =====================
+   HEADER
+===================== */
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* USER INFO */
+.user-info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffd6dc;
+  color: #e60012;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+
+/* CLOSE BUTTON */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* =====================
+   WALLET
+===================== */
+.wallet-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.wallet-box div {
+  background: rgba(255, 238, 241, 0.9);
+  padding: 14px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+/* =====================
+   MENU
+===================== */
+.drawer-section {
+  margin-top: 20px;
+}
+
+.drawer-section a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  color: #111;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.section-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+/* =====================
+   LOGOUT
+===================== */
+.logout {
+  margin-top: auto;
+  color: #e60012;
+  font-weight: 800;
+  text-decoration: none;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* =====================
+   TOMBOL ☰
+===================== */
+.menu-btn {
+  pointer-events: auto;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 22px;
+}
+
+/* =====================
+   RESPONSIVE HP
+===================== */
+@media (max-width: 600px) {
+  #drawerMenu {
+    width: 85vw;
+    right: -85vw;
+  }
+}  box-shadow: -10px 0 25px rgba(0,0,0,0.25);
   transition: right 0.35s ease;
 
   z-index: 999;
@@ -121,135 +273,6 @@ body{
   margin-bottom: 24px;
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #e60012;
-  color: #fff;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* CLOSE BUTTON */
-.close-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0,0,0,0.1);
-  cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-btn i {
-  font-size: 18px;
-}
-
-/* ============================
-   WALLET BOX
-============================ */
-.wallet-box {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 28px;
-}
-
-.wallet-box > div {
-  flex: 1;
-  background: rgba(255,255,255,0.7);
-  border-radius: 14px;
-  padding: 14px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* ============================
-   MENU SECTIONS
-============================ */
-.drawer-section {
-  margin-bottom: 22px;
-}
-
-.drawer-section .section-title {
-  font-size: 12px;
-  font-weight: bold;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-.drawer-section a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 12px;
-  text-decoration: none;
-  color: #111;
-  transition: background 0.2s ease;
-}
-
-.drawer-section a:hover {
-  background: rgba(0,0,0,0.08);
-}
-
-/* ============================
-   LOGOUT
-============================ */
-.logout {
-  margin-top: auto;
-  padding: 14px;
-  border-radius: 14px;
-  background: rgba(230, 0, 18, 0.15);
-  color: #e60012;
-  font-weight: bold;
-  text-decoration: none;
-
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.logout:hover {
-  background: rgba(230, 0, 18, 0.25);
-}
-
-/* ============================
-   RESPONSIVE (HP)
-============================ */
-@media (max-width: 600px) {
-  #drawerMenu {
-    width: 88vw;
-    right: -88vw;
-  }
-}  background:#f5f5f5;
-}
-
-body.dark .app-header{
-  background:#111;
-  border-bottom:1px solid #222;
-}
-
-body.dark .brand-black{
-  color:#fff;
-}
-
-body.dark .icon-btn{
-  background:#111;
-  border-color:#333;
-  color:#fff;
-}
 
 /* NAVBAR */
 .navbar {
