@@ -210,30 +210,48 @@ document.addEventListener("DOMContentLoaded", async () => {
 </section>
 
   <!-- ===== TOMBOL LOGIN DI BAWAH HERO ===== -->
+<section class="hero-auth" id="authSection">
+
+  <h2 id="authTitle">Login Akun</h2>
+
+  <div id="authForm">
+    <input type="email" id="authEmail" placeholder="Email">
+    <input type="password" id="authPassword" placeholder="Password">
+
+    <button id="authBtn">Login</button>
+
+    <p>
+      <span id="authText">Belum punya akun?</span>
+      <a href="#" id="switchAuth">Daftar</a>
+    </p>
+
+    <small id="authInfo"></small>
+  </div>
+
+  <div id="loggedInBox" style="display:none;">
+    <p><strong>Anda sudah login</strong></p>
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+</section>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
   let isLogin = true;
 
-  const authTitle = document.getElementById("authTitle");
-  const authBtn   = document.getElementById("authBtn");
-  const authText  = document.getElementById("authText");
-  const switchAuth= document.getElementById("switchAuth");
-  const authInfo  = document.getElementById("authInfo");
+  const authForm   = document.getElementById("authForm");
+  const loggedBox  = document.getElementById("loggedInBox");
+
+  const authTitle  = document.getElementById("authTitle");
+  const authBtn    = document.getElementById("authBtn");
+  const authText   = document.getElementById("authText");
+  const switchAuth = document.getElementById("switchAuth");
+  const authInfo   = document.getElementById("authInfo");
 
   const emailInput = document.getElementById("authEmail");
   const passInput  = document.getElementById("authPassword");
-
-  const authForm  = document.getElementById("authForm");
-  const loggedBox = document.getElementById("loggedInBox");
-
-  if (!authForm || !loggedBox) {
-    console.error("authForm / loggedInBox tidak ditemukan");
-    return;
-  }
-
-  authForm.style.display = "block";
-  loggedBox.style.display = "none";
+  const logoutBtn  = document.getElementById("logoutBtn");
 
   function renderAuth(){
     if(isLogin){
@@ -252,27 +270,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderAuth();
 
-  // SWITCH LOGIN / REGISTER
   switchAuth.onclick = (e) => {
     e.preventDefault();
     isLogin = !isLogin;
     renderAuth();
   };
 
-  // LOGIN / REGISTER
   authBtn.onclick = async () => {
     const email = emailInput.value.trim();
     const password = passInput.value.trim();
 
     if(!email || !password){
-      authInfo.textContent = "Email & password wajib diisi";
+      authInfo.textContent = "Email dan password wajib diisi";
       return;
     }
 
     authInfo.textContent = "Loading...";
 
     if(isLogin){
-      const { error } = await supabase.auth.signInWithPassword({
+      // 🔐 LOGIN
+      const { data, error } = await supabase.auth.signInWithPassword({
         email, password
       });
 
@@ -281,10 +298,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      authForm.style.display = "none";
-      loggedBox.style.display = "block";
+      showLoggedIn();
 
     } else {
+      // 🆕 REGISTER
       const { data, error } = await supabase.auth.signUp({
         email, password
       });
@@ -294,6 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      // ⬇️ SIMPAN KE DATABASE profiles
       await supabase.from("profiles").insert({
         id: data.user.id,
         email: email,
@@ -301,20 +319,25 @@ document.addEventListener("DOMContentLoaded", () => {
         coin: 0
       });
 
-      authForm.style.display = "none";
-      loggedBox.style.display = "block";
+      showLoggedIn();
     }
   };
 
-  // LOGOUT (BALIK KE FORM)
   logoutBtn.onclick = async () => {
     await supabase.auth.signOut();
     authForm.style.display = "block";
     loggedBox.style.display = "none";
+    renderAuth();
   };
+
+  function showLoggedIn(){
+    authForm.style.display = "none";
+    loggedBox.style.display = "block";
+  }
 
 });
 </script>
+
 
 
 <div class="container">
