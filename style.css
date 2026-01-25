@@ -209,6 +209,27 @@ body{
   font-size: 22px;
 }
 
+.drawer-coin{
+  background: rgba(255,255,255,.8);
+  margin: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+
+.drawer-coin p{
+  font-size: 13px;
+  color: #666;
+}
+
+.drawer-coin h2{
+  font-size: 28px;
+  font-weight: 900;
+  color: #e60012;
+}
+
+
 /* =====================
    RESPONSIVE HP
 ===================== */
@@ -311,6 +332,32 @@ body{
   background:#e60012;
   overflow:hidden;
 }
+
+.hero-auth{
+  padding: 20px;
+}
+
+.login-btn{
+  width: 100%;
+  background: #e60012;
+  color: #fff;
+  border: none;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 800;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(230,0,18,.35);
+}
+
+.login-btn:hover{
+  background: #c80010;
+}
+
 
 /* BACKGROUND TEXT */
 .hero-bg{
