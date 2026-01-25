@@ -39,23 +39,24 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 
-<!-- ===== DRAWER MENU ===== -->
+<!-- ===== DRAWER OVERLAY ===== -->
 <div id="drawerOverlay"></div>
 
+<!-- ===== DRAWER MENU ===== -->
 <aside id="drawerMenu">
+
+  <!-- HEADER -->
   <div class="drawer-header">
-    <div class="user-info">
-      <div class="avatar">1</div>
-      <div>
-        <strong>123</strong>
-        <p>@Kimmy</p>
-      </div>
+    <div class="user-info" id="userInfo">
+      <!-- DIISI VIA JS -->
     </div>
+
     <button id="closeDrawer" class="close-btn">
       <i class="fa-solid fa-xmark"></i>
     </button>
   </div>
 
+  <!-- WALLET -->
   <div class="wallet-box">
     <div>
       <span>Coins</span>
@@ -67,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </div>
 
+  <!-- NAVIGATION -->
   <div class="drawer-section">
     <p class="section-title">NAVIGATION</p>
     <a href="#"><i class="fa-solid fa-house"></i> Home</a>
@@ -74,71 +76,18 @@ document.addEventListener("DOMContentLoaded", () => {
     <a href="#"><i class="fa-solid fa-tv"></i> Livestream</a>
   </div>
 
+  <!-- SETTINGS -->
   <div class="drawer-section">
     <p class="section-title">SETTINGS</p>
     <a href="#"><i class="fa-solid fa-user"></i> Profil Saya</a>
   </div>
 
-  <a href="#" class="logout">
-    <i class="fa-solid fa-right-from-bracket"></i> Keluar
-  </a>
+  <!-- LOGIN / REGISTER / LOGOUT -->
+  <div class="drawer-section" id="authButtons">
+    <!-- DIISI VIA JS -->
+  </div>
+
 </aside>
-
-<body>
-  
-<header class="app-header">
-  <div class="app-left">
-    <span class="brand-red">JKT48</span>
-    <span class="brand-black">NOT OFFICIAL</span>
-  </div>
-
-  <div class="app-right">
-    <button class="icon-btn" id="modeToggle">
-      <i class="fa-solid fa-sun"></i>
-    </button>
-
-    <!-- INI TOMBOL DRAWER YANG DIPAKAI -->
-    <button class="icon-btn" id="openDrawer">
-      <i class="fa-solid fa-bars"></i>
-    </button>
-  </div>
-</header>
-
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const drawer  = document.getElementById("drawerMenu");
-  const overlay = document.getElementById("drawerOverlay");
-  const openBtn = document.getElementById("openDrawer");
-  const closeBtn = document.getElementById("closeDrawer");
-
-  if (!drawer || !overlay || !openBtn || !closeBtn) {
-    console.error("Drawer element tidak lengkap");
-    return;
-  }
-
-  openBtn.addEventListener("click", () => {
-    drawer.classList.add("active");
-    overlay.classList.add("active");
-  });
-
-  closeBtn.addEventListener("click", () => {
-    drawer.classList.remove("active");
-    overlay.classList.remove("active");
-  });
-
-  overlay.addEventListener("click", () => {
-    drawer.classList.remove("active");
-    overlay.classList.remove("active");
-  });
-
-});
-  </script>
-
-
-
-
-
 
 
   
