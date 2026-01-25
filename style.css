@@ -221,6 +221,14 @@ body.dark .icon-btn{
   align-items:center;
 }
 
+.menu-btn {
+  pointer-events: auto;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 22px;
+}
+
 /* ===== HERO ===== */
 .hero{
   position:relative;
