@@ -47,24 +47,70 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<!-- ===== DRAWER MENU ===== -->
+<div id="drawerOverlay"></div>
 
-
-<body>
-
-<nav class="navbar">
-  <b>48 Replay</b>
-
-  <div class="nav-right">
-    <a href="sorter">Sorter</a>
-
-    <!-- TOMBOL MODE -->
-    <button class="mode-btn" id="modeToggle">
-      <i class="fa-solid fa-moon"></i>
-      <span>Mode Malam</span>
+<aside id="drawerMenu">
+  <div class="drawer-header">
+    <div class="user-info">
+      <div class="avatar">1</div>
+      <div>
+        <strong>123</strong>
+        <p>@Kimmy</p>
+      </div>
+    </div>
+    <button id="closeDrawer" class="close-btn">
+      <i class="fa-solid fa-xmark"></i>
     </button>
   </div>
-</nav>
 
+  <div class="wallet-box">
+    <div>
+      <span>Coins</span>
+      <strong>0</strong>
+    </div>
+    <div>
+      <span>Points</span>
+      <strong>0</strong>
+    </div>
+  </div>
+
+  <div class="drawer-section">
+    <p class="section-title">NAVIGATION</p>
+    <a href="#"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="#"><i class="fa-solid fa-wallet"></i> Wallet</a>
+    <a href="#"><i class="fa-solid fa-tv"></i> Livestream</a>
+  </div>
+
+  <div class="drawer-section">
+    <p class="section-title">SETTINGS</p>
+    <a href="#"><i class="fa-solid fa-user"></i> Profil Saya</a>
+  </div>
+
+  <a href="#" class="logout">
+    <i class="fa-solid fa-right-from-bracket"></i> Keluar
+  </a>
+</aside>
+
+<body>
+  
+<header class="app-header">
+  <div class="app-left">
+    <span class="brand-red">JKT48</span>
+    <span class="brand-black">NOT OFFICIAL</span>
+  </div>
+
+  <div class="app-right">
+    <button class="icon-btn" id="modeToggle">
+      <i class="fa-solid fa-sun"></i>
+    </button>
+
+    <button class="icon-btn">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+</header>
+  
 <section class="hero">
   <div class="hero-bg">
     <div class="line l1">
