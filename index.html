@@ -210,39 +210,116 @@ document.addEventListener("DOMContentLoaded", async () => {
 </section>
 
   <!-- ===== TOMBOL LOGIN DI BAWAH HERO ===== -->
-  <script>
-const supabase = window.supabase.createClient(
-  "https://fyumvtdufxfkivwcuwsy.supabase.co",
-  "sb_publishable_QSHBBsl9Efl7EzxTNbvlJQ_o8nxgB7m"
-);
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  let isLogin = true;
+
+  const authTitle = document.getElementById("authTitle");
+  const authBtn   = document.getElementById("authBtn");
+  const authText  = document.getElementById("authText");
+  const switchAuth= document.getElementById("switchAuth");
+  const authInfo  = document.getElementById("authInfo");
+
+  const emailInput = document.getElementById("authEmail");
+  const passInput  = document.getElementById("authPassword");
+
+  const authForm   = document.getElementById("authForm");
+  const loggedBox  = document.getElementById("loggedInBox");
+  const logoutBtn  = document.getElementById("logoutBtn");
+
+  function renderAuth(){
+    if(isLogin){
+      authTitle.textContent = "Login Akun";
+      authBtn.textContent   = "Login";
+      authText.textContent  = "Belum punya akun?";
+      switchAuth.textContent = "Daftar";
+    } else {
+      authTitle.textContent = "Daftar Akun";
+      authBtn.textContent   = "Daftar";
+      authText.textContent  = "Sudah punya akun?";
+      switchAuth.textContent = "Login";
+    }
+    authInfo.textContent = "";
+  }
+
+  renderAuth();
+
+  // 🔁 SWITCH LOGIN / REGISTER
+  switchAuth.onclick = (e) => {
+    e.preventDefault();
+    isLogin = !isLogin;
+    renderAuth();
+  };
+
+  // 🔐 LOGIN / REGISTER
+  authBtn.onclick = async () => {
+    const email = emailInput.value.trim();
+    const password = passInput.value.trim();
+
+    if(!email || !password){
+      authInfo.textContent = "Email & password wajib diisi";
+      return;
+    }
+
+    authInfo.textContent = "Loading...";
+
+    if(isLogin){
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email, password
+      });
+
+      if(error){
+        authInfo.textContent = error.message;
+        return;
+      }
+
+      showLoggedIn();
+
+    } else {
+      const { data, error } = await supabase.auth.signUp({
+        email, password
+      });
+
+      if(error){
+        authInfo.textContent = error.message;
+        return;
+      }
+
+      // SIMPAN KE DATABASE
+      await supabase.from("profiles").insert({
+        id: data.user.id,
+        email: email,
+        username: email.split("@")[0],
+        coin: 0
+      });
+
+      showLoggedIn();
+    }
+  };
+
+  // ✅ SETELAH LOGIN
+  function showLoggedIn(){
+    authForm.style.display = "none";
+    loggedBox.style.display = "block";
+  }
+
+  // 🚪 LOGOUT
+  logoutBtn.onclick = async () => {
+    await supabase.auth.signOut();
+    authForm.style.display = "block";
+    loggedBox.style.display = "none";
+  };
+
+  // 🔄 AUTO LOGIN SAAT REFRESH
+  const { data: { session } } = await supabase.auth.getSession();
+  if(session){
+    showLoggedIn();
+  }
+
+});
 </script>
 
-<section class="hero-auth" id="authSection">
-
-  <h2 id="authTitle">Login Akun</h2>
-
-  <!-- FORM -->
-  <div id="authForm">
-    <input type="email" id="authEmail" placeholder="Email">
-    <input type="password" id="authPassword" placeholder="Password">
-
-    <button id="authBtn">Login</button>
-
-    <p id="authSwitch">
-      <span id="authText">Belum punya akun?</span>
-      <a href="#" id="switchAuth">Daftar</a>
-    </p>
-
-    <small id="authInfo"></small>
-  </div>
-
-  <!-- STATUS LOGIN -->
-  <div id="loggedInBox" style="display:none;">
-    <p><strong>Anda sudah login</strong></p>
-    <button id="logoutBtn">Logout</button>
-  </div>
-
-</section>
 
 
 
