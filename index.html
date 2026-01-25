@@ -119,18 +119,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const openBtn = document.getElementById("openDrawer");
   const closeBtn = document.getElementById("closeDrawer");
 
-  openBtn.onclick = () => {
+  if (!drawer || !overlay || !openBtn || !closeBtn) {
+    console.error("Drawer element tidak lengkap");
+    return;
+  }
+
+  openBtn.addEventListener("click", () => {
     drawer.classList.add("active");
     overlay.classList.add("active");
-  };
+  });
 
-  closeBtn.onclick = overlay.onclick = () => {
+  closeBtn.addEventListener("click", () => {
     drawer.classList.remove("active");
     overlay.classList.remove("active");
-  };
+  });
+
+  overlay.addEventListener("click", () => {
+    drawer.classList.remove("active");
+    overlay.classList.remove("active");
+  });
 
 });
   </script>
+
+
+
+
+
+
+
+
+  
 
   
 <section class="hero">
