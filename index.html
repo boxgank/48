@@ -97,6 +97,48 @@ const supabase = supabase.createClient(
   </div>
 
 </aside>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const loginSection = document.getElementById("loginSection");
+  const loginBtn = document.getElementById("loginBtn");
+  const info = document.getElementById("loginInfo");
+
+  const emailInput = document.getElementById("loginEmail");
+  const passInput  = document.getElementById("loginPassword");
+
+  loginBtn.addEventListener("click", () => {
+    const email = emailInput.value.trim();
+    const pass  = passInput.value.trim();
+
+    if(!email || !pass){
+      info.textContent = "Email dan password wajib diisi";
+      return;
+    }
+
+    // SIMULASI LOGIN BERHASIL
+    localStorage.setItem("user_email", email);
+
+    // UPDATE DRAWER
+    document.getElementById("drawerUsername").textContent = email.split("@")[0];
+    document.getElementById("drawerEmail").textContent = email;
+
+    // HILANGKAN FORM LOGIN
+    loginSection.style.display = "none";
+  });
+
+  // AUTO LOAD JIKA SUDAH LOGIN
+  const savedEmail = localStorage.getItem("user_email");
+  if(savedEmail){
+    document.getElementById("drawerUsername").textContent = savedEmail.split("@")[0];
+    document.getElementById("drawerEmail").textContent = savedEmail;
+    loginSection.style.display = "none";
+  }
+
+});
+</script>
+
   
 <body>
   
@@ -214,12 +256,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 </section>
 
   <!-- ===== TOMBOL LOGIN DI BAWAH HERO ===== -->
-  <section class="hero-auth">
-    <button class="login-btn" onclick="location.href='login.html'">
-      <i class="fa-solid fa-right-to-bracket"></i>
-      Login / Daftar
-    </button>
-  </section>
+<section class="hero-auth" id="loginSection">
+  <h3>Login Akun</h3>
+
+  <input type="email" id="loginEmail" placeholder="Email" />
+  <input type="password" id="loginPassword" placeholder="Password" />
+
+  <button id="loginBtn">
+    <i class="fa-solid fa-right-to-bracket"></i> Login
+  </button>
+
+  <p class="login-info" id="loginInfo"></p>
+</section>
 
   <!-- ===== DRAWER ===== -->
   <aside id="drawerMenu">
