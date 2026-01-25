@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <script>
@@ -40,15 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <!-- ===== DRAWER OVERLAY ===== -->
-  
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const supabase = supabase.createClient(
-  "https://fyumvtdufxfkivwcuwsy.supabase.co",
-  "sb_publishable_QSHBBsl9Efl7EzxTNbvlJQ_o8nxgB7m"
-);
-</script>
-
 <div id="drawerOverlay"></div>
 
 <!-- ===== DRAWER MENU ===== -->
@@ -56,8 +48,12 @@ const supabase = supabase.createClient(
 
   <!-- HEADER -->
   <div class="drawer-header">
-    <div class="user-info" id="userInfo">
-      <!-- DIISI VIA JS -->
+    <div class="user-info">
+      <div class="avatar">U</div>
+      <div>
+        <strong id="drawerUsername">Guest</strong>
+        <p id="drawerEmail">Belum login</p>
+      </div>
     </div>
 
     <button id="closeDrawer" class="close-btn">
@@ -69,7 +65,7 @@ const supabase = supabase.createClient(
   <div class="wallet-box">
     <div>
       <span>Coins</span>
-      <strong>0</strong>
+      <strong id="drawerCoin">0</strong>
     </div>
     <div>
       <span>Points</span>
@@ -77,26 +73,25 @@ const supabase = supabase.createClient(
     </div>
   </div>
 
-  <!-- NAVIGATION -->
-  <div class="drawer-section">
-    <p class="section-title">NAVIGATION</p>
-    <a href="#"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="#"><i class="fa-solid fa-wallet"></i> Wallet</a>
-    <a href="#"><i class="fa-solid fa-tv"></i> Livestream</a>
-  </div>
+  <!-- ===== LOGIN / REGISTER FORM ===== -->
+  <div class="drawer-section" id="authSection">
+    <h3 id="authTitle">Login Akun</h3>
 
-  <!-- SETTINGS -->
-  <div class="drawer-section">
-    <p class="section-title">SETTINGS</p>
-    <a href="#"><i class="fa-solid fa-user"></i> Profil Saya</a>
-  </div>
+    <input id="authEmail" type="email" placeholder="Email">
+    <input id="authPassword" type="password" placeholder="Password">
 
-  <!-- LOGIN / REGISTER / LOGOUT -->
-  <div class="drawer-section" id="authButtons">
-    <!-- DIISI VIA JS -->
+    <button id="authBtn" class="login-btn">Login</button>
+
+    <p class="auth-text">
+      <span id="authText">Belum punya akun?</span>
+      <a href="#" id="switchAuth">Daftar</a>
+    </p>
+
+    <small id="authInfo"></small>
   </div>
 
 </aside>
+
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -115,12 +110,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderAuth(){
     if(isLogin){
       title.textContent = "Login Akun";
-      btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Login`;
+      btn.textContent = "Login";
       text.textContent = "Belum punya akun?";
       link.textContent = "Daftar";
     } else {
       title.textContent = "Daftar Akun";
-      btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Daftar`;
+      btn.textContent = "Daftar";
       text.textContent = "Sudah punya akun?";
       link.textContent = "Login";
     }
@@ -129,40 +124,88 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderAuth();
 
-  link.addEventListener("click", (e) => {
+  link.onclick = (e) => {
     e.preventDefault();
     isLogin = !isLogin;
     renderAuth();
-  });
+  };
 
-  btn.addEventListener("click", () => {
-    const email = emailInput.value.trim();
-    const pass  = passInput.value.trim();
+  btn.onclick = async () => {
+    const email = emailInput.value;
+    const password = passInput.value;
 
-    if(!email || !pass){
-      info.textContent = "Email dan password wajib diisi";
+    if(!email || !password){
+      info.textContent = "Email & password wajib diisi";
       return;
     }
 
-    // SIMULASI BERHASIL
-    localStorage.setItem("user_email", email);
+    info.textContent = "Loading...";
 
-    document.getElementById("drawerUsername").textContent = email.split("@")[0];
-    document.getElementById("drawerEmail").textContent = email;
+    if(isLogin){
+      // 🔐 LOGIN
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email, password
+      });
 
-    document.getElementById("authSection").style.display = "none";
-  });
+      if(error){
+        info.textContent = error.message;
+        return;
+      }
 
-  // AUTO LOGIN JIKA ADA
-  const savedEmail = localStorage.getItem("user_email");
-  if(savedEmail){
-    document.getElementById("drawerUsername").textContent = savedEmail.split("@")[0];
-    document.getElementById("drawerEmail").textContent = savedEmail;
+      loadUserData(data.user.id);
+
+    } else {
+      // 🆕 REGISTER
+      const { data, error } = await supabase.auth.signUp({
+        email, password
+      });
+
+      if(error){
+        info.textContent = error.message;
+        return;
+      }
+
+      // SIMPAN DATA KE DATABASE
+      await supabase.from("profiles").insert({
+        id: data.user.id,
+        email: email,
+        username: email.split("@")[0],
+        coin: 0
+      });
+
+      loadUserData(data.user.id);
+    }
+  };
+
+  async function loadUserData(uid){
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", uid)
+      .single();
+
+    if(error){
+      info.textContent = "Gagal ambil data user";
+      return;
+    }
+
+    document.getElementById("drawerUsername").textContent = data.username;
+    document.getElementById("drawerEmail").textContent = data.email;
+    document.getElementById("drawerCoin").textContent = data.coin;
+
     document.getElementById("authSection").style.display = "none";
   }
 
+  // AUTO LOGIN
+  supabase.auth.getSession().then(({ data }) => {
+    if(data.session){
+      loadUserData(data.session.user.id);
+    }
+  });
+
 });
 </script>
+
 
 
   
@@ -282,6 +325,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 </section>
 
   <!-- ===== TOMBOL LOGIN DI BAWAH HERO ===== -->
+  <script>
+const supabase = window.supabase.createClient(
+  "https://fyumvtdufxfkivwcuwsy.supabase.co",
+  "sb_publishable_QSHBBsl9Efl7EzxTNbvlJQ_o8nxgB7m"
+);
+</script>
+
 <section class="hero-auth" id="authSection">
   <h3 id="authTitle">Login Akun</h3>
 
