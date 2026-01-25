@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Register</title>
+</head>
+<body>
+
+<h2>Register</h2>
+
+<input id="email" type="email" placeholder="Email"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
+
+<button onclick="register()">Daftar</button>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabase = supabase.createClient(
+  "https://PROJECT_ID.supabase.co",
+  "PUBLIC_ANON_KEY"
+);
+
+async function register(){
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { error } = await supabase.auth.signUp({
+    email, password
+  });
+
+  if(error){
+    alert(error.message);
+  }else{
+    alert("Registrasi berhasil, silakan login");
+    location.href = "login.html";
+  }
+}
+</script>
+
+</body>
+</html>
