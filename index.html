@@ -157,48 +157,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const { data: { session } } = await supabase.auth.getSession();
 
-  if (session) {
-    const user = session.user;
-
-    userInfo.innerHTML = `
-      <div class="avatar">${user.email[0].toUpperCase()}</div>
-      <div>
-        <strong>${user.email}</strong>
-        <p>Login</p>
-      </div>
-    `;
-
-    authButtons.innerHTML = `
-      <a href="#" class="logout" id="logoutBtn">
-        <i class="fa-solid fa-right-from-bracket"></i> Keluar
-      </a>
-    `;
-
-    document.getElementById("logoutBtn").onclick = async () => {
-      await supabase.auth.signOut();
-      location.reload();
-    };
-
-  } else {
-    userInfo.innerHTML = `
-      <div class="avatar">?</div>
-      <div>
-        <strong>Guest</strong>
-        <p>Belum login</p>
-      </div>
-    `;
-
-    authButtons.innerHTML = `
-      <a href="login.html">
-        <i class="fa-solid fa-right-to-bracket"></i> Login
-      </a>
-      <a href="register.html">
-        <i class="fa-solid fa-user-plus"></i> Daftar
-      </a>
-    `;
-  }
-
-});
+  if (session) 
 </script>
 
 
@@ -254,7 +213,57 @@ document.addEventListener("DOMContentLoaded", async () => {
   </div>
 </section>
 
+  <!-- ===== TOMBOL LOGIN DI BAWAH HERO ===== -->
+  <section class="hero-auth">
+    <button class="login-btn" onclick="location.href='login.html'">
+      <i class="fa-solid fa-right-to-bracket"></i>
+      Login / Daftar
+    </button>
+  </section>
 
+  <!-- ===== DRAWER ===== -->
+  <aside id="drawerMenu">
+
+  <!-- HEADER USER -->
+  <div class="drawer-header">
+    <div class="user-info">
+      <div class="avatar" id="userAvatar">G</div>
+      <div>
+        <strong id="drawerUsername">Guest</strong>
+        <p id="drawerEmail">Belum login</p>
+      </div>
+    </div>
+
+    <button id="closeDrawer" class="close-btn">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- COIN INFO -->
+  <div class="drawer-coin">
+    <p>Saldo Coin</p>
+    <h2 id="drawerCoin">0</h2>
+  </div>
+
+  <!-- MENU -->
+  <div class="drawer-section">
+    <a href="#"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="#"><i class="fa-solid fa-user"></i> Profil</a>
+  </div>
+
+</aside>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+    // INFO USER DEFAULT
+    document.getElementById("drawerUsername").textContent = "Guest";
+    document.getElementById("drawerEmail").textContent = "Belum login";
+    document.getElementById("drawerCoin").textContent = "0";
+
+  });
+  </script>
 
 
 
