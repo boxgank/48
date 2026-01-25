@@ -981,3 +981,17 @@ body.dark .member-card p{
   color:#ddd;
 }
 
+.hero-auth {
+  margin: 40px auto;
+  padding: 20px;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.hero-auth input,
+.hero-auth button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+}
