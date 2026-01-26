@@ -1,6 +1,11 @@
 // js/auth.js
 document.addEventListener("DOMContentLoaded", () => {
 
+  if (!window.supabaseClient) {
+  console.error("Supabase client belum siap");
+  return;
+}
+
   let isLogin = true;
 
   const title = document.getElementById("authTitle");
