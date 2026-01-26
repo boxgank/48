@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isLogin = true;
 
-  // ===== CEK ELEMEN WAJIB =====
   const section = document.getElementById("authSection");
   if (!section) return;
 
@@ -16,63 +15,65 @@ document.addEventListener("DOMContentLoaded", () => {
   const emailInput = document.getElementById("authEmail");
   const passInput  = document.getElementById("authPassword");
 
+  const formBox    = document.getElementById("authForm");
   const loggedBox  = document.getElementById("loggedInBox");
   const logoutBtn  = document.getElementById("logoutBtn");
 
-  // ===== RENDER LOGIN / REGISTER =====
+  // ================= UI RENDER =================
   function render() {
     if (isLogin) {
       title.textContent = "Login Akun";
-      btn.textContent = "Login";
-      text.textContent = "Belum punya akun?";
-      link.textContent = "Daftar";
+      btn.textContent   = "Login";
+      text.textContent  = "Belum punya akun?";
+      link.textContent  = "Daftar";
     } else {
       title.textContent = "Daftar Akun";
-      btn.textContent = "Daftar";
-      text.textContent = "Sudah punya akun?";
-      link.textContent = "Login";
+      btn.textContent   = "Daftar";
+      text.textContent  = "Sudah punya akun?";
+      link.textContent  = "Login";
     }
     info.textContent = "";
   }
 
   render();
 
-  link.onclick = e => {
+  link.onclick = (e) => {
     e.preventDefault();
     isLogin = !isLogin;
     render();
   };
 
-  // ===== LOGIN / REGISTER ACTION =====
+  // ================= SUBMIT =================
   btn.onclick = async () => {
-    const email = emailInput.value.trim();
+    const email    = emailInput.value.trim();
     const password = passInput.value.trim();
 
     if (!email || !password) {
-      info.textContent = "Email & password wajib diisi";
+      info.textContent = "Email dan password wajib diisi";
       return;
     }
 
+    btn.disabled = true;
     info.textContent = "Loading...";
 
-    // ===== LOGIN =====
+    // ========== LOGIN ==========
     if (isLogin) {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+      const { data, error } =
+        await supabase.auth.signInWithPassword({ email, password });
+
+      btn.disabled = false;
 
       if (error) {
         info.textContent = error.message;
         return;
       }
 
-      await createProfileIfNotExist(data.user);
+      await ensureProfile(data.user);
       showLoggedIn(data.user);
       return;
     }
 
-    // ===== REGISTER (CONFIRM EMAIL) =====
+    // ========== REGISTER ==========
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -81,25 +82,28 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+    btn.disabled = false;
+
     if (error) {
       info.textContent = error.message;
       return;
     }
 
+    // ⛔ STOP DI SINI (JANGAN LOGIN)
     info.innerHTML = `
       Akun berhasil dibuat.<br>
       Silakan cek email untuk verifikasi akun.
     `;
   };
 
-  // ===== LOGOUT =====
+  // ================= LOGOUT =================
   logoutBtn.onclick = async () => {
     await supabase.auth.signOut();
     location.reload();
   };
 
-  // ===== CREATE PROFILE (SETELAH LOGIN SAJA) =====
-  async function createProfileIfNotExist(user) {
+  // ================= PROFILE =================
+  async function ensureProfile(user) {
     const { data } = await supabase
       .from("profiles")
       .select("id")
@@ -116,27 +120,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ===== TAMPILAN SETELAH LOGIN =====
+  // ================= UI LOGGED IN =================
   function showLoggedIn(user) {
-    document.getElementById("authForm")?.style && 
-      (document.getElementById("authForm").style.display = "none");
-
+    formBox.style.display   = "none";
     loggedBox.style.display = "block";
   }
 
-  // ===== AUTO LOGIN JIKA SESSION ADA =====
+  // ================= AUTO LOGIN =================
   supabase.auth.getSession().then(({ data }) => {
     if (data.session) {
-      createProfileIfNotExist(data.session.user);
       showLoggedIn(data.session.user);
-    }
-  });
-
-  // ===== LOGIN SETELAH VERIFIKASI EMAIL =====
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (event === "SIGNED_IN" && session) {
-      createProfileIfNotExist(session.user);
-      showLoggedIn(session.user);
     }
   });
 
