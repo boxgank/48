@@ -1,11 +1,6 @@
 // js/auth.js
 document.addEventListener("DOMContentLoaded", () => {
 
-  if (!window.supabaseClient) {
-  console.error("Supabase client belum siap");
-  return;
-}
-
   let isLogin = true;
 
   const title = document.getElementById("authTitle");
@@ -17,9 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const emailInput = document.getElementById("authEmail");
   const passInput  = document.getElementById("authPassword");
 
-  const formBox    = document.getElementById("authForm");
-  const loggedBox  = document.getElementById("loggedInBox");
-  const logoutBtn  = document.getElementById("logoutBtn");
+  const loggedBox = document.getElementById("loggedInBox");
+  const logoutBtn = document.getElementById("logoutBtn");
 
   function render() {
     if (isLogin) {
@@ -49,78 +43,47 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = passInput.value.trim();
 
     if (!email || !password) {
-      info.textContent = "Email dan password wajib diisi";
+      info.textContent = "Email & password wajib diisi";
       return;
     }
 
-    btn.disabled = true;
     info.textContent = "Loading...";
 
-    // ===== LOGIN =====
     if (isLogin) {
-      const { data, error } =
+      const { error } =
         await window.supabase.auth.signInWithPassword({
-          
-      btn.disabled = false;
+          email,
+          password
+        });
 
       if (error) {
         info.textContent = error.message;
         return;
       }
 
-      await ensureProfile(data.user);
-      showLoggedIn();
+      info.textContent = "Login berhasil";
       return;
     }
 
-    // ===== REGISTER (NO VERIFICATION) =====
-    const { data, error } =
-      await supabase.auth.signUp({ email, password });
-
-    btn.disabled = false;
+    const { error } =
+      await window.supabase.auth.signUp({
+        email,
+        password
+      });
 
     if (error) {
       info.textContent = error.message;
       return;
     }
 
-    // user LANGSUNG ADA
-    await ensureProfile(data.user);
-    showLoggedIn();
+    info.textContent = "Akun dibuat, silakan login";
+    isLogin = true;
+    render();
   };
 
   logoutBtn.onclick = async () => {
-    await supabase.auth.signOut();
+    await window.supabase.auth.signOut();
     location.reload();
   };
-
-  async function ensureProfile(user) {
-    const { data } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("id", user.id)
-      .single();
-
-    if (!data) {
-      await supabase.from("profiles").insert({
-        id: user.id,
-        email: user.email,
-        username: user.email.split("@")[0],
-        coin: 0
-      });
-    }
-  }
-
-  function showLoggedIn() {
-    formBox.style.display = "none";
-    loggedBox.style.display = "block";
-  }
-
-  // AUTO LOGIN
-  window.supabaseClient.auth.getSession().then(({ data }) => {
-    if (data.session) {
-      showLoggedIn();
-    }
-  });
 
 });
