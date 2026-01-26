@@ -59,8 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // ===== LOGIN =====
     if (isLogin) {
       const { data, error } =
-        await supabase.auth.signInWithPassword({ email, password });
-
+        await window.supabase.auth.signInWithPassword({
+          
       btn.disabled = false;
 
       if (error) {
