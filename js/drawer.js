@@ -1,6 +1,11 @@
 // js/drawer.js
 document.addEventListener("DOMContentLoaded", () => {
 
+  if (!window.supabaseClient) {
+  console.error("Supabase client belum siap");
+  return;
+}
+
   const drawer  = document.getElementById("drawerMenu");
   const overlay = document.getElementById("drawerOverlay");
   const openBtn = document.getElementById("openDrawer");
