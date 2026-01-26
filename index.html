@@ -145,44 +145,7 @@
   </div>
 </aside>
 
-<!-- ================= SCRIPT ================= -->
-<h2>Supabase Test</h2>
 
-<input id="email" placeholder="email">
-<input id="pass" placeholder="password" type="password">
-<button onclick="signup()">DAFTAR</button>
-<button onclick="login()">LOGIN</button>
-
-<pre id="log"></pre>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const supabase = window.supabase.createClient(
-  "https://fyumvtdufxfkivwcuwsy.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5dW12dGR1Znhma2l2d2N1d3N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNDkxNDYsImV4cCI6MjA4NDkyNTE0Nn0.AP2En4VfC-eayvokOzR6QAUm6SIwfTX5pJVgZ_kKxhA"
-);
-
-function log(msg){
-  document.getElementById("log").textContent =
-    JSON.stringify(msg, null, 2);
-}
-
-async function signup(){
-  const email = email.value;
-  const password = pass.value;
-
-  const res = await supabase.auth.signUp({ email, password });
-  log(res);
-}
-
-async function login(){
-  const email = email.value;
-  const password = pass.value;
-
-  const res = await supabase.auth.signInWithPassword({ email, password });
-  log(res);
-}
-</script>
 
     <div class="card">     
     <h2>Show Hari ini :</h2>
