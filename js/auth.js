@@ -3,9 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isLogin = true;
 
-  const section = document.getElementById("authSection");
-  if (!section) return;
-
   const title = document.getElementById("authTitle");
   const btn   = document.getElementById("authBtn");
   const text  = document.getElementById("authText");
@@ -19,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const loggedBox  = document.getElementById("loggedInBox");
   const logoutBtn  = document.getElementById("logoutBtn");
 
-  // ================= UI RENDER =================
   function render() {
     if (isLogin) {
       title.textContent = "Login Akun";
@@ -37,15 +33,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   render();
 
-  link.onclick = (e) => {
+  link.onclick = e => {
     e.preventDefault();
     isLogin = !isLogin;
     render();
   };
 
-  // ================= SUBMIT =================
   btn.onclick = async () => {
-    const email    = emailInput.value.trim();
+    const email = emailInput.value.trim();
     const password = passInput.value.trim();
 
     if (!email || !password) {
@@ -56,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.disabled = true;
     info.textContent = "Loading...";
 
-    // ========== LOGIN ==========
+    // ===== LOGIN =====
     if (isLogin) {
       const { data, error } =
         await supabase.auth.signInWithPassword({ email, password });
@@ -69,18 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       await ensureProfile(data.user);
-      showLoggedIn(data.user);
+      showLoggedIn();
       return;
     }
 
-    // ========== REGISTER ==========
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: "https://boxgank.github.io/48/"
-      }
-    });
+    // ===== REGISTER (NO VERIFICATION) =====
+    const { data, error } =
+      await supabase.auth.signUp({ email, password });
 
     btn.disabled = false;
 
@@ -89,20 +79,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // ⛔ STOP DI SINI (JANGAN LOGIN)
-    info.innerHTML = `
-      Akun berhasil dibuat.<br>
-      Silakan cek email untuk verifikasi akun.
-    `;
+    // user LANGSUNG ADA
+    await ensureProfile(data.user);
+    showLoggedIn();
   };
 
-  // ================= LOGOUT =================
   logoutBtn.onclick = async () => {
     await supabase.auth.signOut();
     location.reload();
   };
 
-  // ================= PROFILE =================
   async function ensureProfile(user) {
     const { data } = await supabase
       .from("profiles")
@@ -120,16 +106,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ================= UI LOGGED IN =================
-  function showLoggedIn(user) {
-    formBox.style.display   = "none";
+  function showLoggedIn() {
+    formBox.style.display = "none";
     loggedBox.style.display = "block";
   }
 
-  // ================= AUTO LOGIN =================
+  // AUTO LOGIN
   supabase.auth.getSession().then(({ data }) => {
     if (data.session) {
-      showLoggedIn(data.session.user);
+      showLoggedIn();
     }
   });
 
