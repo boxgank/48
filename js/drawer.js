@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // LOAD USER INFO
-  supabase.auth.getSession().then(async ({ data }) => {
+  window.supabaseClient.auth.getSession().then(async ({ data }) => {
     if (!data.session) return;
 
     const user = data.session.user;
