@@ -10,17 +10,6 @@
 </head>
 
 <body>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const supabase = window.supabase.createClient(
-    "https://fyumvtdufxfkivwcuwsy.supabase.co",
-    "sb_publishable_QSHBBsl9Efl7EzxTNbvlJQ_o8nxgB7m"
-  );
-</script>
-
-<script src="js/supabase.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/drawer.js"></script>
 
 <!-- ================= HEADER ================= -->
 <header class="app-header">
@@ -92,7 +81,64 @@
   </div>
 </section>
 
+<!-- ================= LOGIN DI BAWAH HERO ================= -->
+<section class="hero-auth" id="authSection">
+  <h2 id="authTitle">Login Akun</h2>
 
+  <input type="email" id="authEmail" placeholder="Email">
+  <input type="password" id="authPassword" placeholder="Password">
+
+  <button id="authBtn">Login</button>
+
+  <p>
+    <span id="authText">Belum punya akun?</span>
+    <a href="#" id="switchAuth">Daftar</a>
+  </p>
+
+  <small id="authInfo"></small>
+
+  <div id="loggedInBox" style="display:none;">
+    <p><strong>Anda sudah login</strong></p>
+    <button id="logoutBtn">Logout</button>
+  </div>
+</section>
+
+<!-- ================= DRAWER ================= -->
+<div id="drawerOverlay"></div>
+
+<aside id="drawerMenu">
+  <div class="drawer-header">
+    <div class="user-info">
+      <div class="avatar">U</div>
+      <div>
+        <strong id="drawerUsername">Guest</strong>
+        <p id="drawerEmail">Belum login</p>
+      </div>
+    </div>
+
+    <button id="closeDrawer">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="wallet-box">
+    <div>
+      <span>Coins</span>
+      <strong id="drawerCoin">0</strong>
+    </div>
+    <div>
+      <span>Points</span>
+      <strong>0</strong>
+    </div>
+  </div>
+</aside>
+
+<!-- ================= SCRIPT ================= -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/drawer.js"></script>
 <div class="container">
 
     <div class="card">     
