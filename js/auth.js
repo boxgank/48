@@ -3,8 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isLogin = true;
 
+  // ===== CEK ELEMEN WAJIB =====
   const section = document.getElementById("authSection");
-  if (!section) return; // ⬅️ PENTING (hindari error null)
+  if (!section) return;
 
   const title = document.getElementById("authTitle");
   const btn   = document.getElementById("authBtn");
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const loggedBox  = document.getElementById("loggedInBox");
   const logoutBtn  = document.getElementById("logoutBtn");
 
+  // ===== RENDER LOGIN / REGISTER =====
   function render() {
     if (isLogin) {
       title.textContent = "Login Akun";
@@ -41,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     render();
   };
 
+  // ===== LOGIN / REGISTER ACTION =====
   btn.onclick = async () => {
     const email = emailInput.value.trim();
     const password = passInput.value.trim();
@@ -52,9 +55,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     info.textContent = "Loading...";
 
+    // ===== LOGIN =====
     if (isLogin) {
-      const { data, error } =
-        await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
       if (error) {
         info.textContent = error.message;
@@ -63,27 +69,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
       await createProfileIfNotExist(data.user);
       showLoggedIn(data.user);
-
-    } else {
-      const { error } =
-        await supabase.auth.signUp({ email, password });
-
-      if (error) {
-        info.textContent = error.message;
-        return;
-      }
-
-      info.textContent = "Akun dibuat. Silakan login.";
-      isLogin = true;
-      render();
+      return;
     }
+
+    // ===== REGISTER (CONFIRM EMAIL) =====
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: "https://boxgank.github.io/48/"
+      }
+    });
+
+    if (error) {
+      info.textContent = error.message;
+      return;
+    }
+
+    info.innerHTML = `
+      Akun berhasil dibuat.<br>
+      Silakan cek email untuk verifikasi akun.
+    `;
   };
 
+  // ===== LOGOUT =====
   logoutBtn.onclick = async () => {
     await supabase.auth.signOut();
     location.reload();
   };
 
+  // ===== CREATE PROFILE (SETELAH LOGIN SAJA) =====
   async function createProfileIfNotExist(user) {
     const { data } = await supabase
       .from("profiles")
@@ -101,15 +116,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ===== TAMPILAN SETELAH LOGIN =====
   function showLoggedIn(user) {
-    document.getElementById("authForm").style.display = "none";
+    document.getElementById("authForm")?.style && 
+      (document.getElementById("authForm").style.display = "none");
+
     loggedBox.style.display = "block";
   }
 
-  // AUTO LOGIN CHECK
+  // ===== AUTO LOGIN JIKA SESSION ADA =====
   supabase.auth.getSession().then(({ data }) => {
     if (data.session) {
+      createProfileIfNotExist(data.session.user);
       showLoggedIn(data.session.user);
+    }
+  });
+
+  // ===== LOGIN SETELAH VERIFIKASI EMAIL =====
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_IN" && session) {
+      createProfileIfNotExist(session.user);
+      showLoggedIn(session.user);
     }
   });
 
