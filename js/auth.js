@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // AUTO LOGIN
-  supabase.auth.getSession().then(({ data }) => {
+  window.supabaseClient.auth.getSession().then(({ data }) => {
     if (data.session) {
       showLoggedIn();
     }
